@@ -1,328 +1,1492 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="description" content="NXhyp — Your health journey, gamified. Track steps, sleep & water. Grow your companion. Connect with friends.">
-  <meta name="theme-color" content="#0f0f1a">
-  <title>NXhyp — Level Up Your Health</title>
-  <link rel="stylesheet" href="css/styles.css">
-  <style>
-    /* Structural glue not covered by styles.css */
-    #main-app { display: flex; flex-direction: column; flex: 1; min-height: 0; }
-    #main-app.hidden { display: none !important; }
-    .auth-logo { font-size: 1.75rem; font-weight: 900; text-align: center; margin-bottom: 1.25rem;
-      background: linear-gradient(135deg, #7c3aed, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -1px; }
-    .auth-switch { text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted); }
-    .btn-full { width: 100%; }
-    .form-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.35rem; }
-    /* Landing extras */
-    .land-logo-accent { background: linear-gradient(135deg, #7c3aed, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .land-cta-band { background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 5rem 5vw; text-align: center; }
-    .land-cta-band h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 800; letter-spacing: -1px; margin-bottom: 0.75rem; }
-    .land-cta-band p { color: var(--text-muted); margin-bottom: 1.75rem; }
-    /* Onboarding extras */
-    .onboarding-wrap { background: var(--bg); }
-    .onboard-emoji { font-size: 4rem; margin-bottom: 1.25rem; }
-    .onboard-features { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem; }
-    .onboard-feat { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 0.875rem 1rem; font-size: 0.9rem; }
-    .onboard-tip { background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.3); border-radius: 12px; padding: 1rem; font-size: 0.875rem; color: var(--text-muted); margin-bottom: 2rem; }
-    .onboard-comp-preview { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; margin-bottom: 2rem;
-      background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; }
-    .onboard-comp-name { font-size: 1rem; font-weight: 700; color: var(--text-muted); }
-    .onboard-stats-preview { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem; }
-    .onboard-stat-item { display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem;
-      background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 0.875rem 1rem; }
-    /* Sidebar footer / clock */
-    .sidebar-clock-wrap { margin-top: auto; padding: 1rem 0.75rem 0.5rem; }
-    /* Hero visual */
-    .hero-visual { display: flex; justify-content: center; margin-top: 3rem; }
-    .hero-phone { background: var(--card); border: 2px solid var(--border); border-radius: 28px; padding: 1.5rem; max-width: 240px; width: 100%; box-shadow: 0 24px 60px rgba(0,0,0,0.4); }
-    .hero-phone-stat { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; font-weight: 600; padding: 0.5rem 0;
-      border-bottom: 1px solid var(--border); }
-    .hero-phone-stat:last-of-type { border-bottom: none; }
-    .hero-phone-comp { text-align: center; padding: 1rem 0 0.5rem; font-size: 3.5rem; }
-    .hero-phone-label { text-align: center; font-size: 0.8rem; font-weight: 600; color: #10b981; }
-    .hero-phone-xp { height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; margin: 0.75rem 0 0.35rem; }
-    .hero-phone-xp-fill { height: 100%; width: 65%; background: linear-gradient(90deg, #7c3aed, #a855f7); border-radius: 999px; }
-    .hero-phone-level { font-size: 0.75rem; color: var(--text-muted); text-align: center; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>NXhyp</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+:root{
+  --pk:#D4537E;--pk0:#FBEAF0;--pk1:#F4C0D1;--pk6:#993556;--pk8:#72243E;
+  --bl:#3A7BD5;--bl0:#E8F0FD;--bl1:#B3CEFA;--bl6:#1E4DA0;--bl8:#0F2F6B;
+  --tl:#1D9E75;--tl0:#E1F5EE;--tl1:#9FE1CB;--tl6:#0F6E56;
+  --pu:#7F77DD;--pu0:#EEEDFE;--pu1:#CECBF6;--pu6:#534AB7;
+  --am:#EF9F27;--am0:#FAEEDA;--am1:#FAC775;--am6:#854F0B;
+  --re:#E24B4A;--re0:#FCEBEB;--gr:#2D7A3A;--gr0:#E8F5EA;--gr1:#A8D9AF;--gr6:#1A5024;
+  --cream:#FFF8FB;--font-d:'Playfair Display',serif;--font-b:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--font-b);background:var(--cream);color:#2C1A22;overflow-x:hidden}
+#app-modal{display:none;position:fixed;inset:0;z-index:999;background:#F8F5FC}
+#app-modal.open{display:flex}
+.ami{width:100%;background:#F8F5FC;overflow:hidden;height:100%;display:flex;flex-direction:column;position:relative}
+.mc{position:absolute;top:12px;right:12px;z-index:20;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.9);border:.5px solid #ddd;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#666;font-size:15px}
+.asc{display:none;flex-direction:column;flex:1;overflow:hidden}
+.asc.on{display:flex}
+.asb{display:flex;justify-content:space-between;padding:10px 16px 2px;font-size:10px;color:#999;flex-shrink:0}
+.atb{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-bottom:.5px solid rgba(0,0,0,.07);flex-shrink:0;background:#fff}
+.atb-title{font-size:15px;font-weight:500;color:#1A1A2E}
+.bod{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.bod::-webkit-scrollbar{width:2px}
+.bod::-webkit-scrollbar-thumb{background:var(--pk1);border-radius:2px}
+.acard{border-radius:14px;padding:13px;background:#fff;border:.5px solid rgba(0,0,0,.07)}
+.albl{font-size:10px;color:#999;letter-spacing:.05em;margin-bottom:6px;font-weight:500;text-transform:uppercase}
+.abtn{border:none;border-radius:11px;padding:12px;font-size:13px;font-weight:500;cursor:pointer;width:100%;font-family:var(--font-b);margin-top:4px;transition:.15s}
+.abtn-g{background:var(--pk);color:#fff}.abtn-b{background:var(--bl);color:#fff}.abtn-p{background:var(--pu6);color:#fff}.abtn-o{background:#fff;border:.5px solid #E8E0F0;color:#4A3A50}
+.abtn:disabled{opacity:.5;cursor:not-allowed}
+.tabs{display:flex;background:#fff;border-top:.5px solid rgba(0,0,0,.07);flex-shrink:0;padding:2px 0 4px}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;border:none;background:none;cursor:pointer;color:#C0B0CC;font-size:9px;font-family:var(--font-b)}
+.tab i{font-size:18px}
+.tab.ag{color:var(--pk)}.tab.ab{color:var(--bl)}.tab.ap{color:var(--pu6)}
+.inp-w label{font-size:11px;font-weight:500;color:#5A3048;display:block;margin-bottom:4px}
+.inp-f{height:42px;border-radius:11px;border:1.5px solid var(--pk1);padding:0 12px;font-size:13px;font-family:var(--font-b);background:#fff;color:#1A1A2E;outline:none;transition:.2s;width:100%}
+.inp-f:focus{border-color:var(--pk);box-shadow:0 0 0 3px rgba(212,83,126,.1)}
+.inp-r{position:relative}
+.inp-ic{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#bbb;font-size:16px;pointer-events:none}
+.inp-pt{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#bbb;cursor:pointer;background:none;border:none;padding:0;font-size:16px}
+.err-m{font-size:11px;color:var(--re);margin-top:2px;display:none}
+.err-m.show{display:block}
+.prog-o{height:8px;border-radius:999px;background:rgba(0,0,0,.07);overflow:hidden}
+.prog-i{height:100%;border-radius:999px;transition:.4s}
+.arng{display:flex;align-items:center;gap:8px;margin:6px 0}
+.arng label{font-size:11px;color:#888;min-width:70px}
+.arng span{font-size:12px;font-weight:500;min-width:36px;text-align:right}
+.pts-coin{width:20px;height:20px;border-radius:50%;background:var(--am);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:500}
+.tracker-card{background:#fff;border-radius:16px;padding:14px;border:.5px solid rgba(0,0,0,.07);margin-bottom:8px}
+.chart-bar-row{display:flex;align-items:flex-end;gap:3px;height:60px;margin:8px 0 4px}
+.bar{border-radius:4px 4px 0 0;min-width:10px;flex:1;transition:.4s;cursor:pointer;position:relative}
+.bar:hover::after{content:attr(data-val);position:absolute;top:-18px;left:50%;transform:translateX(-50%);background:#333;color:#fff;font-size:9px;padding:2px 5px;border-radius:4px;white-space:nowrap}
+.step-prog{height:10px;border-radius:999px;background:var(--tl0);overflow:hidden}
+.step-prog-fill{height:100%;border-radius:999px;background:var(--tl);transition:.5s}
+.sleep-phase{display:flex;height:28px;border-radius:8px;overflow:hidden;margin-top:6px}
+.sp-block{display:flex;align-items:center;justify-content:center;font-size:8px;color:#fff;font-weight:500}
+.msg-area{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.msg-area::-webkit-scrollbar{display:none}
+.chat-in{display:flex;gap:8px;padding:8px 14px;border-top:.5px solid rgba(0,0,0,.07);flex-shrink:0;background:#fff}
+.chat-in input{flex:1;height:36px;padding:0 12px;border-radius:9px;border:.5px solid rgba(0,0,0,.12);font-size:12px;font-family:var(--font-b);background:#F8F5FC;outline:none}
+.csend{width:36px;height:36px;border-radius:9px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff}
+.msg-bubble{max-width:82%}
+.msg-bubble.me{align-self:flex-end}
+.msg-bubble.them{align-self:flex-start}
+.msg-inner{padding:8px 11px;font-size:12px;line-height:1.5}
+.msg-bubble.me .msg-inner{border-radius:12px 4px 12px 12px}
+.msg-bubble.them .msg-inner{border-radius:4px 12px 12px 12px;background:#fff;border:.5px solid rgba(0,0,0,.08)}
+.msg-time{font-size:9px;color:#aaa;margin-top:2px}
+.a-chat{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.cmsg{max-width:85%}.cmsg.ai{align-self:flex-start}.cmsg.me{align-self:flex-end}
+.cbub{padding:9px 12px;font-size:12px;line-height:1.55}
+.cmsg.ai .cbub{border-radius:4px 12px 12px 12px;background:#fff;border:.5px solid rgba(0,0,0,.08)}
+.cmsg.me .cbub{border-radius:12px 4px 12px 12px;color:#fff}
+.cwho{font-size:10px;color:#999;margin-bottom:3px}
+.qr-row{display:flex;gap:6px;overflow-x:auto;padding:4px 14px;flex-shrink:0}
+.qr-row::-webkit-scrollbar{display:none}
+.qr-btn{padding:5px 10px;border-radius:999px;border:.5px solid;background:#fff;font-size:11px;cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:var(--font-b)}
+.cpost{background:#fff;border:.5px solid rgba(0,0,0,.08);border-radius:12px;padding:12px;margin-bottom:8px}
+.c-reply{border-radius:8px;padding:8px 10px;margin-bottom:5px;background:var(--pk0)}
+.like-btn{background:none;border:none;cursor:pointer;font-size:11px;color:#888;font-family:var(--font-b);display:flex;align-items:center;gap:4px;padding:0}
+.like-btn.liked{color:var(--pk)}
+.item-btn{width:48px;height:48px;border-radius:12px;border:1.5px solid #E0D8EC;background:#fff;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;position:relative;flex-shrink:0}
+.item-btn.on{border-color:var(--pu6);background:var(--pu0);box-shadow:0 0 0 2px rgba(83,74,183,.2)}
+.item-btn.locked{opacity:.5}
+.item-btn .cost-badge{position:absolute;bottom:-9px;left:50%;transform:translateX(-50%);background:var(--am);color:#fff;font-size:8px;padding:1px 4px;border-radius:999px;white-space:nowrap;display:none}
+.item-btn:hover .cost-badge{display:block}
+.ava-tab-btn{padding:5px 12px;border-radius:999px;border:.5px solid #ddd;background:#fff;font-size:11px;cursor:pointer;white-space:nowrap;font-family:var(--font-b);flex-shrink:0}
+.ava-tab-btn.on{background:var(--pu6);color:#fff;border-color:var(--pu6)}
+.ob-dot{flex:1;height:4px;border-radius:999px;background:#E0D8EC;transition:.3s}
+.ob-dot.done{background:var(--pu6)}.ob-dot.active{background:var(--pk)}
+.ob-step{display:none;flex:1;flex-direction:column;overflow:hidden}
+.ob-step.on{display:flex}
+.ob-in{flex:1;overflow-y:auto;padding:18px 20px;display:flex;flex-direction:column;gap:12px}
+.ob-ft{padding:10px 20px 14px;flex-shrink:0}
+.dob-row{display:flex;gap:8px}
+.dob-row select{flex:1;height:42px;border-radius:11px;border:1.5px solid var(--pk1);padding:0 8px;font-size:13px;font-family:var(--font-b);background:#fff;outline:none;cursor:pointer}
+.g-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.g-opt{border-radius:14px;padding:12px 10px;text-align:center;cursor:pointer;border:1.5px solid #E0D8EC;background:#fff;transition:.2s;font-family:var(--font-b)}
+.g-opt.ag{border-color:var(--pk);background:var(--pk0)}
+.g-opt.ab{border-color:var(--bl);background:var(--bl0)}
+.g-opt.ap{border-color:var(--pu6);background:var(--pu0)}
+.pur-opt{border-radius:14px;padding:12px 14px;cursor:pointer;border:1.5px solid #E0D8EC;background:#fff;transition:.2s;display:flex;align-items:center;gap:12px}
+.pur-opt.active{border-color:var(--pk);background:var(--pk0)}
+.pur-check{margin-left:auto;width:20px;height:20px;border-radius:50%;border:1.5px solid #ddd;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pur-opt.active .pur-check{background:var(--pk);border-color:var(--pk)}
+.spinner{width:32px;height:32px;border:3px solid var(--pk1);border-top-color:var(--pk);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto}
+/* CANVAS TOOLS */
+.canvas-toolbar{display:flex;gap:6px;padding:8px 14px;flex-shrink:0;background:#fff;border-bottom:.5px solid rgba(0,0,0,.07);flex-wrap:wrap;align-items:center}
+.tool-btn{padding:5px 10px;border-radius:8px;border:.5px solid #ddd;background:#fff;font-size:11px;cursor:pointer;font-family:var(--font-b);display:flex;align-items:center;gap:4px}
+.tool-btn.on{background:var(--pu6);color:#fff;border-color:var(--pu6)}
+.color-dot{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;flex-shrink:0;transition:.15s}
+.color-dot.on{border-color:#333;transform:scale(1.2)}
+.premade-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px 0}
+.premade-btn{border-radius:12px;border:1.5px solid #E0D8EC;background:#fff;padding:10px;cursor:pointer;text-align:center;transition:.2s;font-family:var(--font-b)}
+.premade-btn:hover{border-color:var(--pu6);background:var(--pu0)}
+.premade-btn.on{border-color:var(--pu6);background:var(--pu0)}
+.setting-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:.5px solid rgba(0,0,0,.06)}
+.setting-row:last-child{border-bottom:none}
+.toggle{position:relative;width:38px;height:22px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.tog-sl{position:absolute;cursor:pointer;inset:0;background:#E0D8EC;border-radius:999px;transition:.25s}
+.tog-sl::before{content:'';position:absolute;height:16px;width:16px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.25s}
+.toggle input:checked+.tog-sl{background:var(--pu6)}
+.toggle input:checked+.tog-sl::before{transform:translateX(16px)}
+.badge-pill{background:var(--re);color:#fff;border-radius:999px;font-size:9px;padding:1px 6px;margin-left:4px}
+.fava{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;flex-shrink:0;position:relative}
+.f-online{position:absolute;bottom:0;right:0;width:9px;height:9px;border-radius:50%;background:var(--tl);border:2px solid #fff}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.toast-a{animation:fadeUp .3s ease}
+</style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════
-     TOASTS
-════════════════════════════════════════════ -->
-<div id="toast-container"></div>
+<style>
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,248,251,.94);backdrop-filter:blur(12px);border-bottom:.5px solid var(--pk1);padding:0 5vw;display:flex;align-items:center;justify-content:space-between;height:60px}
+.nav-logo{display:flex;align-items:center;gap:9px;text-decoration:none}
+.nav-logo-text{font-family:var(--font-d);font-style:italic;font-size:22px;color:var(--pk)}
+.nav-links{display:flex;align-items:center;gap:26px}
+.nav-links a{text-decoration:none;font-size:13px;color:#5A3048;transition:.15s}
+.nav-links a:hover{color:var(--pk)}
+.nav-cta{background:var(--pk);color:#fff;border:none;border-radius:999px;padding:9px 20px;font-size:13px;font-family:var(--font-b);font-weight:500;cursor:pointer;transition:.2s}
+.nav-cta:hover{background:var(--pk6)}
+@media(max-width:768px){.nav-links{display:none}}
+.hero-split{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;width:100%}
+@media(max-width:900px){.hero-split{grid-template-columns:1fr}}
+.gc-row{display:flex;gap:16px}
+.gc{flex:1;max-width:200px;border-radius:24px;padding:22px 18px;cursor:pointer;transition:.25s}
+.gc-g{background:linear-gradient(145deg,#FBEAF0,#F9D4E8);border:1.5px solid var(--pk1)}
+.gc-b{background:linear-gradient(145deg,#E8F0FD,#D4E4FB);border:1.5px solid var(--bl1)}
+.gc:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.1)}
+.trust-strip{background:linear-gradient(90deg,var(--pk0),var(--bl0));border-top:.5px solid var(--pk1);border-bottom:.5px solid var(--bl1);padding:14px 5vw;display:flex;align-items:center;justify-content:center;gap:clamp(14px,3vw,40px);flex-wrap:wrap}
+.ti-item{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:500}
+.lsec{padding:clamp(60px,8vw,100px) 5vw}
+.sec-ey{display:inline-block;font-size:10px;font-weight:500;letter-spacing:.1em;padding:4px 12px;border-radius:999px;border:.5px solid;margin-bottom:14px}
+.sec-t{font-family:var(--font-d);font-size:clamp(28px,3.5vw,44px);line-height:1.2;margin-bottom:12px}
+.sec-t em{font-style:italic}
+.sec-b{font-size:15px;color:#6B3D52;line-height:1.7;max-width:560px}
+.lcard{border-radius:14px;padding:13px;background:#fff;border:.5px solid rgba(0,0,0,.07)}
+.reveal{opacity:0;transform:translateY(18px);transition:.6s ease}
+.reveal.visible{opacity:1;transform:none}
+@keyframes float2{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.float2{animation:float2 4s ease-in-out infinite}
+footer{background:#1A1A2E;padding:40px 5vw 24px;color:rgba(255,255,255,.45);font-size:12px}
+</style>
 
-<!-- ══════════════════════════════════════════
-     AUTH MODAL
-════════════════════════════════════════════ -->
-<div id="auth-overlay" class="modal-overlay hidden">
-  <div class="modal">
-    <button class="modal-close" onclick="closeAuthModal()">✕</button>
-    <div class="auth-logo">NXhyp</div>
-
-    <div class="auth-tabs">
-      <button class="auth-tab active" data-tab="signin" onclick="switchAuthTab('signin')">Sign In</button>
-      <button class="auth-tab" data-tab="signup" onclick="switchAuthTab('signup')">Sign Up</button>
-    </div>
-
-    <!-- Sign In -->
-    <form id="signin-form" onsubmit="event.preventDefault(); handleSignin()">
-      <div class="form-group">
-        <label for="signin-email">Email</label>
-        <input type="email" id="signin-email" placeholder="you@example.com" autocomplete="email" required>
-      </div>
-      <div class="form-group">
-        <label for="signin-password">Password</label>
-        <input type="password" id="signin-password" placeholder="••••••••" autocomplete="current-password" required>
-      </div>
-      <button class="btn btn-primary btn-full" id="signin-btn" type="submit">Sign In</button>
-      <p class="auth-switch">Don't have an account?
-        <a href="#" onclick="switchAuthTab('signup'); return false;">Sign Up</a>
-      </p>
-    </form>
-
-    <!-- Sign Up -->
-    <form id="signup-form" class="hidden" onsubmit="event.preventDefault(); handleSignup()">
-      <div class="form-group">
-        <label for="signup-username">Username</label>
-        <input type="text" id="signup-username" placeholder="cooluser123" autocomplete="username" required>
-      </div>
-      <div class="form-group">
-        <label for="signup-email">Email</label>
-        <input type="email" id="signup-email" placeholder="you@example.com" autocomplete="email" required>
-      </div>
-      <div class="form-group">
-        <label for="signup-password">Password</label>
-        <input type="password" id="signup-password" placeholder="Min. 6 characters" autocomplete="new-password" required>
-      </div>
-      <div class="form-group">
-        <label for="signup-confirm-pw">Confirm Password</label>
-        <input type="password" id="signup-confirm-pw" placeholder="Repeat password" autocomplete="new-password" required>
-      </div>
-      <button class="btn btn-primary btn-full" id="signup-btn" type="submit">Create Account</button>
-      <p class="auth-switch">Already have an account?
-        <a href="#" onclick="switchAuthTab('signin'); return false;">Sign In</a>
-      </p>
-    </form>
+<nav>
+  <a class="nav-logo" href="#">
+    <svg width="110" height="36" viewBox="0 0 220 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Moon arc -->
+      <path d="M36 8 A28 28 0 1 0 36 64" stroke="#6B7F4A" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <!-- Stem -->
+      <path d="M36 58 Q34 44 36 32" stroke="#6B7F4A" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- Leaf -->
+      <path d="M36 44 Q28 40 26 34 Q32 36 36 44Z" fill="#6B7F4A"/>
+      <!-- Petals -->
+      <path d="M36 32 Q30 22 32 14 Q38 20 36 32Z" fill="#C9897A" opacity=".85"/>
+      <path d="M36 32 Q42 22 44 14 Q38 20 36 32Z" fill="#C9897A" opacity=".85"/>
+      <path d="M36 32 Q24 28 20 20 Q30 22 36 32Z" fill="#D4A090" opacity=".7"/>
+      <path d="M36 32 Q48 28 52 20 Q42 22 36 32Z" fill="#D4A090" opacity=".7"/>
+      <!-- Dots -->
+      <circle cx="54" cy="14" r="2.5" fill="#C9897A" opacity=".7"/>
+      <circle cx="60" cy="20" r="1.8" fill="#C9897A" opacity=".5"/>
+      <circle cx="58" cy="9"  r="1.4" fill="#C9897A" opacity=".4"/>
+      <!-- NXhyp text -->
+      <text x="76" y="46" font-family="Georgia, serif" font-size="30" font-weight="400" fill="#6B7F4A" letter-spacing="-0.5">NXhyp</text>
+    </svg>
+  </a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#companion">Companion</a>
+    <a href="#safety">Safety</a>
   </div>
+  <button class="nav-cta" onclick="openApp()">Try demo</button>
+</nav>
+
+<!-- HERO -->
+<section id="hero" style="min-height:100vh;display:flex;align-items:center;padding:80px 5vw 60px;background:linear-gradient(135deg,#FFF8FB 0%,#F0F4FF 100%)">
+  <div class="hero-split">
+    <div style="animation:fadeUp .8s ease both">
+      <!-- Hero logo mark -->
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+        <svg width="48" height="48" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M36 8 A28 28 0 1 0 36 64" stroke="#6B7F4A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M36 58 Q34 44 36 32" stroke="#6B7F4A" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          <path d="M36 44 Q28 40 26 34 Q32 36 36 44Z" fill="#6B7F4A"/>
+          <path d="M36 32 Q30 22 32 14 Q38 20 36 32Z" fill="#C9897A" opacity=".85"/>
+          <path d="M36 32 Q42 22 44 14 Q38 20 36 32Z" fill="#C9897A" opacity=".85"/>
+          <path d="M36 32 Q24 28 20 20 Q30 22 36 32Z" fill="#D4A090" opacity=".7"/>
+          <path d="M36 32 Q48 28 52 20 Q42 22 36 32Z" fill="#D4A090" opacity=".7"/>
+          <circle cx="54" cy="14" r="2.8" fill="#C9897A" opacity=".7"/>
+          <circle cx="60" cy="20" r="2" fill="#C9897A" opacity=".5"/>
+          <circle cx="58" cy="9" r="1.5" fill="#C9897A" opacity=".4"/>
+        </svg>
+        <div>
+          <div style="font-family:Georgia,serif;font-size:26px;color:#6B7F4A;line-height:1;letter-spacing:-.5px">NXhyp</div>
+          <div style="font-size:10px;color:#C9897A;letter-spacing:.05em;margin-top:2px">your body, your rhythm, your hype</div>
+        </div>
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:7px;background:var(--pk0);border:.5px solid var(--pk1);border-radius:999px;padding:5px 14px;font-size:11px;font-weight:500;color:var(--pk6);letter-spacing:.06em;margin-bottom:18px">🌱 Wellness for every body</div>
+      <p style="font-size:15px;color:#5A3A5A;line-height:1.75;margin-bottom:28px">NXhyp gives you a fully personalised health journey — cycle, sleep, steps, mental health — plus a drawable AI companion and global friends with real chat.</p>
+      <button onclick="openApp()" style="background:var(--pk);color:#fff;border:none;border-radius:999px;padding:14px 28px;font-size:14px;font-family:var(--font-b);font-weight:500;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:7px">🌸 Get started free</button>
+    </div>
+    <div class="gc-row float2">
+      <div class="gc gc-g" onclick="openApp()">
+        <div style="font-size:36px;margin-bottom:10px">🌸</div>
+        <div style="font-family:var(--font-d);font-size:18px;font-weight:500;color:var(--pk8);margin-bottom:5px">Girls & Women</div>
+        <div style="font-size:11px;color:var(--pk6);line-height:1.6">Cycle, hormones, fertility, PCOS, menopause</div>
+      </div>
+      <div class="gc gc-b" onclick="openApp()">
+        <div style="font-size:36px;margin-bottom:10px">💪</div>
+        <div style="font-family:var(--font-d);font-size:18px;font-weight:500;color:var(--bl8);margin-bottom:5px">Boys & Men</div>
+        <div style="font-size:11px;color:var(--bl6);line-height:1.6">Testosterone, recovery, prostate, heart health</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<div class="trust-strip">
+  <div class="ti-item" style="color:var(--pk6)"><i class="ti ti-calendar-heart" style="color:var(--pk)"></i>Cycle tracking</div>
+  <div class="ti-item" style="color:var(--tl6)"><i class="ti ti-moon" style="color:var(--tl)"></i>Sleep tracker</div>
+  <div class="ti-item" style="color:var(--bl6)"><i class="ti ti-shoe" style="color:var(--bl)"></i>Step tracker</div>
+  <div class="ti-item" style="color:var(--pu6)"><i class="ti ti-sparkles" style="color:var(--pu)"></i>AI companion</div>
+  <div class="ti-item" style="color:var(--tl6)"><i class="ti ti-shield-lock" style="color:var(--tl)"></i>E2E encrypted</div>
+  <div class="ti-item" style="color:var(--am6)"><i class="ti ti-world" style="color:var(--am)"></i>Global friends</div>
+  <div class="ti-item" style="color:var(--pk6)"><i class="ti ti-pencil" style="color:var(--pk)"></i>Draw companion</div>
 </div>
 
-<!-- ══════════════════════════════════════════
-     LANDING PAGE
-════════════════════════════════════════════ -->
-<div id="landing">
+<!-- FEATURES -->
+<section id="features" class="lsec" style="background:#fff">
+  <div class="sec-ey" style="background:var(--gr0);color:var(--gr6);border-color:var(--gr1)">What's inside</div>
+  <h2 class="sec-t" style="color:#1A1A2E">Everything you need, <em>personalised</em></h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:32px">
+    <div class="lcard reveal"><div style="font-size:24px;margin-bottom:8px">🛌</div><div style="font-size:14px;font-weight:500;margin-bottom:4px">Sleep tracker</div><div style="font-size:12px;color:#888;line-height:1.6">Hour-by-hour sleep phases, quality scores, and AI-powered rest tips.</div></div>
+    <div class="lcard reveal"><div style="font-size:24px;margin-bottom:8px">👟</div><div style="font-size:14px;font-weight:500;margin-bottom:4px">Step tracker</div><div style="font-size:12px;color:#888;line-height:1.6">Real-time hourly breakdown, daily goal progress, and weekly trends.</div></div>
+    <div class="lcard reveal"><div style="font-size:24px;margin-bottom:8px">🌸</div><div style="font-size:14px;font-weight:500;margin-bottom:4px">Cycle & health logs</div><div style="font-size:12px;color:#888;line-height:1.6">Log flow, symptoms, energy — personalised to your health profile.</div></div>
+    <div class="lcard reveal"><div style="font-size:24px;margin-bottom:8px">🎨</div><div style="font-size:14px;font-weight:500;margin-bottom:4px">Draw your companion</div><div style="font-size:12px;color:#888;line-height:1.6">Free-draw your AI companion on a canvas or choose a premade character.</div></div>
+    <div class="lcard reveal"><div style="font-size:24px;margin-bottom:8px">🌐</div><div style="font-size:14px;font-weight:500;margin-bottom:4px">Global friends</div><div style="font-size:12px;color:#888;line-height:1.6">Search friends by unique username. Real-time chat stored on the server.</div></div>
+    <div class="lcard reveal"><div style="font-size:24px;margin-bottom:8px">🤝</div><div style="font-size:14px;font-weight:500;margin-bottom:4px">Community</div><div style="font-size:12px;color:#888;line-height:1.6">Anonymous posts, real likes, real replies — shared globally in real time.</div></div>
+  </div>
+</section>
 
-  <!-- Nav -->
-  <nav class="landing-nav">
-    <div class="logo">NX<span class="land-logo-accent">hyp</span></div>
-    <div class="nav-links">
-      <button class="btn btn-ghost" onclick="openAuthModal('signin')">Sign In</button>
-      <button class="btn btn-primary" onclick="openAuthModal('signup')">Get Started Free</button>
-    </div>
-  </nav>
+<!-- COMPANION -->
+<section id="companion" class="lsec" style="background:linear-gradient(160deg,#F0EEFF,#FFF8FB)">
+  <div class="sec-ey" style="background:var(--pu0);color:var(--pu6);border-color:var(--pu1)">Your companion</div>
+  <h2 class="sec-t" style="color:#1A1A2E">Draw it. <em>Earn points. Unlock more.</em></h2>
+  <p class="sec-b">Every healthy habit earns NXhyp Points. Use the free-draw canvas to create your own unique AI companion character, or pick from premade designs. Unlock new outfits and accessories with points.</p>
+</section>
 
-  <!-- Hero -->
-  <section class="hero">
+<!-- SAFETY -->
+<section id="safety" class="lsec" style="background:#0F1B3A">
+  <div class="sec-ey" style="background:rgba(255,255,255,.08);color:#B5D4F4;border-color:rgba(255,255,255,.15)">Privacy first</div>
+  <h2 class="sec-t" style="color:#fff">Built safe from the <em style="color:#FAC775">ground up</em></h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:28px">
+    <div class="reveal" style="background:rgba(255,255,255,.06);border:.5px solid rgba(255,255,255,.1);border-radius:16px;padding:18px"><i class="ti ti-shield-lock" style="font-size:22px;color:#85B7EB;margin-bottom:8px;display:block"></i><div style="font-size:14px;font-weight:500;color:#fff;margin-bottom:4px">E2E encryption</div><div style="font-size:12px;color:#85B7EB;line-height:1.55">AES-256. Your logs readable only by you.</div></div>
+    <div class="reveal" style="background:rgba(255,255,255,.06);border:.5px solid rgba(255,255,255,.1);border-radius:16px;padding:18px"><i class="ti ti-ad-off" style="font-size:22px;color:#85B7EB;margin-bottom:8px;display:block"></i><div style="font-size:14px;font-weight:500;color:#fff;margin-bottom:4px">Zero ads</div><div style="font-size:12px;color:#85B7EB;line-height:1.55">Never sold, never targeted, never shared.</div></div>
+    <div class="reveal" style="background:rgba(255,255,255,.06);border:.5px solid rgba(255,255,255,.1);border-radius:16px;padding:18px"><i class="ti ti-world" style="font-size:22px;color:#85B7EB;margin-bottom:8px;display:block"></i><div style="font-size:14px;font-weight:500;color:#fff;margin-bottom:4px">Real backend</div><div style="font-size:12px;color:#85B7EB;line-height:1.55">Supabase-powered. Your data persists across devices.</div></div>
+    <div class="reveal" style="background:rgba(255,255,255,.06);border:.5px solid rgba(255,255,255,.1);border-radius:16px;padding:18px"><i class="ti ti-baby" style="font-size:22px;color:#85B7EB;margin-bottom:8px;display:block"></i><div style="font-size:14px;font-weight:500;color:#fff;margin-bottom:4px">Age-gated</div><div style="font-size:12px;color:#85B7EB;line-height:1.55">COPPA & GDPR compliant. Privacy by design.</div></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:28px;margin-bottom:28px">
     <div>
-      <div style="font-size:0.85rem;font-weight:600;color:var(--primary);margin-bottom:1rem;letter-spacing:0.05em;text-transform:uppercase">
-        🌟 Health · Gamified
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <svg width="28" height="28" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M36 8 A28 28 0 1 0 36 64" stroke="#9FB87A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M36 58 Q34 44 36 32" stroke="#9FB87A" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          <path d="M36 44 Q28 40 26 34 Q32 36 36 44Z" fill="#9FB87A"/>
+          <path d="M36 32 Q30 22 32 14 Q38 20 36 32Z" fill="#E8A898" opacity=".85"/>
+          <path d="M36 32 Q42 22 44 14 Q38 20 36 32Z" fill="#E8A898" opacity=".85"/>
+          <path d="M36 32 Q24 28 20 20 Q30 22 36 32Z" fill="#EAB8A8" opacity=".7"/>
+          <path d="M36 32 Q48 28 52 20 Q42 22 36 32Z" fill="#EAB8A8" opacity=".7"/>
+          <circle cx="54" cy="14" r="2.8" fill="#E8A898" opacity=".7"/>
+          <circle cx="60" cy="20" r="2" fill="#E8A898" opacity=".5"/>
+        </svg>
+        <span style="font-family:Georgia,serif;font-size:20px;color:#D4C5B0;letter-spacing:-.3px">NXhyp</span>
       </div>
-      <h1>Level Up<br>Your Health</h1>
-      <p>Track steps, sleep &amp; water. Grow your companion.<br>Turn healthy habits into a rewarding game.</p>
-      <div class="hero-btns">
-        <button class="btn btn-primary btn-lg" onclick="openAuthModal('signup')">Get Started Free</button>
-        <button class="btn btn-outline btn-lg" onclick="openAuthModal('signin')">Sign In</button>
-      </div>
-      <!-- Mini phone mockup -->
-      <div class="hero-visual">
-        <div class="hero-phone">
-          <div class="hero-phone-stat">👟 <strong>8,432</strong> steps today</div>
-          <div class="hero-phone-stat">😴 <strong>7h 45m</strong> sleep</div>
-          <div class="hero-phone-stat">💧 <strong>6 / 8</strong> cups</div>
-          <div class="hero-phone-comp">🐱</div>
-          <div class="hero-phone-label">Buddy is Happy! 😄</div>
-          <div class="hero-phone-xp"><div class="hero-phone-xp-fill"></div></div>
-          <div class="hero-phone-level">Lv 12 · 🔥 5 day streak</div>
-        </div>
-      </div>
+      <div style="font-size:12px;color:rgba(255,255,255,.38);line-height:1.7;max-width:240px">Tailored wellness for every body. Always private. Always ad-free.</div>
     </div>
-  </section>
-
-  <!-- Features -->
-  <section class="features-section">
-    <h2>Everything you need to build<br>lasting healthy habits</h2>
-    <p class="section-sub">Free forever. Works on any device.</p>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feat-icon">📊</div>
-        <h3>Health Tracking</h3>
-        <p>Track steps, sleep, water, and mood with beautiful charts and visualizations.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feat-icon">🐾</div>
-        <h3>Companion Pet</h3>
-        <p>Draw and customize your own companion that grows happier as your habits improve.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feat-icon">💬</div>
-        <h3>AI Health Coach</h3>
-        <p>Get personalized health advice and motivation from your AI assistant.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feat-icon">👥</div>
-        <h3>Social &amp; Community</h3>
-        <p>Connect with friends, share achievements, and stay motivated together.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feat-icon">🏆</div>
-        <h3>Level Up System</h3>
-        <p>Earn XP and level up as you hit your goals. Unlock traits and rewards.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feat-icon">🌐</div>
-        <h3>Multi-Language</h3>
-        <p>Available in English, Bahasa Indonesia, Español, Français, and العربية.</p>
-      </div>
+    <div>
+      <h4 style="font-size:11px;font-weight:500;color:rgba(255,255,255,.7);letter-spacing:.06em;margin-bottom:9px">Legal</h4>
+      <a href="#" style="display:block;color:rgba(255,255,255,.4);text-decoration:none;margin-bottom:6px;font-size:12px">Privacy policy</a>
+      <a href="#" style="display:block;color:rgba(255,255,255,.4);text-decoration:none;font-size:12px">Terms of use</a>
     </div>
-  </section>
+    <div>
+      <h4 style="font-size:11px;font-weight:500;color:rgba(255,255,255,.7);letter-spacing:.06em;margin-bottom:9px">Product</h4>
+      <a href="#features" style="display:block;color:rgba(255,255,255,.4);text-decoration:none;margin-bottom:6px;font-size:12px">Features</a>
+      <a href="#safety" style="display:block;color:rgba(255,255,255,.4);text-decoration:none;font-size:12px">Security</a>
+    </div>
+  </div>
+  <div style="border-top:.5px solid rgba(255,255,255,.08);padding-top:16px;font-size:11px">© 2026 NXhyp Health. All rights reserved.</div>
+</footer>
 
-  <!-- CTA Band -->
-  <div class="land-cta-band">
-    <h2>Start your journey today</h2>
-    <p>Free forever. No credit card required.</p>
-    <button class="btn btn-primary btn-lg" onclick="openAuthModal('signup')">Create Free Account</button>
+<!-- APP MODAL -->
+<div id="app-modal">
+<div class="ami">
+<button class="mc" onclick="closeApp()"><i class="ti ti-x"></i></button>
+
+<!-- ── AUTH ── -->
+<div class="asc on" id="as-auth">
+<div style="display:flex;flex-direction:column;flex:1;overflow:hidden">
+  <div style="display:flex;gap:5px;padding:10px 20px 0;flex-shrink:0" id="ob-prog">
+    <div class="ob-dot active" id="d0"></div><div class="ob-dot" id="d1"></div><div class="ob-dot" id="d2"></div><div class="ob-dot" id="d3"></div>
   </div>
 
-  <!-- Footer -->
-  <footer>
-    <strong style="background:linear-gradient(135deg,#7c3aed,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">NXhyp</strong>
-    &nbsp;· Your health journey, gamified. © 2025
-  </footer>
+  <!-- Step 0: Sign up / in choice -->
+  <div class="ob-step on" id="s0">
+    <div class="ob-in" style="align-items:center;justify-content:center">
+      <svg width="90" height="90" viewBox="0 0 72 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M36 8 A28 28 0 1 0 36 64" stroke="#6B7F4A" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <path d="M36 58 Q34 44 36 32" stroke="#6B7F4A" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M36 44 Q28 40 26 34 Q32 36 36 44Z" fill="#6B7F4A"/>
+        <path d="M36 32 Q30 22 32 14 Q38 20 36 32Z" fill="#C9897A" opacity=".85"/>
+        <path d="M36 32 Q42 22 44 14 Q38 20 36 32Z" fill="#C9897A" opacity=".85"/>
+        <path d="M36 32 Q24 28 20 20 Q30 22 36 32Z" fill="#D4A090" opacity=".7"/>
+        <path d="M36 32 Q48 28 52 20 Q42 22 36 32Z" fill="#D4A090" opacity=".7"/>
+        <circle cx="54" cy="14" r="2.5" fill="#C9897A" opacity=".7"/>
+        <circle cx="60" cy="20" r="1.8" fill="#C9897A" opacity=".5"/>
+        <circle cx="58" cy="9"  r="1.4" fill="#C9897A" opacity=".4"/>
+      </svg>
+      <div style="font-family:Georgia,serif;font-size:28px;color:#6B7F4A;margin-top:2px;letter-spacing:-.5px">NXhyp</div>
+      <div style="font-size:11px;color:#C9897A;letter-spacing:.04em;margin-top:2px">your body, your rhythm, your hype</div>
+      <div style="font-size:13px;color:#888;line-height:1.6;text-align:center;max-width:260px">Your wellness companion. Global friends. Real chat. Draw your AI companion.</div>
+      <div style="width:100%;display:flex;flex-direction:column;gap:8px;margin-top:8px">
+        <button class="abtn abtn-g" onclick="goStep(1)">🌸 Create account</button>
+        <button class="abtn abtn-o" onclick="goStep(10)">Sign in to existing account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 1: Credentials + username -->
+  <div class="ob-step" id="s1">
+    <div class="ob-in">
+      <div style="font-family:var(--font-d);font-size:20px;color:#1A1A2E">Create your <em style="font-style:italic;color:var(--pk)">account</em></div>
+      <div style="font-size:11px;color:#888;line-height:1.6;background:var(--pk0);border-radius:10px;padding:8px 12px;border:.5px solid var(--pk1)"><i class="ti ti-globe"></i> Your <strong>username</strong> is unique globally — friends will find you by it.</div>
+      <div class="inp-w"><label>Username (unique, public)</label><div class="inp-r"><input class="inp-f" id="ob-un" type="text" placeholder="e.g. luna_rose" maxlength="20" oninput="clrE('e-un');this.value=this.value.toLowerCase().replace(/[^a-z0-9_]/g,'')"><i class="ti ti-at inp-ic"></i></div><div class="err-m" id="e-un">Username taken or invalid (letters, numbers, _ only).</div></div>
+      <div class="inp-w"><label>Email address</label><div class="inp-r"><input class="inp-f" id="ob-email" type="email" placeholder="you@example.com" oninput="clrE('e-email')"><i class="ti ti-mail inp-ic"></i></div><div class="err-m" id="e-email">Enter a valid email.</div></div>
+      <div class="inp-w"><label>Password</label><div class="inp-r"><input class="inp-f" id="ob-pass" type="password" placeholder="Min 8 characters" oninput="clrE('e-pass')"><button class="inp-pt" onclick="togP('ob-pass',this)" type="button"><i class="ti ti-eye-off"></i></button></div><div class="err-m" id="e-pass">Min 8 characters.</div></div>
+      <div class="inp-w"><label>Confirm password</label><div class="inp-r"><input class="inp-f" id="ob-p2" type="password" placeholder="Repeat" oninput="clrE('e-p2')"><button class="inp-pt" onclick="togP('ob-p2',this)" type="button"><i class="ti ti-eye-off"></i></button></div><div class="err-m" id="e-p2">Passwords don't match.</div></div>
+    </div>
+    <div class="ob-ft"><button class="abtn abtn-g" id="s1-btn" onclick="nxt(1)">Continue →</button></div>
+  </div>
+
+  <!-- Step 2: Profile -->
+  <div class="ob-step" id="s2">
+    <div class="ob-in">
+      <div style="font-family:var(--font-d);font-size:20px;color:#1A1A2E">About <em style="font-style:italic;color:var(--pk)">you</em></div>
+      <div style="font-size:11px;color:#888">Personalises your tracking. Private & encrypted.</div>
+      <div class="inp-w"><label>Date of birth</label><div class="dob-row"><select id="ob-day"><option value="">Day</option></select><select id="ob-mon"><option value="">Month</option><option>January</option><option>February</option><option>March</option><option>April</option><option>May</option><option>June</option><option>July</option><option>August</option><option>September</option><option>October</option><option>November</option><option>December</option></select><select id="ob-yr"><option value="">Year</option></select></div><div class="err-m" id="e-dob">Select full date.</div></div>
+      <div class="inp-w"><label>Health profile</label>
+        <div class="g-grid">
+          <div class="g-opt" id="go-girl" onclick="selG('girl')"><div style="font-size:22px;margin-bottom:5px">🌸</div><div style="font-size:12px;font-weight:500;color:var(--pk8)">Girl / Woman</div></div>
+          <div class="g-opt" id="go-boy" onclick="selG('boy')"><div style="font-size:22px;margin-bottom:5px">💪</div><div style="font-size:12px;font-weight:500;color:var(--bl8)">Boy / Man</div></div>
+          <div class="g-opt" id="go-nb" onclick="selG('nb')"><div style="font-size:22px;margin-bottom:5px">⭐</div><div style="font-size:12px;font-weight:500">Non-binary</div></div>
+          <div class="g-opt" id="go-ns" onclick="selG('ns')"><div style="font-size:22px;margin-bottom:5px">🤍</div><div style="font-size:12px;font-weight:500">Prefer not to say</div></div>
+        </div>
+        <div class="err-m" id="e-gen">Select a profile.</div>
+      </div>
+    </div>
+    <div class="ob-ft" style="display:flex;gap:8px"><button class="abtn abtn-o" onclick="goStep(1)" style="width:44px;flex-shrink:0;padding:0;display:flex;align-items:center;justify-content:center"><i class="ti ti-arrow-left"></i></button><button class="abtn abtn-g" style="flex:1" onclick="nxt(2)">Continue →</button></div>
+  </div>
+
+  <!-- Step 3: Companion name + drawing -->
+  <div class="ob-step" id="s3">
+    <div class="ob-in">
+      <div style="font-family:var(--font-d);font-size:20px;color:#1A1A2E">Your <em style="font-style:italic;color:var(--pk)">companion</em></div>
+      <div style="font-size:11px;color:#888;line-height:1.6">Name your companion and either draw them or pick a premade character. You can always change this later!</div>
+      <div class="inp-w"><label>Companion name</label><input class="inp-f" id="ob-cname" value="Luna" maxlength="20" style="font-family:var(--font-d);font-style:italic;text-align:center;font-size:16px" oninput="upd('ob-cname-prev',this.value||'Companion')"></div>
+
+      <!-- Tabs -->
+      <div style="display:flex;gap:6px">
+        <button class="ava-tab-btn on" id="ct-draw" onclick="switchCompTab('draw',this)">🎨 Free draw</button>
+        <button class="ava-tab-btn" id="ct-premade" onclick="switchCompTab('premade',this)">✨ Premade</button>
+      </div>
+
+      <!-- Draw tab -->
+      <div id="comp-tab-draw">
+        <div style="font-size:11px;color:#888;margin-bottom:6px">Draw your companion! Use the tools below.</div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px;align-items:center">
+          <button class="tool-btn on" id="tool-pen" onclick="setTool('pen',this)">✏️ Draw</button>
+          <button class="tool-btn" id="tool-erase" onclick="setTool('erase',this)">⬜ Erase</button>
+          <button class="tool-btn" id="tool-fill" onclick="setTool('fill',this)">🪣 Fill</button>
+          <button class="tool-btn" onclick="clearCanvas()">🗑️ Clear</button>
+          <input type="range" min="2" max="30" value="6" id="brush-size" style="width:60px" oninput="brushSize=+this.value">
+        </div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px">
+          <div class="color-dot on" style="background:#222" onclick="setColor('#222',this)"></div>
+          <div class="color-dot" style="background:#D4537E" onclick="setColor('#D4537E',this)"></div>
+          <div class="color-dot" style="background:#3A7BD5" onclick="setColor('#3A7BD5',this)"></div>
+          <div class="color-dot" style="background:#1D9E75" onclick="setColor('#1D9E75',this)"></div>
+          <div class="color-dot" style="background:#EF9F27" onclick="setColor('#EF9F27',this)"></div>
+          <div class="color-dot" style="background:#7F77DD" onclick="setColor('#7F77DD',this)"></div>
+          <div class="color-dot" style="background:#E24B4A" onclick="setColor('#E24B4A',this)"></div>
+          <div class="color-dot" style="background:#FFC0CB" onclick="setColor('#FFC0CB',this)"></div>
+          <div class="color-dot" style="background:#FFD700" onclick="setColor('#FFD700',this)"></div>
+          <div class="color-dot" style="background:#8B4513" onclick="setColor('#8B4513',this)"></div>
+          <div class="color-dot" style="background:#fff;border:.5px solid #ccc" onclick="setColor('#fff',this)"></div>
+        </div>
+        <canvas id="companion-canvas" width="280" height="200" style="border-radius:14px;border:1.5px solid var(--pu1);background:#fff;touch-action:none;cursor:crosshair;width:100%;display:block"></canvas>
+      </div>
+
+      <!-- Premade tab -->
+      <div id="comp-tab-premade" style="display:none">
+        <div class="premade-grid" id="premade-grid"></div>
+      </div>
+    </div>
+    <div class="ob-ft" style="display:flex;gap:8px">
+      <button class="abtn abtn-o" onclick="goStep(2)" style="width:44px;flex-shrink:0;padding:0;display:flex;align-items:center;justify-content:center"><i class="ti ti-arrow-left"></i></button>
+      <button class="abtn abtn-p" style="flex:1" id="s3-btn" onclick="finOb()">🌸 Enter NXhyp</button>
+    </div>
+  </div>
+
+  <!-- Step 10: Sign in -->
+  <div class="ob-step" id="s10">
+    <div class="ob-in">
+      <div style="font-size:44px;text-align:center">🌸</div>
+      <div style="font-family:var(--font-d);font-size:20px;color:#1A1A2E">Welcome <em style="font-style:italic;color:var(--pk)">back</em></div>
+      <div style="font-size:11px;color:#888">Sign in to restore all your data, friends & companion.</div>
+      <div class="inp-w"><label>Email</label><div class="inp-r"><input class="inp-f" id="si-e" type="email" placeholder="you@example.com"><i class="ti ti-mail inp-ic"></i></div></div>
+      <div class="inp-w"><label>Password</label><div class="inp-r"><input class="inp-f" id="si-p" type="password" placeholder="Your password" onkeydown="if(event.key==='Enter')doSI()"><button class="inp-pt" onclick="togP('si-p',this)" type="button"><i class="ti ti-eye-off"></i></button></div><div class="err-m" id="e-si">Incorrect email or password.</div></div>
+      <button class="abtn abtn-g" id="si-btn" onclick="doSI()">Sign in</button>
+      <div style="text-align:center;font-size:12px;color:#888">New? <span style="color:var(--pk);cursor:pointer;font-weight:500" onclick="goStep(1)">Create account →</span></div>
+    </div>
+  </div>
 
 </div>
+</div>
 
-<!-- ══════════════════════════════════════════
-     APP SHELL  (#app)
-════════════════════════════════════════════ -->
-<div id="app" class="hidden">
-
-  <!-- ── ONBOARDING ── -->
-  <div id="onboarding" class="hidden onboarding-wrap">
-
-    <div id="onboard-step-1" class="onboard-step">
-      <div class="onboard-emoji">🎉</div>
-      <h2>Welcome to NXhyp!</h2>
-      <p>Let's set up your health journey.</p>
-      <div class="onboard-features">
-        <div class="onboard-feat">👟 Track your steps daily</div>
-        <div class="onboard-feat">😴 Log your sleep patterns</div>
-        <div class="onboard-feat">💧 Stay hydrated — 8 cups a day</div>
-        <div class="onboard-feat">🐾 Grow your companion pet</div>
-      </div>
-      <button class="btn btn-primary btn-lg" onclick="nextOnboardStep()">Get Started →</button>
+<!-- ── HOME ── -->
+<div class="asc" id="as-home">
+  <div class="asb"><span id="home-time">9:41 AM</span><span>🔋 100%</span></div>
+  <div class="atb">
+    <div><div id="h-gr" style="font-size:10px;color:var(--pk);margin-bottom:1px">Good morning</div><div id="h-nm" style="font-size:17px;font-weight:500">Hi!</div></div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="display:flex;align-items:center;gap:4px;background:var(--am0);border-radius:999px;padding:4px 10px;cursor:pointer;border:.5px solid var(--am1)" onclick="goTo('companion')"><div class="pts-coin">✦</div><span id="pts-d" style="font-size:12px;font-weight:500;color:var(--am6)">0</span></div>
+      <div id="h-ca" style="cursor:pointer;font-size:26px;line-height:1;width:36px;height:36px;display:flex;align-items:center;justify-content:center" onclick="goTo('companion')"></div>
     </div>
-
-    <div id="onboard-step-2" class="onboard-step hidden">
-      <div class="onboard-emoji">👤</div>
-      <h2>You're set up!</h2>
-      <p>Your username is ready. Others will find you in the community.</p>
-      <div class="onboard-tip">
-        <strong>Tip:</strong> Earn XP by logging steps, sleep, and water every day. Build your streak for bonus points!
+  </div>
+  <div class="bod">
+    <div id="hc-g"><div class="acard"><div class="albl">Cycle today</div><div style="display:flex;align-items:center;gap:14px"><div style="position:relative;width:60px;height:60px;flex-shrink:0"><svg width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="24" fill="none" stroke="#FBEAF0" stroke-width="6"/><circle cx="30" cy="30" r="24" fill="none" stroke="#ED93B1" stroke-width="6" stroke-dasharray="75 151" stroke-linecap="round" transform="rotate(-90 30 30)"/></svg><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center"><div style="font-size:15px;font-weight:500;color:var(--pk)">14</div><div style="font-size:8px;color:var(--pk)">day</div></div></div><div><div style="font-size:12px;margin-bottom:6px">Next period in 14 days</div><button onclick="goTo('health-g');logA('cycle')" style="background:var(--pk);border:none;border-radius:999px;padding:6px 13px;color:#fff;font-size:11px;cursor:pointer;font-family:var(--font-b)">Log today +10pts</button></div></div></div></div>
+    <div id="hc-b" style="display:none"><div class="acard"><div class="albl">Health today</div><div style="display:flex;align-items:center;gap:14px"><div style="font-size:28px;font-weight:500;color:var(--bl)">7/10</div><div><div style="font-size:12px;margin-bottom:6px">Energy: High · Good recovery</div><button onclick="goTo('health-b');logA('health')" style="background:var(--bl);border:none;border-radius:999px;padding:6px 13px;color:#fff;font-size:11px;cursor:pointer;font-family:var(--font-b)">Log today +10pts</button></div></div></div></div>
+    <div class="acard" style="cursor:pointer" onclick="goTo('trackers')">
+      <div class="albl">Steps today</div>
+      <div style="display:flex;align-items:center;gap:10px;padding:6px 0">
+        <div><div style="font-size:26px;font-weight:500;color:var(--tl)" id="home-steps">0</div><div style="font-size:10px;color:#888">/ 10,000</div></div>
+        <div style="flex:1"><div class="step-prog"><div class="step-prog-fill" id="home-steps-bar" style="width:0%"></div></div><div style="font-size:10px;color:var(--tl6);margin-top:4px" id="home-steps-pct">0%</div></div>
+        <i class="ti ti-chevron-right" style="color:#bbb;font-size:18px"></i>
       </div>
-      <button class="btn btn-primary btn-lg" onclick="nextOnboardStep()">Next →</button>
     </div>
-
-    <div id="onboard-step-3" class="onboard-step hidden">
-      <div class="onboard-emoji">🐾</div>
-      <h2>Meet your Companion!</h2>
-      <p>Your companion's mood reflects your healthy habits.</p>
-      <div class="onboard-comp-preview">
-        <span style="font-size:4.5rem">🐱</span>
-        <div class="onboard-comp-name">Buddy · Neutral 😐</div>
+    <div class="acard" style="border:.5px solid var(--pu1);background:var(--pu0);cursor:pointer" onclick="goTo('companion')">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div id="hm-ca" style="width:48px;height:48px;flex-shrink:0;display:flex;align-items:center;justify-content:center"></div>
+        <div style="flex:1"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px"><span id="hm-cn" style="font-size:13px;font-weight:500;color:var(--pu8)">Luna</span><span id="hm-lv" style="background:var(--pu6);color:#fff;font-size:9px;padding:1px 7px;border-radius:999px">Lv 1</span></div><div style="font-size:11px;color:var(--pu6)" id="hm-ct">Gentle & wise</div><div class="prog-o" style="margin-top:5px"><div class="prog-i" id="hm-cb" style="width:0%;background:var(--pu6)"></div></div></div>
+        <i class="ti ti-chevron-right" style="color:var(--pu6);font-size:18px"></i>
       </div>
-      <div class="onboard-tip">
-        Hit your daily step, sleep, and water goals to make Buddy <strong>Excited!</strong> 🎉
-      </div>
-      <button class="btn btn-primary btn-lg" onclick="nextOnboardStep()">Next →</button>
     </div>
-
-    <div id="onboard-step-4" class="onboard-step hidden">
-      <div class="onboard-emoji">🚀</div>
-      <h2>You're all set!</h2>
-      <p>Your health journey starts now.</p>
-      <div class="onboard-stats-preview">
-        <div class="onboard-stat-item">🔥 <span>Streak starts today</span></div>
-        <div class="onboard-stat-item">⭐ <span>Level 1 · 0 XP</span></div>
-        <div class="onboard-stat-item">🏆 <span>First goal: 10,000 steps</span></div>
-        <div class="onboard-stat-item">🤝 <span>Join the community</span></div>
-      </div>
-      <button class="btn btn-primary btn-lg" onclick="nextOnboardStep()">Let's Go! 🎮</button>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px">
+      <div class="acard" style="cursor:pointer;text-align:center;padding:11px 6px" onclick="goTo('trackers')"><div style="font-size:20px;margin-bottom:5px">📊</div><div style="font-size:11px;font-weight:500">Trackers</div></div>
+      <div class="acard" style="cursor:pointer;text-align:center;padding:11px 6px" onclick="goTo('ai')"><div style="font-size:20px;margin-bottom:5px">💬</div><div style="font-size:11px;font-weight:500">Chat</div></div>
+      <div class="acard" style="cursor:pointer;text-align:center;padding:11px 6px;position:relative" onclick="goTo('friends')"><div style="font-size:20px;margin-bottom:5px">👥</div><div style="font-size:11px;font-weight:500">Friends</div><span id="fr-notif" style="display:none;position:absolute;top:6px;right:8px" class="badge-pill">!</span></div>
     </div>
+  </div>
+  <div class="tabs">
+    <button class="tab ag" onclick="goTo('home')"><i class="ti ti-home"></i><span>Home</span></button>
+    <button class="tab" onclick="goHealth()"><i class="ti ti-heart-rate-monitor"></i><span>Health</span></button>
+    <button class="tab" onclick="goTo('trackers')"><i class="ti ti-chart-line"></i><span>Trackers</span></button>
+    <button class="tab" onclick="goTo('companion')"><i class="ti ti-sparkles"></i><span>Companion</span></button>
+    <button class="tab" onclick="goTo('more')"><i class="ti ti-dots"></i><span>More</span></button>
+  </div>
+</div>
 
-  </div><!-- /#onboarding -->
+<!-- ── TRACKERS ── -->
+<div class="asc" id="as-trackers">
+  <div class="asb"><span>9:41</span><span>100%</span></div>
+  <div class="atb"><button onclick="goTo('home')" style="background:none;border:.5px solid #ddd;border-radius:8px;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#888"><i class="ti ti-arrow-left" style="font-size:14px"></i></button><div class="atb-title">Trackers</div><span style="background:var(--tl0);color:var(--tl6);font-size:10px;padding:3px 8px;border-radius:999px;border:.5px solid var(--tl1)" id="tr-streak">0-day streak</span></div>
+  <div class="bod">
+    <div class="tracker-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div><div style="font-size:14px;font-weight:500">👟 Steps today</div></div><div style="font-size:22px;font-weight:500;color:var(--tl)" id="t-steps">0</div></div>
+      <div class="prog-o"><div class="prog-i" id="t-steps-bar" style="background:var(--tl);width:0%"></div></div>
+      <div class="albl" style="margin-top:10px">Hourly</div>
+      <div class="chart-bar-row" id="steps-bars"></div>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <div style="flex:1;background:var(--tl0);border-radius:10px;padding:8px;text-align:center"><div style="font-size:16px;font-weight:500;color:var(--tl)" id="t-cal">0</div><div style="font-size:10px;color:var(--tl6)">Cal</div></div>
+        <div style="flex:1;background:var(--bl0);border-radius:10px;padding:8px;text-align:center"><div style="font-size:16px;font-weight:500;color:var(--bl)" id="t-km">0.0</div><div style="font-size:10px;color:var(--bl6)">km</div></div>
+        <div style="flex:1;background:var(--pu0);border-radius:10px;padding:8px;text-align:center"><div style="font-size:16px;font-weight:500;color:var(--pu6)" id="t-act">0</div><div style="font-size:10px;color:var(--pu6)">min</div></div>
+      </div>
+      <button class="abtn abtn-o" style="margin-top:8px;padding:8px" onclick="addSteps()">+ Add 500 steps (+5 pts)</button>
+    </div>
+    <div class="tracker-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div style="font-size:14px;font-weight:500">🛌 Sleep</div><div style="font-size:22px;font-weight:500;color:var(--pu6)" id="t-sleep">—</div></div>
+      <div class="sleep-phase" id="t-sleep-phase" style="height:36px;border-radius:10px;overflow:hidden"><div style="flex:1;background:#E0D8EC;display:flex;align-items:center;justify-content:center;font-size:10px;color:#aaa">No sleep logged</div></div>
+      <div class="arng" style="margin-top:10px"><label>Quality</label><input type="range" min="1" max="5" value="3" oninput="this.nextElementSibling.textContent=['','Poor','Fair','Good','Great','Perfect'][this.value]" style="flex:1"><span>Good</span></div>
+      <button class="abtn abtn-p" style="padding:9px" onclick="logSleep();logA('sleep')">Log sleep +8 pts</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="tracker-card" style="margin-bottom:0"><div class="albl">Mood</div><input type="range" min="1" max="10" value="7" id="mood-sl" oninput="this.nextElementSibling.textContent=['','😔','😕','😐','🙂','😊','😄','😁','😆','😍','🤩'][this.value]" style="width:100%;margin:8px 0"><span style="display:block;text-align:center;font-size:22px">😁</span><button class="abtn abtn-o" style="padding:7px;font-size:11px;margin-top:6px" onclick="logA('mood');aToast('+5 pts! Mood logged 😊');saveState()">Log +5pts</button></div>
+      <div class="tracker-card" style="margin-bottom:0"><div class="albl">Water</div><div style="text-align:center;margin:4px 0"><div style="font-size:22px;font-weight:500;color:var(--bl)" id="water-cnt">0</div><div style="font-size:10px;color:var(--bl6)">/ 8 glasses</div></div><div style="display:flex;gap:2px;justify-content:center;flex-wrap:wrap;margin:4px 0" id="water-icons"></div><button class="abtn abtn-b" style="padding:7px;font-size:11px;background:var(--bl)" onclick="addWater()">+ 1 glass</button></div>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab" onclick="goTo('home')"><i class="ti ti-home"></i><span>Home</span></button>
+    <button class="tab" onclick="goHealth()"><i class="ti ti-heart-rate-monitor"></i><span>Health</span></button>
+    <button class="tab ag" onclick="goTo('trackers')"><i class="ti ti-chart-line"></i><span>Trackers</span></button>
+    <button class="tab" onclick="goTo('companion')"><i class="ti ti-sparkles"></i><span>Companion</span></button>
+    <button class="tab" onclick="goTo('more')"><i class="ti ti-dots"></i><span>More</span></button>
+  </div>
+</div>
 
-  <!-- ── MAIN APP ── -->
-  <div id="main-app" class="hidden">
-
-    <!-- Sidebar (desktop only) -->
-    <div class="app-content">
-      <aside id="sidebar">
-        <div class="logo">NXhyp</div>
-        <nav id="sidebar-nav"></nav>
-        <div class="sidebar-clock-wrap">
-          <div id="clock"></div>
+<!-- ── COMPANION ── -->
+<div class="asc" id="as-companion">
+  <div class="asb"><span>9:41</span><span>100%</span></div>
+  <div class="atb"><button onclick="goTo('home')" style="background:none;border:.5px solid #ddd;border-radius:8px;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#888"><i class="ti ti-arrow-left" style="font-size:14px"></i></button><div class="atb-title">My companion</div><div style="display:flex;align-items:center;gap:5px"><div class="pts-coin">✦</div><span id="pts-cd" style="font-size:13px;font-weight:500;color:var(--am6)">0</span></div></div>
+  <div class="bod">
+    <div style="background:linear-gradient(160deg,#F0EEFF,#FFF8FB);border-radius:20px;padding:16px;border:.5px solid var(--pu1)">
+      <div style="text-align:center;margin-bottom:12px">
+        <div id="comp-big-ava" style="width:120px;height:120px;margin:0 auto;border-radius:20px;border:2px solid var(--pu1);background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden"></div>
+        <div style="font-size:16px;font-weight:500;margin-top:8px" id="comp-nm-d">Luna</div>
+        <div style="font-size:10px;color:var(--pu6)" id="comp-tr-d">Gentle & wise</div>
+        <div style="max-width:160px;margin:8px auto 0"><div style="display:flex;justify-content:space-between;font-size:10px;color:#888;margin-bottom:3px"><span id="lv-d">Level 1</span><span id="lv-pts-d">0/200</span></div><div class="prog-o"><div class="prog-i" id="lv-bar-d" style="width:0%;background:var(--pu6)"></div></div></div>
+      </div>
+      <!-- Edit companion drawing -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+        <button class="ava-tab-btn on" id="ct2-draw" onclick="switchCompTab2('draw',this)">🎨 Edit drawing</button>
+        <button class="ava-tab-btn" id="ct2-premade" onclick="switchCompTab2('premade',this)">✨ Premade</button>
+        <button class="ava-tab-btn" id="ct2-personality" onclick="switchCompTab2('personality',this)">💜 Personality</button>
+      </div>
+      <div id="comp2-draw">
+        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px;align-items:center">
+          <button class="tool-btn on" id="t2-pen" onclick="setTool2('pen',this)">✏️</button>
+          <button class="tool-btn" id="t2-erase" onclick="setTool2('erase',this)">⬜</button>
+          <button class="tool-btn" id="t2-fill" onclick="setTool2('fill',this)">🪣</button>
+          <button class="tool-btn" onclick="clearCanvas2()">🗑️</button>
+          <input type="range" min="2" max="30" value="6" id="brush-size2" style="width:60px" oninput="brushSize2=+this.value">
         </div>
-      </aside>
-
-      <!-- Main content column -->
-      <div id="content">
-
-        <!-- Sticky header (visible on all sizes) -->
-        <div id="app-header">
-          <div class="logo" style="font-size:1.1rem">NXhyp</div>
-          <div style="display:flex;align-items:center;gap:1rem">
-            <span id="clock-mobile" style="font-size:0.85rem;color:var(--text-muted)"></span>
-          </div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px">
+          <div class="color-dot on" style="background:#222" onclick="setColor2('#222',this)"></div>
+          <div class="color-dot" style="background:#D4537E" onclick="setColor2('#D4537E',this)"></div>
+          <div class="color-dot" style="background:#3A7BD5" onclick="setColor2('#3A7BD5',this)"></div>
+          <div class="color-dot" style="background:#1D9E75" onclick="setColor2('#1D9E75',this)"></div>
+          <div class="color-dot" style="background:#EF9F27" onclick="setColor2('#EF9F27',this)"></div>
+          <div class="color-dot" style="background:#7F77DD" onclick="setColor2('#7F77DD',this)"></div>
+          <div class="color-dot" style="background:#E24B4A" onclick="setColor2('#E24B4A',this)"></div>
+          <div class="color-dot" style="background:#FFC0CB" onclick="setColor2('#FFC0CB',this)"></div>
+          <div class="color-dot" style="background:#FFD700" onclick="setColor2('#FFD700',this)"></div>
+          <div class="color-dot" style="background:#8B4513" onclick="setColor2('#8B4513',this)"></div>
+          <div class="color-dot" style="background:#fff;border:.5px solid #ccc" onclick="setColor2('#fff',this)"></div>
         </div>
+        <canvas id="companion-canvas2" width="280" height="180" style="border-radius:12px;border:1.5px solid var(--pu1);background:#fff;touch-action:none;cursor:crosshair;width:100%;display:block"></canvas>
+        <button class="abtn abtn-p" style="padding:9px;margin-top:8px" onclick="saveDrawing2()">Save companion drawing</button>
+      </div>
+      <div id="comp2-premade" style="display:none"><div class="premade-grid" id="premade-grid2"></div></div>
+      <div id="comp2-personality" style="display:none"><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:4px" id="trait-grid-comp"></div></div>
+    </div>
+    <div class="acard"><div class="albl">Earn NXhyp Points</div><div id="earn-l"></div></div>
+  </div>
+  <div class="tabs">
+    <button class="tab" onclick="goTo('home')"><i class="ti ti-home"></i><span>Home</span></button>
+    <button class="tab" onclick="goHealth()"><i class="ti ti-heart-rate-monitor"></i><span>Health</span></button>
+    <button class="tab" onclick="goTo('trackers')"><i class="ti ti-chart-line"></i><span>Trackers</span></button>
+    <button class="tab ap" onclick="goTo('companion')"><i class="ti ti-sparkles"></i><span>Companion</span></button>
+    <button class="tab" onclick="goTo('more')"><i class="ti ti-dots"></i><span>More</span></button>
+  </div>
+</div>
 
-        <!-- Views — rendered by JS -->
-        <div id="view-dashboard"  class="view hidden"></div>
-        <div id="view-steps"      class="view hidden"></div>
-        <div id="view-sleep"      class="view hidden"></div>
-        <div id="view-water"      class="view hidden"></div>
-        <div id="view-companion"  class="view hidden"></div>
-        <div id="view-ai"         class="view hidden"></div>
-        <div id="view-friends"    class="view hidden"></div>
-        <div id="view-community"  class="view hidden"></div>
-        <div id="view-profile"    class="view hidden"></div>
+<!-- ── HEALTH G ── -->
+<div class="asc" id="as-health-g"><div class="asb"><span>9:41</span><span>100%</span></div><div class="atb"><button onclick="goTo('home')" style="background:none;border:.5px solid #ddd;border-radius:8px;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#888"><i class="ti ti-arrow-left" style="font-size:14px"></i></button><div class="atb-title">🌸 Cycle tracker</div></div>
+<div class="bod"><div class="acard"><div class="albl">Log today</div><div style="display:flex;gap:6px;flex-wrap:wrap"><button style="padding:6px 11px;border-radius:9px;border:1px solid var(--pk);background:var(--pk0);font-size:12px;cursor:pointer;font-family:var(--font-b)">None</button><button style="padding:6px 11px;border-radius:9px;border:1px solid #E8E0F0;background:#fff;font-size:12px;cursor:pointer;font-family:var(--font-b)">Light</button><button style="padding:6px 11px;border-radius:9px;border:1px solid #E8E0F0;background:#fff;font-size:12px;cursor:pointer;font-family:var(--font-b)">Medium</button><button style="padding:6px 11px;border-radius:9px;border:1px solid #E8E0F0;background:#fff;font-size:12px;cursor:pointer;font-family:var(--font-b)">Heavy</button></div><div class="arng" style="margin-top:10px"><label>Pain</label><input type="range" min="0" max="10" value="3" oninput="this.nextElementSibling.textContent=this.value+'/10'" style="flex:1"><span>3/10</span></div><button class="abtn abtn-g" onclick="logA('cycle');aToast('Logged! +10 pts 🌸');saveState()">Save & earn +10 pts</button></div></div>
+<div class="tabs"><button class="tab" onclick="goTo('home')"><i class="ti ti-home"></i><span>Home</span></button><button class="tab ag"><i class="ti ti-heart-rate-monitor"></i><span>Health</span></button><button class="tab" onclick="goTo('trackers')"><i class="ti ti-chart-line"></i><span>Trackers</span></button><button class="tab" onclick="goTo('companion')"><i class="ti ti-sparkles"></i><span>Companion</span></button><button class="tab" onclick="goTo('more')"><i class="ti ti-dots"></i><span>More</span></button></div>
+</div>
 
-      </div><!-- /#content -->
-    </div><!-- /.app-content -->
+<!-- ── HEALTH B ── -->
+<div class="asc" id="as-health-b"><div class="asb"><span>9:41</span><span>100%</span></div><div class="atb"><button onclick="goTo('home')" style="background:none;border:.5px solid #ddd;border-radius:8px;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#888"><i class="ti ti-arrow-left" style="font-size:14px"></i></button><div class="atb-title">💪 Health tracker</div></div>
+<div class="bod"><div class="acard"><div class="albl">Log today</div><div class="arng"><label>Energy</label><input type="range" min="1" max="10" value="7" oninput="this.nextElementSibling.textContent=this.value+'/10'" style="flex:1"><span>7/10</span></div><div class="arng"><label>Recovery</label><input type="range" min="1" max="10" value="7" oninput="this.nextElementSibling.textContent=this.value+'/10'" style="flex:1"><span>7/10</span></div><button class="abtn abtn-b" style="margin-top:10px" onclick="logA('health');aToast('Logged! +10 pts 💪');saveState()">Save & earn +10 pts</button></div></div>
+<div class="tabs"><button class="tab" onclick="goTo('home')"><i class="ti ti-home"></i><span>Home</span></button><button class="tab ab"><i class="ti ti-heart-rate-monitor"></i><span>Health</span></button><button class="tab" onclick="goTo('trackers')"><i class="ti ti-chart-line"></i><span>Trackers</span></button><button class="tab" onclick="goTo('companion')"><i class="ti ti-sparkles"></i><span>Companion</span></button><button class="tab" onclick="goTo('more')"><i class="ti ti-dots"></i><span>More</span></button></div>
+</div>
 
-    <!-- Bottom nav (mobile only) -->
-    <nav id="bottom-nav"></nav>
+<!-- ── AI CHAT ── -->
+<div class="asc" id="as-ai">
+  <div class="asb"><span>9:41</span><span>100%</span></div>
+  <div class="atb"><button onclick="goTo('home')" style="background:none;border:.5px solid #ddd;border-radius:8px;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#888"><i class="ti ti-arrow-left" style="font-size:14px"></i></button><div style="display:flex;align-items:center;gap:8px"><div id="ai-ava" style="width:30px;height:30px;border-radius:8px;overflow:hidden;border:.5px solid var(--pu1);background:#fff;display:flex;align-items:center;justify-content:center"></div><div><div class="atb-title" id="ai-nm">Luna</div><div style="font-size:10px;color:var(--tl6)">Online</div></div></div></div>
+  <div class="a-chat" id="a-chat"></div>
+  <div class="qr-row" id="a-qr"></div>
+  <div class="cin"><input type="text" id="a-in" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')aSend()"><button class="csend" id="a-sb" style="background:var(--pu6)" onclick="aSend()"><i class="ti ti-send"></i></button></div>
+</div>
 
-  </div><!-- /#main-app -->
+<!-- ── FRIENDS ── -->
+<div class="asc" id="as-friends">
+  <div class="asb"><span>9:41</span><span>100%</span></div>
+  <div class="atb"><button onclick="goTo('more')" style="background:none;border:.5px solid #ddd;border-radius:8px;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#888"><i class="ti ti-arrow-left" style="font-size:14px"></i></button><div class="atb-title">Friends</div></div>
+  <div style="display:flex;border-bottom:.5px solid rgba(0,0,0,.07);flex-shrink:0">
+    <button onclick="fTab('search',this)" style="flex:1;padding:10px;border:none;background:none;font-size:12px;cursor:pointer;color:var(--pk);border-bottom:2px solid var(--pk);font-family:var(--font-b);font-weight:500">Search</button>
+    <button onclick="fTab('list',this)" style="flex:1;padding:10px;border:none;background:none;font-size:12px;cursor:pointer;color:#888;border-bottom:2px solid transparent;font-family:var(--font-b)">Friends</button>
+    <button onclick="fTab('requests',this)" style="flex:1;padding:10px;border:none;background:none;font-size:12px;cursor:pointer;color:#888;border-bottom:2px solid transparent;font-family:var(--font-b)">Requests<span id="req-cnt" class="badge-pill" style="display:none">0</span></button>
+  </div>
+  <div class="bod" id="friends-body"></div>
+  <div class="tabs"><button class="tab" onclick="goTo('home')"><i class="ti ti-home"></i><span>Home</span></button><button class="tab" onclick="goHealth()"><i class="ti ti-heart-rate-monitor"></i><span>Health</span></button><button class="tab" onclick="goTo('trackers')"><i class="ti ti-chart-line"></i><span>Trackers</span></button><button class="tab" onclick="goTo('companion')"><i class="ti ti-sparkles"></i><span>Companion</span></button><button class="tab ap" onclick="goTo('more')"><i class="ti ti-dots"></i><span>More</span></button></div>
+</div>
 
-</div><!-- /#app -->
+<!-- ── DM ── -->
+<div class="asc" id="as-dm">
+  <div class="asb"><span>9:41</span><span>100%</span></div>
+  <div class="atb"><button onclick="goTo('friends')" style="background:none;border:.5px solid #ddd;border-radius:8px;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#888"><i class="ti ti-arrow-left" style="font-size:14px"></i></button><div style="display:flex;align-items:center;gap:8px"><div id="dm-ava" style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;background:var(--pk0);color:var(--pk8)">?</div><div class="atb-title" id="dm-name">Chat</div></div></div>
+  <div class="msg-area" id="dm-msgs"></div>
+  <div class="chat-in"><input type="text" id="dm-in" placeholder="Message..." onkeydown="if(event.key==='Enter')dmSend()"><button class="csend" id="dm-sb" style="background:var(--pk)" onclick="dmSend()"><i class="ti ti-send"></i></button></div>
+</div>
 
-<!-- ══════════════════════════════════════════
-     SCRIPTS  (order matters)
-════════════════════════════════════════════ -->
-<script src="js/translations.js"></script>
-<script src="js/state.js"></script>
-<script src="js/lang.js"></script>
-<script src="js/supabase.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/canvas.js"></script>
-<script src="js/companion.js"></script>
-<script src="js/trackers.js"></script>
-<script src="js/community.js"></script>
-<script src="js/friends.js"></script>
-<script src="js/ai.js"></script>
-<script src="js/app.js"></script>
+<!-- ── COMMUNITY ── -->
+<div class="asc" id="as-community">
+  <div class="asb"><span>9:41</span><span>100%</span></div>
+  <div class="atb"><button onclick="goTo('more')" style="background:none;border:.5px solid #ddd;border-radius:8px;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#888"><i class="ti ti-arrow-left" style="font-size:14px"></i></button><div class="atb-title">Community</div><span style="background:var(--bl0);color:var(--bl8);font-size:10px;padding:3px 8px;border-radius:999px">Anon</span></div>
+  <div style="display:flex;border-bottom:.5px solid rgba(0,0,0,.07);flex-shrink:0">
+    <button onclick="cTab('all',this)" style="flex:1;padding:8px 4px;border:none;background:none;font-size:11px;cursor:pointer;color:var(--pk);border-bottom:2px solid var(--pk);font-family:var(--font-b);font-weight:500">All</button>
+    <button onclick="cTab('q',this)" style="flex:1;padding:8px 4px;border:none;background:none;font-size:11px;cursor:pointer;color:#888;border-bottom:2px solid transparent;font-family:var(--font-b)">Questions</button>
+    <button onclick="cTab('t',this)" style="flex:1;padding:8px 4px;border:none;background:none;font-size:11px;cursor:pointer;color:#888;border-bottom:2px solid transparent;font-family:var(--font-b)">Tips</button>
+  </div>
+  <div style="flex:1;overflow-y:auto;padding:10px 14px" id="comm-list"><div style="text-align:center;padding:30px"><div class="spinner"></div></div></div>
+  <div style="display:flex;gap:8px;padding:8px 14px;border-top:.5px solid rgba(0,0,0,.07);background:#fff;flex-shrink:0"><input type="text" id="comm-in" placeholder="Share anonymously..." style="flex:1;height:34px;padding:0 11px;border-radius:9px;border:.5px solid #ddd;font-size:12px;font-family:var(--font-b);background:#F8F5FC;outline:none"><button class="csend" id="comm-sb" style="background:var(--pk)" onclick="commPost()"><i class="ti ti-send"></i></button></div>
+</div>
+
+<!-- ── MORE ── -->
+<div class="asc" id="as-more">
+  <div class="asb"><span>9:41</span><span>100%</span></div>
+  <div class="atb"><button onclick="goTo('home')" style="background:none;border:.5px solid #ddd;border-radius:8px;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#888"><i class="ti ti-arrow-left" style="font-size:14px"></i></button><div class="atb-title">More</div></div>
+  <div class="bod">
+    <div style="background:var(--pu0);border-radius:14px;padding:12px;border:.5px solid var(--pu1);display:flex;align-items:center;gap:10px">
+      <div id="more-ava" style="width:42px;height:42px;border-radius:10px;overflow:hidden;border:.5px solid var(--pu1);background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"></div>
+      <div><div id="more-name" style="font-size:14px;font-weight:500">You</div><div id="more-un" style="font-size:11px;color:var(--pu6)">@username</div></div>
+      <div style="margin-left:auto;text-align:right"><div style="font-size:11px;color:var(--am6);font-weight:500" id="more-pts">0 pts</div><div style="font-size:10px;color:#888">Level <span id="more-lv">1</span></div></div>
+    </div>
+    <div class="acard" style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="goTo('community')"><i class="ti ti-users" style="font-size:20px;color:var(--pk)"></i><div><div style="font-size:13px;font-weight:500">Community</div><div style="font-size:11px;color:#888">Anonymous posts</div></div><i class="ti ti-chevron-right" style="color:#bbb;margin-left:auto"></i></div>
+    <div class="acard" style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="goTo('friends')"><i class="ti ti-heart-handshake" style="font-size:20px;color:var(--bl)"></i><div><div style="font-size:13px;font-weight:500">Friends</div><div style="font-size:11px;color:#888">Search by username & chat</div></div><i class="ti ti-chevron-right" style="color:#bbb;margin-left:auto"></i></div>
+    <div class="acard" style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="goTo('ai')"><i class="ti ti-message-circle" style="font-size:20px;color:var(--pu6)"></i><div><div style="font-size:13px;font-weight:500">Chat with companion</div></div><i class="ti ti-chevron-right" style="color:#bbb;margin-left:auto"></i></div>
+    <div class="acard" style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="doSignOut()"><i class="ti ti-logout" style="font-size:20px;color:var(--re)"></i><div><div style="font-size:13px;font-weight:500">Sign out</div><div style="font-size:11px;color:#888">Data saved to server</div></div></div>
+  </div>
+  <div class="tabs"><button class="tab" onclick="goTo('home')"><i class="ti ti-home"></i><span>Home</span></button><button class="tab" onclick="goHealth()"><i class="ti ti-heart-rate-monitor"></i><span>Health</span></button><button class="tab" onclick="goTo('trackers')"><i class="ti ti-chart-line"></i><span>Trackers</span></button><button class="tab" onclick="goTo('companion')"><i class="ti ti-sparkles"></i><span>Companion</span></button><button class="tab ap" onclick="goTo('more')"><i class="ti ti-dots"></i><span>More</span></button></div>
+</div>
+
+</div></div>
+
+<script>
+// ══════════════════════════════════════════
+// SUPABASE CONFIG
+// ══════════════════════════════════════════
+const SB_URL = 'https://bkqyryolitaunuociuvx.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJrcXlyeW9saXRhdW51b2NpdXZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5NDEwMTUsImV4cCI6MjA5NTUxNzAxNX0.AP_OmGKWnHVEbFYMkK5xKitQQWLVKQGrOU7wDA7UdN8';
+
+async function sb(path, opts={}) {
+  const r = await fetch(SB_URL + '/rest/v1/' + path, {
+    headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=representation', ...opts.headers },
+    ...opts
+  });
+  if (!r.ok && r.status !== 200) { const t = await r.text(); console.error(t); throw new Error(t); }
+  try { return await r.json(); } catch { return []; }
+}
+
+// Simple hash
+async function hashPw(pw) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw + 'nxhyp_salt'));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let ME = null; // full user row from DB
+let profile = 'girl', pts = 0, level = 1, levelPts = 0, levelMax = 200, streak = 0;
+let companion = { name:'Luna', base:'🧍‍♀️', drawing: null, trait:'gentle', traitLabel:'Gentle & wise' };
+let steps = 0, sleepH = 0, waterCount = 0;
+let hourlySteps = new Array(24).fill(0);
+let chatHist = [], commFilter = 'all', compMode = 'supportive';
+let selGender = null, curDmUserId = null, curFTab = 'search';
+
+// Canvas state
+let drawTool = 'pen', drawColor = '#222', brushSize = 6;
+let drawTool2 = 'pen', drawColor2 = '#222', brushSize2 = 6;
+let isDrawing = false, isDrawing2 = false;
+let lastX = 0, lastY = 0, lastX2 = 0, lastY2 = 0;
+
+const premadeCompanions = [
+  { emoji: '🐱', label: 'Cat', bg: '#FFF3E0' },
+  { emoji: '🐶', label: 'Dog', bg: '#E8F5EA' },
+  { emoji: '🦊', label: 'Fox', bg: '#FBE9E7' },
+  { emoji: '🐼', label: 'Panda', bg: '#FAFAFA' },
+  { emoji: '🦁', label: 'Lion', bg: '#FFF9C4' },
+  { emoji: '🐸', label: 'Frog', bg: '#E8F5EA' },
+  { emoji: '🐧', label: 'Penguin', bg: '#E3F2FD' },
+  { emoji: '🦄', label: 'Unicorn', bg: '#F8BBD9' },
+  { emoji: '🐉', label: 'Dragon', bg: '#EDE7F6' },
+  { emoji: '🌸', label: 'Blossom', bg: '#FCE4EC' },
+  { emoji: '⭐', label: 'Star', bg: '#FFF9C4' },
+  { emoji: '🌙', label: 'Moon', bg: '#E8EAF6' },
+];
+
+const traits = [
+  {id:'gentle',label:'Gentle & wise',cost:0},
+  {id:'cheerful',label:'Bright & cheerful',cost:60},
+  {id:'direct',label:'Direct & clear',cost:80},
+  {id:'playful',label:'Playful & fun',cost:100},
+  {id:'clinical',label:'Clinical & precise',cost:120},
+  {id:'wise',label:'Wise elder',cost:90},
+];
+let traitOwned = ['gentle'];
+
+const earnActions = [
+  {icon:'ti-calendar-check',lbl:'Log health/cycle',pts:10,c:'var(--pk0)',ic:'var(--pk)'},
+  {icon:'ti-shoe',lbl:'Steps milestone',pts:5,c:'var(--tl0)',ic:'var(--tl)'},
+  {icon:'ti-moon',lbl:'Log sleep',pts:8,c:'var(--pu0)',ic:'var(--pu)'},
+  {icon:'ti-mood-smile',lbl:'Mood check-in',pts:5,c:'#FFF3E0',ic:'#E65100'},
+  {icon:'ti-droplet',lbl:'Hit water goal',pts:10,c:'var(--bl0)',ic:'var(--bl)'},
+  {icon:'ti-users',lbl:'Community reply',pts:15,c:'var(--gr0)',ic:'var(--gr6)'},
+];
+
+const gReplies = {
+  cramp:"Cramps are caused by prostaglandins. Ibuprofen 24–48h before your period, a heating pad at 40°C, and magnesium glycinate 300mg before bed all reduce severity significantly.",
+  cycle:"You're on Day 14 — your ovulation window. Average cycle 28 days, next period in ~14 days.",
+  pms:"PMS happens when oestrogen and progesterone drop, lowering serotonin. Magnesium, less caffeine, and aerobic exercise 3× per week help.",
+  default:"Ask me anything about your cycle, symptoms, PCOS, fertility, or how you're feeling."
+};
+const bReplies = {
+  testo:"Testosterone peaks during deep sleep. Strength training 3–4× weekly, stress management, and healthy body fat % all help.",
+  recovery:"0.3g protein/kg within 30 min post-training, 7–9 hours sleep, active recovery on off-days.",
+  default:"Ask about testosterone, recovery, prostate health, nutrition, or mental resilience."
+};
+const modeIntros = {supportive:"I'm here with you. 💜 ",coach:"Let's work on this! 💪 ",clinical:"Evidence says — ",friend:"Okay honestly? 😄 ",wise:"Take a breath. 🌙 ",direct:""};
+
+// ══════════════════════════════════════════
+// OPEN / CLOSE
+// ══════════════════════════════════════════
+function openApp() {
+  document.getElementById('app-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  populateDOB();
+  buildPremadeGrids();
+  buildEarnList();
+  updateClock();
+  initCanvas();
+  // Try auto-login from localStorage
+  const saved = localStorage.getItem('nxhyp_uid');
+  if (saved) autoLogin(saved);
+}
+function closeApp() {
+  document.getElementById('app-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+async function autoLogin(uid) {
+  try {
+    const rows = await sb('users?id=eq.' + uid + '&select=*');
+    if (rows && rows[0]) { ME = rows[0]; applyUser(); enterApp(); }
+  } catch(e) {}
+}
+
+// ══════════════════════════════════════════
+// ONBOARD
+// ══════════════════════════════════════════
+function populateDOB() {
+  const dy = document.getElementById('ob-day');
+  if (dy && dy.children.length < 2) for (let i=1;i<=31;i++) { const o=document.createElement('option');o.value=i;o.textContent=i;dy.appendChild(o); }
+  const yr = document.getElementById('ob-yr');
+  if (yr && yr.children.length < 2) for (let y=new Date().getFullYear()-5;y>=1930;y--) { const o=document.createElement('option');o.value=y;o.textContent=y;yr.appendChild(o); }
+}
+function togP(id,btn){const i=document.getElementById(id);i.type=i.type==='password'?'text':'password';btn.innerHTML=i.type==='text'?'<i class="ti ti-eye"></i>':'<i class="ti ti-eye-off"></i>';}
+function shE(id){const e=document.getElementById(id);if(e)e.classList.add('show');}
+function clrE(id){const e=document.getElementById(id);if(e)e.classList.remove('show');}
+function upd(id,v){const e=document.getElementById(id);if(e)e.textContent=v;}
+function selG(g) {
+  selGender=g;
+  document.querySelectorAll('.g-opt').forEach(el=>el.className='g-opt');
+  const el=document.getElementById('go-'+g);
+  if(el)el.className='g-opt '+(g==='girl'?'ag':g==='boy'?'ab':'ap');
+  clrE('e-gen');
+}
+function goStep(n) {
+  document.querySelectorAll('.ob-step').forEach(x=>x.classList.remove('on'));
+  const t=document.getElementById('s'+n);if(t)t.classList.add('on');
+  [0,1,2,3].forEach(i=>{const d=document.getElementById('d'+i);if(!d)return;d.className='ob-dot'+(i<n?' done':i===n?' active':'');});
+}
+function switchCompTab(tab, btn) {
+  document.getElementById('comp-tab-draw').style.display = tab==='draw' ? '' : 'none';
+  document.getElementById('comp-tab-premade').style.display = tab==='premade' ? '' : 'none';
+  document.querySelectorAll('#ct-draw, #ct-premade').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+}
+function switchCompTab2(tab, btn) {
+  ['draw','premade','personality'].forEach(t => { const el=document.getElementById('comp2-'+t); if(el) el.style.display='none'; });
+  const el = document.getElementById('comp2-'+tab); if(el) el.style.display='';
+  document.querySelectorAll('#ct2-draw,#ct2-premade,#ct2-personality').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  if (tab==='personality') buildTraitGrid();
+  if (tab==='premade') buildPremadeGrid2();
+  if (tab==='draw') setTimeout(()=>{ initCanvas2(); syncDrawingToCanvas2(); }, 50);
+}
+
+async function nxt(step) {
+  if (step === 1) {
+    const un = document.getElementById('ob-un').value.trim();
+    const em = document.getElementById('ob-email').value.trim();
+    const p = document.getElementById('ob-pass').value;
+    const p2 = document.getElementById('ob-p2').value;
+    let ok = true;
+    if (!un || un.length < 3) { shE('e-un'); ok=false; }
+    if (!em || !em.includes('@')) { shE('e-email'); ok=false; }
+    if (p.length < 8) { shE('e-pass'); ok=false; }
+    if (p !== p2) { shE('e-p2'); ok=false; }
+    if (!ok) return;
+    // Check username unique
+    const btn = document.getElementById('s1-btn');
+    btn.textContent = 'Checking…'; btn.disabled = true;
+    try {
+      const existing = await sb('users?username=eq.' + un + '&select=id');
+      if (existing && existing.length > 0) { shE('e-un'); btn.textContent='Continue →'; btn.disabled=false; return; }
+    } catch(e) {}
+    btn.textContent = 'Continue →'; btn.disabled = false;
+    goStep(2);
+  }
+  if (step === 2) {
+    let ok = true;
+    if (!document.getElementById('ob-day').value || !document.getElementById('ob-mon').value || !document.getElementById('ob-yr').value) { shE('e-dob'); ok=false; }
+    if (!selGender) { shE('e-gen'); ok=false; }
+    if (!ok) return;
+    goStep(3);
+    setTimeout(()=>initCanvas(), 100);
+  }
+}
+
+async function finOb() {
+  const btn = document.getElementById('s3-btn');
+  btn.textContent = 'Creating account…'; btn.disabled = true;
+  const un = document.getElementById('ob-un').value.trim();
+  const em = document.getElementById('ob-email').value.trim();
+  const pw = document.getElementById('ob-pass').value;
+  const cn = document.getElementById('ob-cname').value.trim() || 'Luna';
+  const drawingData = getCanvasData();
+  const hash = await hashPw(pw);
+  const compData = { name:cn, base:'🧍‍♀️', drawing: drawingData, trait:'gentle', traitLabel:'Gentle & wise' };
+  try {
+    const rows = await sb('users', { method:'POST', body: JSON.stringify({
+      email: em, password_hash: hash, username: un,
+      profile: selGender==='boy'?'boy':'girl',
+      companion: compData
+    })});
+    ME = rows[0];
+    localStorage.setItem('nxhyp_uid', ME.id);
+    applyUser();
+    enterApp();
+    aToast('Welcome to NXhyp, @' + un + '! 🌸');
+  } catch(e) {
+    aToast('Error: ' + e.message);
+    btn.textContent = '🌸 Enter NXhyp'; btn.disabled = false;
+  }
+}
+
+async function doSI() {
+  const btn = document.getElementById('si-btn');
+  btn.textContent = 'Signing in…'; btn.disabled = true;
+  const em = document.getElementById('si-e').value.trim();
+  const pw = document.getElementById('si-p').value;
+  const hash = await hashPw(pw);
+  try {
+    const rows = await sb('users?email=eq.' + encodeURIComponent(em) + '&password_hash=eq.' + hash + '&select=*');
+    if (!rows || rows.length === 0) { shE('e-si'); btn.textContent='Sign in'; btn.disabled=false; return; }
+    ME = rows[0];
+    localStorage.setItem('nxhyp_uid', ME.id);
+    applyUser();
+    enterApp();
+    aToast('Welcome back, @' + ME.username + '! 🌸');
+  } catch(e) {
+    aToast('Error signing in');
+    btn.textContent='Sign in'; btn.disabled=false;
+  }
+}
+
+function applyUser() {
+  profile = ME.profile || 'girl';
+  pts = ME.pts || 0;
+  level = ME.level || 1;
+  levelPts = ME.level_pts || 0;
+  levelMax = ME.level_max || 200;
+  streak = ME.streak || 0;
+  steps = ME.steps || 0;
+  waterCount = ME.water_count || 0;
+  if (ME.companion) companion = typeof ME.companion === 'string' ? JSON.parse(ME.companion) : ME.companion;
+  if (ME.trait_owned) traitOwned = typeof ME.trait_owned === 'string' ? JSON.parse(ME.trait_owned) : ME.trait_owned;
+  document.getElementById('hc-g').style.display = profile==='girl' ? '' : 'none';
+  document.getElementById('hc-b').style.display = profile==='boy' ? '' : 'none';
+  document.getElementById('h-gr').style.color = profile==='girl' ? 'var(--pk)' : 'var(--bl)';
+  document.getElementById('h-nm').textContent = 'Hi, @' + ME.username + '!';
+  document.getElementById('more-name').textContent = ME.username;
+  document.getElementById('more-un').textContent = '@' + ME.username;
+  document.getElementById('tr-streak').textContent = streak + '-day streak';
+  const sd = document.getElementById('s-email-d'); if(sd) sd.textContent = ME.email;
+  updateCompUI(); updatePtsUI(); renderWater(); renderStepBars();
+}
+
+function enterApp() {
+  document.querySelectorAll('.asc').forEach(s=>s.classList.remove('on'));
+  document.getElementById('as-home').classList.add('on');
+  setTimeout(()=>{ initCanvas2(); syncDrawingToCanvas2(); }, 200);
+  checkFriendRequests();
+}
+
+async function doSignOut() {
+  await saveState();
+  ME = null;
+  localStorage.removeItem('nxhyp_uid');
+  document.querySelectorAll('.asc').forEach(s=>s.classList.remove('on'));
+  document.getElementById('as-auth').classList.add('on');
+  goStep(0);
+  aToast('Signed out. Data saved to server.');
+}
+
+// ══════════════════════════════════════════
+// SAVE STATE TO DB
+// ══════════════════════════════════════════
+async function saveState() {
+  if (!ME) return;
+  try {
+    await sb('users?id=eq.' + ME.id, { method:'PATCH', body: JSON.stringify({
+      pts, level, level_pts: levelPts, level_max: levelMax, streak,
+      companion, steps, water_count: waterCount, trait_owned: traitOwned
+    })});
+  } catch(e) { console.log('Save error:', e); }
+}
+
+// ══════════════════════════════════════════
+// NAV
+// ══════════════════════════════════════════
+function goTo(id) {
+  document.querySelectorAll('.asc').forEach(s=>s.classList.remove('on'));
+  const s = document.getElementById('as-'+id);
+  if (s) s.classList.add('on');
+  if (id==='ai') initChat();
+  if (id==='community') loadCommunity();
+  if (id==='friends') { curFTab='search'; buildFriends('search'); }
+  if (id==='companion') { setTimeout(()=>{ initCanvas2(); syncDrawingToCanvas2(); buildPremadeGrid2(); buildTraitGrid(); buildEarnList(); }, 100); }
+  if (id==='more') { document.getElementById('more-pts').textContent = pts.toLocaleString() + ' pts'; document.getElementById('more-lv').textContent = level; renderCompAvatarEl('more-ava'); }
+  if (id==='trackers') renderStepBars();
+}
+function goHealth() { goTo(profile==='girl'?'health-g':'health-b'); }
+function updateClock() {
+  const n=new Date();let h=n.getHours(),m=n.getMinutes();const ap=h>=12?'PM':'AM';h=h%12||12;
+  const el=document.getElementById('home-time');if(el)el.textContent=h+':'+(m<10?'0'+m:m)+' '+ap;
+  setTimeout(updateClock,30000);
+}
+
+// ══════════════════════════════════════════
+// PTS / LEVEL
+// ══════════════════════════════════════════
+function addPts(n) {
+  pts+=n; levelPts+=n;
+  if(levelPts>=levelMax){levelPts-=levelMax;level++;levelMax=Math.round(levelMax*1.4);aToast('Level up! Level '+level+' 🌟');}
+  updatePtsUI();
+}
+function logA(type) {
+  const m={cycle:10,health:10,sleep:8,mood:5,steps:5,community:15,chat:3,water:10};
+  addPts(m[type]||5); streak++;
+  document.getElementById('tr-streak').textContent = streak+'-day streak';
+  saveState();
+}
+function updatePtsUI() {
+  ['pts-d','pts-cd'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=pts.toLocaleString();});
+  const pct = Math.min(100,Math.round(levelPts/levelMax*100));
+  const hb=document.getElementById('hm-cb');if(hb)hb.style.width=pct+'%';
+  const lb=document.getElementById('lv-bar-d');if(lb)lb.style.width=pct+'%';
+  const ld=document.getElementById('lv-d');if(ld)ld.textContent='Level '+level;
+  const lpd=document.getElementById('lv-pts-d');if(lpd)lpd.textContent=levelPts+'/'+levelMax;
+  const hml=document.getElementById('hm-lv');if(hml)hml.textContent='Lv '+level;
+}
+
+// ══════════════════════════════════════════
+// COMPANION + DRAWING
+// ══════════════════════════════════════════
+function renderCompAvatarEl(elId) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.innerHTML = '';
+  if (companion.drawing) {
+    const img = document.createElement('img');
+    img.src = companion.drawing;
+    img.style.cssText = 'width:100%;height:100%;object-fit:contain;border-radius:inherit';
+    el.appendChild(img);
+  } else {
+    el.style.fontSize = '28px';
+    el.textContent = companion.base || '🧍‍♀️';
+  }
+}
+function updateCompUI() {
+  renderCompAvatarEl('hm-ca');
+  renderCompAvatarEl('h-ca');
+  renderCompAvatarEl('ai-ava');
+  renderCompAvatarEl('comp-big-ava');
+  ['hm-cn','ai-nm'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=companion.name;});
+  const ct=document.getElementById('hm-ct');if(ct)ct.textContent=companion.traitLabel;
+  const cd=document.getElementById('comp-nm-d');if(cd)cd.textContent=companion.name;
+  const td=document.getElementById('comp-tr-d');if(td)td.textContent=companion.traitLabel;
+  updatePtsUI();
+}
+
+// ── CANVAS DRAWING (onboard) ──
+let obCanvas, obCtx;
+function initCanvas() {
+  obCanvas = document.getElementById('companion-canvas');
+  if (!obCanvas) return;
+  obCtx = obCanvas.getContext('2d');
+  obCtx.lineCap = 'round'; obCtx.lineJoin = 'round';
+  const draw = (e) => {
+    if (!isDrawing) return;
+    const rect = obCanvas.getBoundingClientRect();
+    const scaleX = obCanvas.width / rect.width;
+    const scaleY = obCanvas.height / rect.height;
+    const x = ((e.clientX||e.touches[0].clientX)-rect.left)*scaleX;
+    const y = ((e.clientY||e.touches[0].clientY)-rect.top)*scaleY;
+    if (drawTool==='pen'||drawTool==='erase') {
+      obCtx.globalCompositeOperation = drawTool==='erase'?'destination-out':'source-over';
+      obCtx.strokeStyle = drawColor; obCtx.lineWidth = brushSize;
+      obCtx.beginPath(); obCtx.moveTo(lastX,lastY); obCtx.lineTo(x,y); obCtx.stroke();
+    }
+    lastX=x; lastY=y;
+  };
+  const start = (e) => {
+    isDrawing=true;
+    const rect=obCanvas.getBoundingClientRect();
+    const scaleX=obCanvas.width/rect.width; const scaleY=obCanvas.height/rect.height;
+    lastX=((e.clientX||e.touches[0].clientX)-rect.left)*scaleX;
+    lastY=((e.clientY||e.touches[0].clientY)-rect.top)*scaleY;
+    if(drawTool==='fill') { floodFill(obCtx,Math.round(lastX),Math.round(lastY),drawColor,obCanvas); isDrawing=false; }
+  };
+  obCanvas.addEventListener('mousedown',start); obCanvas.addEventListener('mousemove',draw);
+  obCanvas.addEventListener('mouseup',()=>isDrawing=false); obCanvas.addEventListener('mouseleave',()=>isDrawing=false);
+  obCanvas.addEventListener('touchstart',e=>{e.preventDefault();start(e);},{passive:false});
+  obCanvas.addEventListener('touchmove',e=>{e.preventDefault();draw(e);},{passive:false});
+  obCanvas.addEventListener('touchend',()=>isDrawing=false);
+}
+function setTool(t,btn) { drawTool=t; document.querySelectorAll('#tool-pen,#tool-erase,#tool-fill').forEach(b=>b.classList.remove('on')); btn.classList.add('on'); }
+function setColor(c,dot) { drawColor=c; document.querySelectorAll('#comp-tab-draw .color-dot').forEach(d=>d.classList.remove('on')); dot.classList.add('on'); if(obCtx){obCtx.globalCompositeOperation='source-over';} }
+function clearCanvas() { if(obCtx)obCtx.clearRect(0,0,obCanvas.width,obCanvas.height); }
+function getCanvasData() {
+  if (!obCanvas) return null;
+  // Check if anything drawn
+  const data = obCtx.getImageData(0,0,obCanvas.width,obCanvas.height).data;
+  const hasContent = data.some((v,i)=>i%4===3&&v>0);
+  return hasContent ? obCanvas.toDataURL('image/png') : null;
+}
+
+// ── CANVAS DRAWING (companion page) ──
+let c2Canvas, c2Ctx;
+function initCanvas2() {
+  c2Canvas = document.getElementById('companion-canvas2');
+  if (!c2Canvas || c2Canvas._init) return;
+  c2Canvas._init = true;
+  c2Ctx = c2Canvas.getContext('2d');
+  c2Ctx.lineCap='round'; c2Ctx.lineJoin='round';
+  const draw=(e)=>{
+    if(!isDrawing2)return;
+    const rect=c2Canvas.getBoundingClientRect();
+    const scaleX=c2Canvas.width/rect.width; const scaleY=c2Canvas.height/rect.height;
+    const x=((e.clientX||e.touches[0].clientX)-rect.left)*scaleX;
+    const y=((e.clientY||e.touches[0].clientY)-rect.top)*scaleY;
+    if(drawTool2==='pen'||drawTool2==='erase'){
+      c2Ctx.globalCompositeOperation=drawTool2==='erase'?'destination-out':'source-over';
+      c2Ctx.strokeStyle=drawColor2;c2Ctx.lineWidth=brushSize2;
+      c2Ctx.beginPath();c2Ctx.moveTo(lastX2,lastY2);c2Ctx.lineTo(x,y);c2Ctx.stroke();
+    }
+    lastX2=x;lastY2=y;
+  };
+  const start=(e)=>{
+    isDrawing2=true;
+    const rect=c2Canvas.getBoundingClientRect();
+    const scaleX=c2Canvas.width/rect.width; const scaleY=c2Canvas.height/rect.height;
+    lastX2=((e.clientX||e.touches[0].clientX)-rect.left)*scaleX;
+    lastY2=((e.clientY||e.touches[0].clientY)-rect.top)*scaleY;
+    if(drawTool2==='fill'){floodFill(c2Ctx,Math.round(lastX2),Math.round(lastY2),drawColor2,c2Canvas);isDrawing2=false;}
+  };
+  c2Canvas.addEventListener('mousedown',start);c2Canvas.addEventListener('mousemove',draw);
+  c2Canvas.addEventListener('mouseup',()=>isDrawing2=false);c2Canvas.addEventListener('mouseleave',()=>isDrawing2=false);
+  c2Canvas.addEventListener('touchstart',e=>{e.preventDefault();start(e);},{passive:false});
+  c2Canvas.addEventListener('touchmove',e=>{e.preventDefault();draw(e);},{passive:false});
+  c2Canvas.addEventListener('touchend',()=>isDrawing2=false);
+}
+function syncDrawingToCanvas2() {
+  if (!c2Canvas || !c2Ctx || !companion.drawing) return;
+  const img = new Image();
+  img.onload=()=>{ c2Ctx.clearRect(0,0,c2Canvas.width,c2Canvas.height); c2Ctx.drawImage(img,0,0,c2Canvas.width,c2Canvas.height); };
+  img.src = companion.drawing;
+}
+function setTool2(t,btn){drawTool2=t;document.querySelectorAll('#t2-pen,#t2-erase,#t2-fill').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+function setColor2(c,dot){drawColor2=c;document.querySelectorAll('#comp2-draw .color-dot').forEach(d=>d.classList.remove('on'));dot.classList.add('on');}
+function clearCanvas2(){if(c2Ctx)c2Ctx.clearRect(0,0,c2Canvas.width,c2Canvas.height);}
+function saveDrawing2() {
+  if (!c2Canvas) return;
+  const data=c2Ctx.getImageData(0,0,c2Canvas.width,c2Canvas.height).data;
+  const hasContent=data.some((v,i)=>i%4===3&&v>0);
+  if (hasContent) { companion.drawing=c2Canvas.toDataURL('image/png'); companion.base=''; }
+  updateCompUI(); saveState(); aToast('Companion drawing saved! 🎨');
+}
+
+// Simple flood fill
+function floodFill(ctx, sx, sy, fillColor, canvas) {
+  const imgData = ctx.getImageData(0,0,canvas.width,canvas.height);
+  const data = imgData.data;
+  const idx = (sy*canvas.width+sx)*4;
+  const tr=data[idx],tg=data[idx+1],tb=data[idx+2],ta=data[idx+3];
+  const fc=hexToRgb(fillColor);
+  if(!fc)return;
+  if(tr===fc.r&&tg===fc.g&&tb===fc.b)return;
+  const stack=[[sx,sy]];
+  while(stack.length){
+    const [x,y]=stack.pop();
+    if(x<0||x>=canvas.width||y<0||y>=canvas.height)continue;
+    const i=(y*canvas.width+x)*4;
+    if(data[i]!==tr||data[i+1]!==tg||data[i+2]!==tb||data[i+3]!==ta)continue;
+    data[i]=fc.r;data[i+1]=fc.g;data[i+2]=fc.b;data[i+3]=255;
+    stack.push([x+1,y],[x-1,y],[x,y+1],[x,y-1]);
+  }
+  ctx.putImageData(imgData,0,0);
+}
+function hexToRgb(hex) {
+  const r=/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return r?{r:parseInt(r[1],16),g:parseInt(r[2],16),b:parseInt(r[3],16)}:null;
+}
+
+// Premade grids
+function buildPremadeGrids() { buildPremadeGrid1(); }
+function buildPremadeGrid1() {
+  const el = document.getElementById('premade-grid'); if(!el)return;
+  el.innerHTML = premadeCompanions.map((p,i)=>`<div class="premade-btn" style="background:${p.bg}" onclick="pickPremade(${i},'premade-grid')">${p.emoji}<div style="font-size:11px;margin-top:4px">${p.label}</div></div>`).join('');
+}
+function buildPremadeGrid2() {
+  const el = document.getElementById('premade-grid2'); if(!el)return;
+  el.innerHTML = premadeCompanions.map((p,i)=>`<div class="premade-btn" style="background:${p.bg}" onclick="pickPremade2(${i})">${p.emoji}<div style="font-size:11px;margin-top:4px">${p.label}</div></div>`).join('');
+}
+function pickPremade(i, gridId) {
+  const p=premadeCompanions[i]; companion.base=p.emoji; companion.drawing=null;
+  document.querySelectorAll('#'+gridId+' .premade-btn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('#'+gridId+' .premade-btn')[i].classList.add('on');
+  if(obCtx) clearCanvas();
+}
+function pickPremade2(i) {
+  const p=premadeCompanions[i]; companion.base=p.emoji; companion.drawing=null;
+  if(c2Ctx) clearCanvas2();
+  document.querySelectorAll('#premade-grid2 .premade-btn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('#premade-grid2 .premade-btn')[i].classList.add('on');
+  updateCompUI(); saveState(); aToast(p.label+' selected as companion! '+p.emoji);
+}
+
+function buildTraitGrid() {
+  const el=document.getElementById('trait-grid-comp');if(!el)return;
+  el.innerHTML=traits.map((t,i)=>{
+    const owned=traitOwned.includes(t.id); const active=companion.trait===t.id;
+    const ct=owned?`<div style="font-size:10px;color:var(--tl6)">${active?'✓ Active':'Tap to set'}</div>`:`<div style="font-size:10px;color:var(--am6)">✦ ${t.cost} pts</div>`;
+    return `<div style="border-radius:10px;padding:9px;cursor:pointer;border:1.5px solid ${active?'var(--pu6)':'#E0D8EC'};background:${active?'var(--pu0)':'#fff'};font-family:var(--font-b)" onclick="buyTrait(${i})"><div style="font-size:12px;font-weight:500">${t.label}</div>${ct}</div>`;
+  }).join('');
+}
+function buyTrait(i) {
+  const t=traits[i];
+  if(!traitOwned.includes(t.id)){if(pts<t.cost){aToast('Need '+t.cost+' pts!');return;}pts-=t.cost;traitOwned.push(t.id);updatePtsUI();}
+  companion.trait=t.id;companion.traitLabel=t.label;updateCompUI();buildTraitGrid();chatHist=[];saveState();
+}
+function buildEarnList() {
+  const el=document.getElementById('earn-l');if(!el)return;
+  el.innerHTML=earnActions.map(a=>`<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:.5px solid rgba(0,0,0,.06)"><div style="width:30px;height:30px;border-radius:8px;background:${a.c};display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ${a.icon}" style="font-size:15px;color:${a.ic}"></i></div><div style="flex:1;font-size:12px">${a.lbl}</div><div style="font-size:13px;font-weight:500;color:var(--am6)">+${a.pts}</div></div>`).join('');
+}
+
+// ══════════════════════════════════════════
+// TRACKERS
+// ══════════════════════════════════════════
+function renderStepBars() {
+  const el=document.getElementById('steps-bars');if(!el)return;
+  const mx=Math.max(...hourlySteps,1);
+  el.innerHTML=hourlySteps.map((v,i)=>{const h=Math.round((v/mx)*52)+4;const col=v>600?'var(--tl)':v>200?'var(--tl1)':'#E0D8EC';return `<div class="bar" style="height:${h}px;background:${col}" data-val="${v}"></div>`;}).join('');
+}
+function addSteps() {
+  const add=500+Math.floor(Math.random()*200); steps+=add;
+  const hr=new Date().getHours(); hourlySteps[hr]=(hourlySteps[hr]||0)+add;
+  const ts=document.getElementById('t-steps');if(ts)ts.textContent=steps.toLocaleString();
+  const bar=document.getElementById('t-steps-bar');if(bar)bar.style.width=Math.min(100,Math.round(steps/100))+'%';
+  const cal=document.getElementById('t-cal');if(cal)cal.textContent=Math.round(steps*.04);
+  const km=document.getElementById('t-km');if(km)km.textContent=(steps*.00075).toFixed(1);
+  const act=document.getElementById('t-act');if(act)act.textContent=Math.round(steps/100);
+  const hs=document.getElementById('home-steps');if(hs)hs.textContent=steps.toLocaleString();
+  const hsb=document.getElementById('home-steps-bar');if(hsb)hsb.style.width=Math.min(100,Math.round(steps/100))+'%';
+  const hsp=document.getElementById('home-steps-pct');if(hsp)hsp.textContent=Math.min(100,Math.round(steps/100))+'%';
+  renderStepBars(); logA('steps'); saveState();
+}
+function logSleep() {
+  sleepH=7+Math.floor(Math.random()*2);
+  const ph=document.getElementById('t-sleep-phase');
+  if(ph)ph.innerHTML='<div class="sp-block" style="flex:2;background:#CECBF6">L</div><div class="sp-block" style="flex:3;background:#7F77DD">D</div><div class="sp-block" style="flex:2;background:#9FE1CB">R</div><div class="sp-block" style="flex:1;background:#E0D8EC">A</div><div class="sp-block" style="flex:2;background:#7F77DD">D</div>';
+  const ts=document.getElementById('t-sleep');if(ts)ts.textContent=sleepH+'h';
+  saveState(); aToast('Sleep logged! +8 pts 🛌');
+}
+function renderWater() {
+  const el=document.getElementById('water-icons');if(!el)return;
+  el.innerHTML=Array.from({length:8},(_,i)=>`<span style="font-size:18px;opacity:${i<waterCount?1:.25}">💧</span>`).join('');
+  const c=document.getElementById('water-cnt');if(c)c.textContent=waterCount;
+}
+function addWater() {
+  waterCount=Math.min(8,waterCount+1); renderWater();
+  if(waterCount>=8){logA('water');aToast('Water goal hit! +10 pts 💧');}
+  else aToast('💧 '+waterCount+'/8'); saveState();
+}
+
+// ══════════════════════════════════════════
+// AI CHAT
+// ══════════════════════════════════════════
+function getReply(msg) {
+  const lc=msg.toLowerCase(),pre=modeIntros[compMode]||'',base=profile==='girl'?
+    (lc.includes('cramp')||lc.includes('pain')?gReplies.cramp:lc.includes('cycle')||lc.includes('period')?gReplies.cycle:lc.includes('pms')||lc.includes('mood')?gReplies.pms:gReplies.default):
+    (lc.includes('testosterone')||lc.includes('energy')?bReplies.testo:lc.includes('recover')?bReplies.recovery:bReplies.default);
+  return pre+base;
+}
+function addBub(text,who) {
+  const el=document.getElementById('a-chat');if(!el)return;
+  const d=document.createElement('div');d.className='cmsg '+who;
+  const col=profile==='girl'?'var(--pk)':profile==='boy'?'var(--bl)':'var(--pu6)';
+  d.innerHTML=who==='ai'?`<div class="cwho">${companion.name}</div><div class="cbub">${text}</div>`:`<div class="cbub" style="background:${col}">${text}</div>`;
+  el.appendChild(d);el.scrollTop=el.scrollHeight;
+}
+function initChat() {
+  const el=document.getElementById('a-chat');if(!el||chatHist.length>0)return;
+  el.innerHTML='';
+  addBub(`${modeIntros[compMode]}I'm ${companion.name}! Ask me anything about your health, cycle, or wellbeing.`,'ai');
+  const qrs=profile==='girl'?['Cramp relief tips','PCOS symptoms','Before my period fatigue','Fertility guidance']:['Boost testosterone?','Muscle recovery','Prostate health','Sleep tips'];
+  const cls=profile==='girl'?'g':'b';
+  document.getElementById('a-qr').innerHTML=qrs.map(q=>`<button class="qr-btn ${cls}" style="border-color:var(--${cls==='g'?'pk1':'bl1'});color:var(--${cls==='g'?'pk6':'bl6'})" onclick="aQR('${q.replace(/'/g,"\\'")}')"> ${q}</button>`).join('');
+  chatHist.push(1);
+}
+function aSend(){const inp=document.getElementById('a-in');const msg=inp.value.trim();if(!msg)return;inp.value='';addBub(msg,'me');logA('chat');setTimeout(()=>addBub(getReply(msg),'ai'),600);}
+function aQR(t){document.getElementById('a-in').value=t;aSend();}
+
+// ══════════════════════════════════════════
+// FRIENDS (GLOBAL)
+// ══════════════════════════════════════════
+let currentFTab = 'search';
+function fTab(tab, btn) {
+  currentFTab=tab;
+  document.querySelectorAll('#as-friends .atb+div button').forEach(b=>{b.style.color='#888';b.style.borderBottomColor='transparent';b.style.fontWeight='400';});
+  btn.style.color=profile==='girl'?'var(--pk)':'var(--bl)';btn.style.borderBottomColor=profile==='girl'?'var(--pk)':'var(--bl)';btn.style.fontWeight='500';
+  buildFriends(tab);
+}
+function buildFriends(tab) {
+  const el=document.getElementById('friends-body');if(!el)return;
+  if(tab==='search') el.innerHTML = `
+    <div class="acard">
+      <div class="albl">Find friends by username</div>
+      <div style="display:flex;gap:8px">
+        <div style="flex:1;position:relative"><i class="ti ti-at" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#aaa;font-size:14px"></i><input type="text" id="fr-search-inp" placeholder="Enter exact username" style="width:100%;height:38px;border-radius:10px;border:1.5px solid var(--pk1);padding:0 12px 0 30px;font-size:13px;font-family:var(--font-b);outline:none" onkeydown="if(event.key==='Enter')searchUser()"></div>
+        <button onclick="searchUser()" style="background:var(--pk);border:none;border-radius:10px;padding:0 14px;color:#fff;font-size:12px;cursor:pointer;font-family:var(--font-b);height:38px;white-space:nowrap">Search</button>
+      </div>
+      <div id="fr-result" style="margin-top:10px"></div>
+    </div>`;
+  else if(tab==='list') loadFriendsList();
+  else if(tab==='requests') loadFriendRequests();
+}
+
+async function searchUser() {
+  if(!ME)return;
+  const q = document.getElementById('fr-search-inp').value.trim().toLowerCase();
+  if (!q) return;
+  const el = document.getElementById('fr-result');
+  el.innerHTML='<div style="text-align:center;padding:10px"><div class="spinner" style="width:22px;height:22px;border-width:2px"></div></div>';
+  try {
+    const rows = await sb('users?username=eq.'+q+'&select=id,username,profile,companion');
+    if(!rows||rows.length===0){el.innerHTML='<div style="font-size:12px;color:#aaa;text-align:center;padding:10px">No user found with that username.</div>';return;}
+    const u=rows[0];
+    if(u.id===ME.id){el.innerHTML='<div style="font-size:12px;color:#aaa;text-align:center;padding:10px">That\'s you! 😄</div>';return;}
+    // Check if already friends or request sent
+    const [fs,fr] = await Promise.all([
+      sb(`friendships?or=(user_a.eq.${ME.id},user_b.eq.${ME.id})&or=(user_a.eq.${u.id},user_b.eq.${u.id})&select=id`),
+      sb(`friend_requests?from_user_id=eq.${ME.id}&to_user_id=eq.${u.id}&select=id,status`)
+    ]);
+    const comp=u.companion??(typeof u.companion==='string'?JSON.parse(u.companion):{base:'🧍‍♀️'});
+    const emojiOrBase = comp.base||'🧍';
+    let actionBtn='<button onclick="sendFriendReq(\''+u.id+'\',\''+u.username+'\')" style="background:var(--pk);border:none;border-radius:999px;padding:7px 16px;color:#fff;font-size:12px;cursor:pointer;font-family:var(--font-b)">Add friend</button>';
+    if(fr&&fr.length>0){ actionBtn=fr[0].status==='pending'?'<span style="font-size:12px;color:var(--tl6);font-weight:500">✓ Request sent</span>':'<span style="font-size:12px;color:var(--tl6);font-weight:500">✓ Friends</span>'; }
+    el.innerHTML=`<div style="display:flex;align-items:center;gap:12px;padding:8px 0"><div style="width:44px;height:44px;border-radius:12px;background:${u.profile==='girl'?'var(--pk0)':'var(--bl0)'};display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;border:.5px solid ${u.profile==='girl'?'var(--pk1)':'var(--bl1)'}">${emojiOrBase}</div><div style="flex:1"><div style="font-size:14px;font-weight:500">@${u.username}</div><div style="font-size:11px;color:#888">${u.profile==='girl'?'🌸 Girl / Woman':u.profile==='boy'?'💪 Boy / Man':'⭐ Non-binary'}</div></div>${actionBtn}</div>`;
+  } catch(e){ el.innerHTML='<div style="font-size:12px;color:#aaa;text-align:center">Search error. Try again.</div>'; }
+}
+
+async function sendFriendReq(toId, toUsername) {
+  if(!ME)return;
+  try {
+    await sb('friend_requests', { method:'POST', body: JSON.stringify({ from_user_id: ME.id, to_user_id: toId, status:'pending' }) });
+    aToast('Friend request sent to @' + toUsername + '! 👋');
+    searchUser();
+  } catch(e){ aToast('Already sent or already friends!'); }
+}
+
+async function loadFriendsList() {
+  const el=document.getElementById('friends-body');if(!el)return;
+  el.innerHTML='<div style="text-align:center;padding:20px"><div class="spinner"></div></div>';
+  try {
+    const rows=await sb(`friendships?or=(user_a.eq.${ME.id},user_b.eq.${ME.id})&select=*`);
+    if(!rows||rows.length===0){el.innerHTML='<div style="text-align:center;padding:30px;font-size:12px;color:#aaa">No friends yet. Search for users by username!</div>';return;}
+    const friendIds=rows.map(r=>r.user_a===ME.id?r.user_b:r.user_a);
+    const friends=await sb('users?id=in.('+friendIds.join(',')+')'+'&select=id,username,profile,companion');
+    el.innerHTML='<div class="acard">'+friends.map(f=>{
+      const comp=f.companion??(typeof f.companion==='string'?JSON.parse(f.companion):{base:'🧍‍♀️'});
+      const disp=comp.drawing?`<img src="${comp.drawing}" style="width:36px;height:36px;object-fit:contain;border-radius:8px;border:.5px solid #eee">`:`<span style="font-size:22px">${comp.base||'🧍‍♀️'}</span>`;
+      return `<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:.5px solid rgba(0,0,0,.06)"><div style="width:38px;height:38px;border-radius:10px;background:${f.profile==='girl'?'var(--pk0)':'var(--bl0)'};display:flex;align-items:center;justify-content:center;flex-shrink:0">${disp}</div><div style="flex:1"><div style="font-size:13px;font-weight:500">@${f.username}</div></div><button onclick="openDM('${f.id}','${f.username}')" style="background:${f.profile==='girl'?'var(--pk)':'var(--bl)'};border:none;border-radius:999px;padding:5px 12px;color:#fff;font-size:11px;cursor:pointer;font-family:var(--font-b)">Chat</button></div>`;
+    }).join('')+'</div>';
+  } catch(e){ el.innerHTML='<div style="text-align:center;padding:20px;font-size:12px;color:#aaa">Error loading friends.</div>'; }
+}
+
+async function loadFriendRequests() {
+  const el=document.getElementById('friends-body');if(!el)return;
+  el.innerHTML='<div style="text-align:center;padding:20px"><div class="spinner"></div></div>';
+  try {
+    const rows=await sb(`friend_requests?to_user_id=eq.${ME.id}&status=eq.pending&select=*`);
+    if(!rows||rows.length===0){el.innerHTML='<div style="text-align:center;padding:30px;font-size:12px;color:#aaa">No pending requests.</div>';return;}
+    const fromIds=rows.map(r=>r.from_user_id);
+    const users=await sb('users?id=in.('+fromIds.join(',')+')'+'&select=id,username,profile');
+    el.innerHTML='<div class="acard">'+rows.map((r,i)=>{
+      const u=users.find(x=>x.id===r.from_user_id)||{};
+      return `<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:.5px solid rgba(0,0,0,.06)"><div class="fava" style="background:${u.profile==='girl'?'var(--pk0)':'var(--bl0)'};color:${u.profile==='girl'?'var(--pk8)':'var(--bl8)'}">${(u.username||'?')[0].toUpperCase()}</div><div style="flex:1"><div style="font-size:13px;font-weight:500">@${u.username||'Unknown'}</div><div style="font-size:10px;color:#888">Wants to be friends</div></div><button onclick="acceptFR('${r.id}','${r.from_user_id}')" style="background:var(--tl);border:none;border-radius:999px;padding:5px 12px;color:#fff;font-size:11px;cursor:pointer;font-family:var(--font-b);margin-right:4px">Accept</button><button onclick="declineFR('${r.id}')" style="background:#fff;border:.5px solid #ddd;border-radius:999px;padding:5px 10px;color:#888;font-size:11px;cursor:pointer;font-family:var(--font-b)">×</button></div>`;
+    }).join('')+'</div>';
+  } catch(e){ el.innerHTML='<div style="text-align:center;padding:20px;font-size:12px;color:#aaa">Error loading requests.</div>'; }
+}
+
+async function acceptFR(frId, fromId) {
+  try {
+    await sb('friend_requests?id=eq.'+frId, {method:'PATCH', body:JSON.stringify({status:'accepted'})});
+    await sb('friendships', {method:'POST', body:JSON.stringify({user_a:ME.id, user_b:fromId})});
+    aToast('Friend added! 🎉'); loadFriendRequests(); document.getElementById('fr-notif').style.display='none';
+  } catch(e){ aToast('Error accepting.'); }
+}
+async function declineFR(frId) {
+  await sb('friend_requests?id=eq.'+frId, {method:'PATCH', body:JSON.stringify({status:'declined'})});
+  loadFriendRequests();
+}
+
+async function checkFriendRequests() {
+  if(!ME)return;
+  try {
+    const rows=await sb(`friend_requests?to_user_id=eq.${ME.id}&status=eq.pending&select=id`);
+    const n=rows?rows.length:0;
+    const badge=document.getElementById('req-cnt');const notif=document.getElementById('fr-notif');
+    if(n>0){if(badge){badge.style.display='';badge.textContent=n;}if(notif)notif.style.display='';}
+    else{if(badge)badge.style.display='none';if(notif)notif.style.display='none';}
+  }catch(e){}
+}
+
+// ══════════════════════════════════════════
+// DM (GLOBAL REAL-TIME POLLING)
+// ══════════════════════════════════════════
+let dmPollInterval = null;
+async function openDM(toUserId, toUsername) {
+  curDmUserId = toUserId;
+  document.getElementById('dm-name').textContent = '@' + toUsername;
+  const da=document.getElementById('dm-ava');da.textContent=(toUsername||'?')[0].toUpperCase();
+  goTo('dm'); loadDMs();
+  if(dmPollInterval) clearInterval(dmPollInterval);
+  dmPollInterval = setInterval(loadDMs, 3000);
+}
+async function loadDMs() {
+  if(!ME||!curDmUserId)return;
+  try {
+    const rows=await sb(`messages?or=(and(from_user_id.eq.${ME.id},to_user_id.eq.${curDmUserId}),and(from_user_id.eq.${curDmUserId},to_user_id.eq.${ME.id}))&order=created_at.asc&select=*`);
+    const el=document.getElementById('dm-msgs');if(!el)return;
+    const wasAtBottom=el.scrollHeight-el.scrollTop<=el.clientHeight+40;
+    const col=profile==='girl'?'var(--pk)':'var(--bl)';
+    el.innerHTML=(rows||[]).map(m=>{
+      const isMe=m.from_user_id===ME.id;
+      const t=new Date(m.created_at);const ts=t.getHours()+':'+(t.getMinutes()<10?'0':'')+t.getMinutes();
+      return `<div class="msg-bubble ${isMe?'me':'them'}"><div class="msg-inner" style="${isMe?'background:'+col+';color:#fff;border-radius:12px 4px 12px 12px':'border-radius:4px 12px 12px 12px'}">${m.content}</div><div class="msg-time" style="text-align:${isMe?'right':'left'}">${ts}</div></div>`;
+    }).join('');
+    if(wasAtBottom||!rows||rows.length<2)el.scrollTop=el.scrollHeight;
+  }catch(e){}
+}
+async function dmSend() {
+  const inp=document.getElementById('dm-in');const msg=inp.value.trim();if(!msg||!curDmUserId||!ME)return;
+  inp.value='';
+  try { await sb('messages',{method:'POST',body:JSON.stringify({from_user_id:ME.id,to_user_id:curDmUserId,content:msg})}); loadDMs(); }
+  catch(e){aToast('Send failed.');}
+}
+
+// ══════════════════════════════════════════
+// COMMUNITY (GLOBAL)
+// ══════════════════════════════════════════
+let commCat = 'all';
+function cTab(cat, btn) {
+  commCat=cat;
+  document.querySelectorAll('#as-community .atb+div button').forEach(b=>{b.style.color='#888';b.style.borderBottomColor='transparent';b.style.fontWeight='400';});
+  btn.style.color=profile==='girl'?'var(--pk)':'var(--bl)';btn.style.borderBottomColor=profile==='girl'?'var(--pk)':'var(--bl)';btn.style.fontWeight='500';
+  loadCommunity();
+}
+async function loadCommunity() {
+  const el=document.getElementById('comm-list');if(!el)return;
+  el.innerHTML='<div style="text-align:center;padding:20px"><div class="spinner"></div></div>';
+  try {
+    let url='community_posts?order=created_at.desc&select=id,cat,content,likes,created_at,user_id&limit=30';
+    if(commCat==='q') url+='&cat=eq.Questions';
+    if(commCat==='t') url+='&cat=eq.Tips';
+    const posts=await sb(url);
+    // Load likes and replies counts
+    const postIds=posts.map(p=>p.id);
+    let myLikes=[];
+    if(ME&&postIds.length>0){
+      myLikes=await sb(`post_likes?user_id=eq.${ME.id}&post_id=in.(${postIds.join(',')})&select=post_id`);
+    }
+    const myLikeIds=new Set((myLikes||[]).map(l=>l.post_id));
+    const catColors={Questions:['var(--bl0)','var(--bl8)'],Tips:['var(--tl0)','var(--tl6)'],Support:['var(--pk0)','var(--pk8)']};
+    el.innerHTML=(posts||[]).map(p=>{
+      const liked=myLikeIds.has(p.id);
+      const cc=catColors[p.cat]||['#eee','#666'];
+      const t=new Date(p.created_at);const ts=t.toLocaleDateString();
+      return `<div class="cpost"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:10px;color:#aaa">${ts}</span><span style="background:${cc[0]};color:${cc[1]};font-size:9px;padding:2px 8px;border-radius:999px;font-weight:500">${p.cat}</span></div><div style="font-size:12px;line-height:1.6;margin-bottom:8px">${p.content}</div><div style="display:flex;gap:12px;margin-bottom:6px"><button class="like-btn ${liked?'liked':''}" onclick="likePost('${p.id}',${liked},${p.likes},this)"><i class="ti ${liked?'ti-heart-filled':'ti-heart'}" style="font-size:13px"></i> <span class="lc-${p.id}">${p.likes}</span></button></div><div style="border-top:.5px solid rgba(0,0,0,.07);padding-top:6px;display:flex;gap:6px"><input type="text" id="ri-${p.id}" placeholder="Reply anonymously…" style="flex:1;height:28px;padding:0 9px;border-radius:8px;border:.5px solid #ddd;font-size:11px;font-family:var(--font-b);background:#FAFAFA;outline:none"><button onclick="addReply('${p.id}')" style="background:${profile==='girl'?'var(--pk)':'var(--bl)'};border:none;border-radius:7px;padding:0 11px;color:#fff;font-size:11px;cursor:pointer;font-family:var(--font-b);height:28px">Reply</button></div></div>`;
+    }).join('');
+    if(!posts||posts.length===0) el.innerHTML='<div style="text-align:center;padding:30px;font-size:12px;color:#aaa">No posts yet. Be the first!</div>';
+  }catch(e){ el.innerHTML='<div style="text-align:center;padding:20px;font-size:12px;color:#aaa">Error loading posts.</div>'; }
+}
+async function likePost(pid, wasLiked, currentLikes, btn) {
+  if(!ME)return;
+  try {
+    if(wasLiked){
+      await sb(`post_likes?user_id=eq.${ME.id}&post_id=eq.${pid}`,{method:'DELETE'});
+      await sb(`community_posts?id=eq.${pid}`,{method:'PATCH',body:JSON.stringify({likes:currentLikes-1})});
+      btn.classList.remove('liked');btn.querySelector('i').className='ti ti-heart';
+      btn.querySelector('.lc-'+pid).textContent=currentLikes-1;
+      btn.onclick=()=>likePost(pid,false,currentLikes-1,btn);
+    }else{
+      await sb('post_likes',{method:'POST',body:JSON.stringify({user_id:ME.id,post_id:pid})});
+      await sb(`community_posts?id=eq.${pid}`,{method:'PATCH',body:JSON.stringify({likes:currentLikes+1})});
+      btn.classList.add('liked');btn.querySelector('i').className='ti ti-heart-filled';
+      btn.querySelector('.lc-'+pid).textContent=currentLikes+1;
+      btn.onclick=()=>likePost(pid,true,currentLikes+1,btn);
+    }
+  }catch(e){}
+}
+async function addReply(pid) {
+  const inp=document.getElementById('ri-'+pid);if(!inp||!inp.value.trim())return;
+  if(!ME)return;
+  try {
+    await sb('post_replies',{method:'POST',body:JSON.stringify({post_id:pid,user_id:ME.id,content:inp.value.trim()})});
+    inp.value=''; logA('community'); aToast('+15 pts for contributing! 🤝');
+  }catch(e){aToast('Error posting reply.');}
+}
+async function commPost() {
+  const inp=document.getElementById('comm-in');if(!inp||!inp.value.trim())return;
+  if(!ME){aToast('Sign in to post.');return;}
+  try {
+    await sb('community_posts',{method:'POST',body:JSON.stringify({user_id:ME.id,cat:'Questions',content:inp.value.trim(),likes:0})});
+    inp.value=''; loadCommunity(); aToast('Posted anonymously! 🌸');
+  }catch(e){aToast('Error posting.');}
+}
+
+// ══════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════
+function aToast(msg) {
+  const old=document.querySelector('.nxhyp-toast');if(old)old.remove();
+  const t=document.createElement('div');t.className='nxhyp-toast toast-a';
+  t.style.cssText='position:absolute;bottom:72px;left:10px;right:10px;background:#3C3489;color:#fff;padding:10px 14px;border-radius:12px;font-size:12px;z-index:9999;line-height:1.5;font-weight:500;font-family:var(--font-b)';
+  t.textContent=msg;const m=document.querySelector('.ami');if(m){m.style.position='relative';m.appendChild(t);}
+  setTimeout(()=>{if(t.parentNode)t.remove();},2800);
+}
+window.addEventListener('scroll',()=>document.querySelectorAll('.reveal').forEach(el=>{if(el.getBoundingClientRect().top<window.innerHeight-60)el.classList.add('visible');}));
+setTimeout(()=>document.querySelectorAll('.reveal').forEach(el=>{if(el.getBoundingClientRect().top<window.innerHeight)el.classList.add('visible');}),200);
+</script>
 </body>
 </html>
