@@ -651,24 +651,778 @@ footer{background:#1A1A2E;padding:40px 5vw 24px;color:rgba(255,255,255,.45);font
 <!-- ── MORE ── -->
 <div class="asc" id="as-more">
   <div class="asb"><span>9:41</span><span>100%</span></div>
-  <div class="atb"><button onclick="goTo('home')" style="background:none;border:.5px solid #ddd;border-radius:8px;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#888"><i class="ti ti-arrow-left" style="font-size:14px"></i></button><div class="atb-title">More</div></div>
+  <div class="atb"><button onclick="goTo('home')" style="background:none;border:.5px solid #ddd;border-radius:8px;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#888"><i class="ti ti-arrow-left" style="font-size:14px"></i></button><div class="atb-title" id="more-title">More</div></div>
   <div class="bod">
     <div style="background:var(--pu0);border-radius:14px;padding:12px;border:.5px solid var(--pu1);display:flex;align-items:center;gap:10px">
       <div id="more-ava" style="width:42px;height:42px;border-radius:10px;overflow:hidden;border:.5px solid var(--pu1);background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"></div>
       <div><div id="more-name" style="font-size:14px;font-weight:500">You</div><div id="more-un" style="font-size:11px;color:var(--pu6)">@username</div></div>
       <div style="margin-left:auto;text-align:right"><div style="font-size:11px;color:var(--am6);font-weight:500" id="more-pts">0 pts</div><div style="font-size:10px;color:#888">Level <span id="more-lv">1</span></div></div>
     </div>
-    <div class="acard" style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="goTo('community')"><i class="ti ti-users" style="font-size:20px;color:var(--pk)"></i><div><div style="font-size:13px;font-weight:500">Community</div><div style="font-size:11px;color:#888">Anonymous posts</div></div><i class="ti ti-chevron-right" style="color:#bbb;margin-left:auto"></i></div>
-    <div class="acard" style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="goTo('friends')"><i class="ti ti-heart-handshake" style="font-size:20px;color:var(--bl)"></i><div><div style="font-size:13px;font-weight:500">Friends</div><div style="font-size:11px;color:#888">Search by username & chat</div></div><i class="ti ti-chevron-right" style="color:#bbb;margin-left:auto"></i></div>
-    <div class="acard" style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="goTo('ai')"><i class="ti ti-message-circle" style="font-size:20px;color:var(--pu6)"></i><div><div style="font-size:13px;font-weight:500">Chat with companion</div></div><i class="ti ti-chevron-right" style="color:#bbb;margin-left:auto"></i></div>
-    <div class="acard" style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="doSignOut()"><i class="ti ti-logout" style="font-size:20px;color:var(--re)"></i><div><div style="font-size:13px;font-weight:500">Sign out</div><div style="font-size:11px;color:#888">Data saved to server</div></div></div>
+    <div class="acard" style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="goTo('community')"><i class="ti ti-users" style="font-size:20px;color:var(--pk)"></i><div><div id="more-comm" style="font-size:13px;font-weight:500">Community</div><div id="more-comm-sub" style="font-size:11px;color:#888">Anonymous posts</div></div><i class="ti ti-chevron-right" style="color:#bbb;margin-left:auto"></i></div>
+    <div class="acard" style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="goTo('friends')"><i class="ti ti-heart-handshake" style="font-size:20px;color:var(--bl)"></i><div><div id="more-friends" style="font-size:13px;font-weight:500">Friends</div><div id="more-friends-sub" style="font-size:11px;color:#888">Search by username & chat</div></div><i class="ti ti-chevron-right" style="color:#bbb;margin-left:auto"></i></div>
+    <div class="acard" style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="goTo('ai')"><i class="ti ti-message-circle" style="font-size:20px;color:var(--pu6)"></i><div><div id="more-chat" style="font-size:13px;font-weight:500">Chat with companion</div></div><i class="ti ti-chevron-right" style="color:#bbb;margin-left:auto"></i></div>
+    <div class="acard" style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="goTo('settings')"><i class="ti ti-settings" style="font-size:20px;color:var(--pu6)"></i><div><div id="more-settings" style="font-size:13px;font-weight:500">Settings</div><div id="more-settings-sub" style="font-size:11px;color:#888">Language, privacy & account</div></div><i class="ti ti-chevron-right" style="color:#bbb;margin-left:auto"></i></div>
+    <div class="acard" style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="doSignOut()"><i class="ti ti-logout" style="font-size:20px;color:var(--re)"></i><div><div id="more-signout" style="font-size:13px;font-weight:500">Sign out</div><div id="more-signout-sub" style="font-size:11px;color:#888">Data saved to server</div></div></div>
   </div>
-  <div class="tabs"><button class="tab" onclick="goTo('home')"><i class="ti ti-home"></i><span>Home</span></button><button class="tab" onclick="goHealth()"><i class="ti ti-heart-rate-monitor"></i><span>Health</span></button><button class="tab" onclick="goTo('trackers')"><i class="ti ti-chart-line"></i><span>Trackers</span></button><button class="tab" onclick="goTo('companion')"><i class="ti ti-sparkles"></i><span>Companion</span></button><button class="tab ap" onclick="goTo('more')"><i class="ti ti-dots"></i><span>More</span></button></div>
+  <div class="tabs">
+    <button class="tab" onclick="goTo('home')"><i class="ti ti-home"></i><span id="tab-home-m">Home</span></button>
+    <button class="tab" onclick="goHealth()"><i class="ti ti-heart-rate-monitor"></i><span id="tab-health-m">Health</span></button>
+    <button class="tab" onclick="goTo('trackers')"><i class="ti ti-chart-line"></i><span id="tab-trackers-m">Trackers</span></button>
+    <button class="tab" onclick="goTo('companion')"><i class="ti ti-sparkles"></i><span id="tab-companion-m">Companion</span></button>
+    <button class="tab ap" onclick="goTo('more')"><i class="ti ti-dots"></i><span id="tab-more-m">More</span></button>
+  </div>
+</div>
+
+<!-- ── SETTINGS ── -->
+<div class="asc" id="as-settings">
+  <div class="asb"><span>9:41</span><span>100%</span></div>
+  <div class="atb"><button onclick="goTo('more')" style="background:none;border:.5px solid #ddd;border-radius:8px;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#888"><i class="ti ti-arrow-left" style="font-size:14px"></i></button><div class="atb-title" id="settings-title">Settings</div></div>
+  <div class="bod">
+    <!-- Language (first, most prominent) -->
+    <div class="acard">
+      <div class="albl" id="lang-section-lbl">Language</div>
+      <div id="lang-selector"></div>
+    </div>
+    <!-- Account -->
+    <div class="acard">
+      <div class="albl" id="account-section-lbl">Account</div>
+      <div class="setting-row"><div style="flex:1"><div id="email-setting-lbl" style="font-size:13px;font-weight:500">Email</div><div style="font-size:11px;color:#888" id="s-email-d">—</div></div><button id="change-btn" onclick="aToast(T('toast_email_change'))" style="background:none;border:.5px solid #ddd;border-radius:8px;padding:5px 10px;font-size:11px;cursor:pointer;font-family:var(--font-b);color:#666">Change</button></div>
+      <div class="setting-row"><div style="flex:1"><div id="pass-setting-lbl" style="font-size:13px;font-weight:500">Password</div><div id="last-changed-lbl" style="font-size:11px;color:#888">Last changed never</div></div><button id="reset-btn" onclick="aToast(T('toast_pass_reset'))" style="background:none;border:.5px solid #ddd;border-radius:8px;padding:5px 10px;font-size:11px;cursor:pointer;font-family:var(--font-b);color:#666">Reset</button></div>
+      <div class="setting-row" style="border:none"><div style="flex:1"><div id="profile-setting-lbl" style="font-size:13px;font-weight:500">Health profile</div><div style="font-size:11px;color:#888" id="s-prof-d">—</div></div><button id="edit-btn" onclick="goHealth()" style="background:none;border:.5px solid #ddd;border-radius:8px;padding:5px 10px;font-size:11px;cursor:pointer;font-family:var(--font-b);color:#666">Edit</button></div>
+    </div>
+    <!-- Notifications -->
+    <div class="acard">
+      <div class="albl" id="notif-section-lbl">Notifications</div>
+      <div class="setting-row"><div style="flex:1"><div id="daily-rem-lbl" style="font-size:13px;font-weight:500">Daily reminders</div><div id="daily-rem-sub-lbl" style="font-size:11px;color:#888">Log health at 8am each day</div></div><label class="toggle"><input type="checkbox" checked><span class="tog-sl"></span></label></div>
+      <div class="setting-row"><div style="flex:1"><div id="step-alerts-lbl" style="font-size:13px;font-weight:500">Step goal alerts</div><div id="step-alerts-sub-lbl" style="font-size:11px;color:#888">Notify when you hit 10,000</div></div><label class="toggle"><input type="checkbox" checked><span class="tog-sl"></span></label></div>
+      <div class="setting-row" style="border:none"><div style="flex:1"><div id="comm-replies-lbl" style="font-size:13px;font-weight:500">Community replies</div><div id="comm-replies-sub-lbl" style="font-size:11px;color:#888">When someone replies to your post</div></div><label class="toggle"><input type="checkbox"><span class="tog-sl"></span></label></div>
+    </div>
+    <!-- Privacy -->
+    <div class="acard">
+      <div class="albl" id="privacy-section-lbl">Privacy & Data</div>
+      <div class="setting-row"><div style="flex:1"><div id="anon-comm-lbl" style="font-size:13px;font-weight:500">Anonymous in community</div><div id="anon-comm-sub-lbl" style="font-size:11px;color:#888">Never show your name in posts</div></div><label class="toggle"><input type="checkbox" checked><span class="tog-sl"></span></label></div>
+      <div class="setting-row" style="border:none"><div style="flex:1"><div id="delete-data-lbl" style="font-size:13px;font-weight:500;color:var(--re)">Delete all my data</div><div id="delete-sub-lbl" style="font-size:11px;color:#888">This cannot be undone</div></div><button id="delete-btn" onclick="if(confirm(T('delete_confirm'))){clearState();doSignOut();}" style="background:var(--re0);border:.5px solid var(--re);border-radius:8px;padding:5px 10px;font-size:11px;cursor:pointer;font-family:var(--font-b);color:var(--re)">Delete</button></div>
+    </div>
+    <!-- App info -->
+    <div class="acard">
+      <div class="albl" id="app-info-lbl">App info</div>
+      <div class="setting-row"><div style="flex:1;font-size:13px;font-weight:500" id="version-lbl">Version</div><div style="font-size:12px;color:#888">NXhyp 1.0.0</div></div>
+      <div class="setting-row" style="border:none"><div style="flex:1;font-size:13px;font-weight:500" id="mem-lbl">Memory status</div><div style="font-size:11px;color:var(--tl6);font-weight:500" id="mem-status">Saved ✓</div></div>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab" onclick="goTo('home')"><i class="ti ti-home"></i><span>Home</span></button>
+    <button class="tab" onclick="goHealth()"><i class="ti ti-heart-rate-monitor"></i><span>Health</span></button>
+    <button class="tab" onclick="goTo('trackers')"><i class="ti ti-chart-line"></i><span>Trackers</span></button>
+    <button class="tab" onclick="goTo('companion')"><i class="ti ti-sparkles"></i><span>Companion</span></button>
+    <button class="tab ap" onclick="goTo('more')"><i class="ti ti-dots"></i><span>More</span></button>
+  </div>
 </div>
 
 </div></div>
 
 <script>
+// ══════════════════════════════════════════
+// TRANSLATIONS
+// ══════════════════════════════════════════
+const LANGS = {
+  en: {
+    name:'English', flag:'🇬🇧',
+    // Nav
+    nav_features:'Features', nav_companion:'Companion', nav_safety:'Safety', nav_try:'Try demo',
+    // Hero
+    hero_tag:'🌱 Wellness for every body',
+    hero_h1:'Healthcare that <em style="font-style:italic;color:var(--pk)">actually fits</em> who you are',
+    hero_sub:'NXhyp gives you a fully personalised health journey — cycle, sleep, steps, mental health — plus a drawable AI companion and global friends with real chat.',
+    hero_cta:'🌸 Get started free',
+    // Landing sections
+    feat_tag:'What\'s inside', feat_h:'Everything you need, <em>personalised</em>',
+    comp_tag:'Your companion', comp_h:'Draw it. <em>Earn points. Unlock more.</em>',
+    comp_sub:'Every healthy habit earns NXhyp Points. Use the free-draw canvas to create your own unique AI companion character, or pick from premade designs.',
+    safe_tag:'Privacy first', safe_h:'Built safe from the <em style="color:#FAC775">ground up</em>',
+    // Auth
+    create_account:'Create account', sign_in:'Sign in to existing account',
+    username_label:'Username (unique, public)', email_label:'Email address', pass_label:'Password', confirm_pass:'Confirm password',
+    username_ph:'e.g. luna_rose', email_ph:'you@example.com', pass_ph:'Min 8 characters', confirm_ph:'Repeat',
+    username_err:'Username taken or invalid (letters, numbers, _ only).', email_err:'Enter a valid email.', pass_err:'Min 8 characters.', confirm_err:'Passwords don\'t match.',
+    about_you:'About <em style="font-style:italic;color:var(--pk)">you</em>',
+    profile_label:'Health profile',
+    girl_label:'Girl / Woman', boy_label:'Boy / Man', nb_label:'Non-binary', ns_label:'Prefer not to say',
+    dob_err:'Select full date.',  gender_err:'Select a profile.',
+    your_comp:'Your <em style="font-style:italic;color:var(--pk)">companion</em>',
+    comp_name_label:'Companion name',
+    free_draw:'🎨 Free draw', premade:'✨ Premade',
+    draw_hint:'Draw your companion! Use the tools below.',
+    enter_app:'🌸 Enter NXhyp', checking:'Checking…', creating:'Creating account…',
+    welcome_back:'Welcome <em style="font-style:italic;color:var(--pk)">back</em>',
+    signin_sub:'Sign in to restore all your data, friends & companion.',
+    signin_btn:'Sign in', signin_err:'Incorrect email or password.',
+    // Home
+    good_morning:'Good morning', good_afternoon:'Good afternoon', good_evening:'Good evening',
+    cycle_today:'Cycle today', next_period:'Next period in 14 days', ovulation:'Ovulation window',
+    log_today_cycle:'Log today +10pts',
+    health_today:'Health today', energy_label:'Energy: High · Good recovery', log_today_health:'Log today +10pts',
+    steps_today:'Steps today', step_goal:'/ 10,000',
+    trackers_btn:'Trackers', chat_btn:'Chat', friends_btn:'Friends',
+    // Tabs
+    tab_home:'Home', tab_health:'Health', tab_trackers:'Trackers', tab_companion:'Companion', tab_more:'More',
+    // Trackers
+    steps_label:'👟 Steps today', hourly:'Hourly', add_steps:'+ Add 500 steps (+5 pts)',
+    sleep_label:'🛌 Sleep', quality:'Quality', log_sleep:'Log sleep +8 pts',
+    mood_label:'Mood', log_mood:'Log +5pts', water_label:'Water', add_water:'+ 1 glass',
+    streak_label:'-day streak',
+    // Companion page
+    edit_draw:'🎨 Edit drawing', personality_tab:'💜 Personality',
+    save_drawing:'Save companion drawing', earn_pts:'Earn NXhyp Points',
+    // Health G
+    cycle_tracker:'🌸 Cycle tracker', log_flow:'Log today — flow',
+    symptoms:'Symptoms', pain:'Pain', save_earn:'Save & earn +10 pts',
+    // Health B
+    health_tracker:'💪 Health tracker', recovery_label:'Recovery',
+    // AI chat
+    ask_ph:'Ask anything…',
+    // Friends
+    search_tab:'Search', friends_tab:'Friends', requests_tab:'Requests',
+    find_friends:'Find friends by username',
+    search_ph:'Enter exact username', search_btn:'Search',
+    no_user:'No user found with that username.', thats_you:'That\'s you! 😄',
+    add_friend:'Add friend', req_sent:'✓ Request sent', already_friends:'✓ Friends',
+    no_friends:'No friends yet. Search for users by username!',
+    no_requests:'No pending requests.',
+    wants_friend:'Wants to be friends',
+    accept:'Accept', chat_btn2:'Chat',
+    // DM
+    msg_ph:'Message…',
+    // Community
+    anon_label:'Anonymous',
+    all_tab:'All', questions_tab:'Questions', tips_tab:'Tips',
+    no_posts:'No posts yet.\nBe the first to share something! 🌸',
+    share_ph:'Share anonymously…',
+    reply_btn:'Reply', you_label:'(you)',
+    sign_in_like:'Sign in to like posts.', sign_in_reply:'Sign in to reply.', sign_in_post:'Sign in to post.',
+    // More
+    community_title:'Community', community_sub:'Anonymous posts',
+    friends_title:'Friends', friends_sub:'Search by username & chat',
+    chat_title:'Chat with companion',
+    signout:'Sign out', signout_sub:'Data saved to server',
+    // Settings
+    settings_title:'Settings',
+    account_section:'Account', email_setting:'Email', change_btn:'Change',
+    pass_setting:'Password', last_changed:'Last changed never', reset_btn:'Reset',
+    profile_setting:'Health profile', edit_btn:'Edit',
+    notif_section:'Notifications',
+    daily_rem:'Daily reminders', daily_rem_sub:'Log health at 8am each day',
+    step_alerts:'Step goal alerts', step_alerts_sub:'Notify when you hit 10,000',
+    comm_replies:'Community replies', comm_replies_sub:'When someone replies to your post',
+    privacy_section:'Privacy & Data',
+    save_local:'Save data locally', save_local_sub:'Remember me between sessions',
+    anon_comm:'Anonymous in community', anon_comm_sub:'Never show your name in posts',
+    delete_data:'Delete all my data', delete_confirm:'Delete all your NXhyp data?', delete_sub:'This cannot be undone',
+    delete_btn:'Delete',
+    lang_section:'Language',
+    app_info:'App info', version_label:'Version', mem_label:'Memory status', mem_ok:'Saved ✓',
+    // Toasts
+    toast_req_sent:'Friend request sent to @{u}! 👋',
+    toast_already:'Already sent or already friends!',
+    toast_accepted:'Friend added! 🎉',
+    toast_drawing:'Companion drawing saved! 🎨',
+    toast_levelup:'Level up! Level {l} 🌟',
+    toast_sleep:'Sleep logged! +8 pts 🛌',
+    toast_water_goal:'Water goal hit! +10 pts 💧',
+    toast_water:' {n}/8',
+    toast_mood:'+5 pts! Mood logged 😊',
+    toast_cycle:'Logged! +10 pts 🌸',
+    toast_health:'Logged! +10 pts 💪',
+    toast_reply:'+15 pts for contributing! 🤝',
+    toast_posted:'Posted! 🌸',
+    toast_signout:'Signed out. Data saved to server.',
+    toast_welcome:'Welcome to NXhyp, @{u}! 🌸',
+    toast_welcome_back:'Welcome back, @{u}! 🌸',
+    toast_premade:'{e} selected as companion!',
+    toast_need_pts:'Need {n} pts!',
+    toast_mode:'Mode: {m}',
+    toast_pass_reset:'Password reset link sent!',
+    toast_email_change:'Email change request sent!',
+    // Misc
+    sign_in_link:'Sign in', create_link:'Create account →',
+    forgot_pass:'Forgot password?', reset_sent:'Reset link sent to your email!',
+    none:'None', light:'Light', medium:'Medium', heavy:'Heavy',
+    cramps:'Cramps', bloating:'Bloating', fatigue:'Fatigue', headache:'Headache', mood_swings:'Mood swings',
+    poor:'Poor', fair:'Fair', good:'Good', great:'Great', perfect:'Perfect',
+    draw_tool:'✏️ Draw', erase_tool:'⬜ Erase', fill_tool:'🪣 Fill', clear_tool:'🗑️ Clear',
+    tap_set:'Tap to set', active:'✓ Active',
+    // AI quick replies girl
+    ai_q1:'Cramp relief tips', ai_q2:'PCOS symptoms', ai_q3:'Before my period fatigue', ai_q4:'Fertility guidance',
+    // AI quick replies boy
+    ai_q1b:'Boost testosterone?', ai_q2b:'Muscle recovery', ai_q3b:'Prostate health', ai_q4b:'Sleep tips',
+    ai_online:'Online',
+    // AI replies
+    ai_cramp:"Cramps are caused by prostaglandins. Ibuprofen 24–48h before your period, a heating pad at 40°C, and magnesium glycinate 300mg before bed all reduce severity significantly.",
+    ai_cycle:"You're on Day 14 — your ovulation window. Average cycle 28 days, next period in ~14 days.",
+    ai_pms:"PMS happens when oestrogen and progesterone drop, lowering serotonin. Magnesium, less caffeine, and aerobic exercise 3× per week help.",
+    ai_default_g:"Ask me anything about your cycle, symptoms, PCOS, fertility, or how you're feeling.",
+    ai_testo:"Testosterone peaks during deep sleep. Strength training 3–4× weekly, stress management, and healthy body fat % all help.",
+    ai_recovery:"0.3g protein/kg within 30 min post-training, 7–9 hours sleep, active recovery on off-days.",
+    ai_default_b:"Ask about testosterone, recovery, prostate health, nutrition, or mental resilience.",
+    ai_greeting:"I'm {name}! Ask me anything about your health, cycle, or wellbeing.",
+  },
+  id: {
+    name:'Bahasa Indonesia', flag:'🇮🇩',
+    nav_features:'Fitur', nav_companion:'Teman AI', nav_safety:'Privasi', nav_try:'Coba demo',
+    hero_tag:'🌱 Kesehatan untuk semua',
+    hero_h1:'Kesehatan yang <em style="font-style:italic;color:var(--pk)">benar-benar pas</em> untukmu',
+    hero_sub:'NXhyp memberi perjalanan kesehatan yang dipersonalisasi — siklus, tidur, langkah, kesehatan mental — plus teman AI yang bisa kamu gambar dan teman global dengan chat nyata.',
+    hero_cta:'🌸 Mulai gratis',
+    feat_tag:'Apa isinya', feat_h:'Semua yang kamu butuhkan, <em>dipersonalisasi</em>',
+    comp_tag:'Teman AI-mu', comp_h:'Gambar. <em>Dapatkan poin. Buka lebih banyak.</em>',
+    comp_sub:'Setiap kebiasaan sehat menghasilkan Poin NXhyp. Gunakan kanvas untuk membuat teman AI unikmu, atau pilih dari desain yang tersedia.',
+    safe_tag:'Privasi utama', safe_h:'Dibangun aman dari <em style="color:#FAC775">dasarnya</em>',
+    create_account:'Buat akun', sign_in:'Masuk ke akun yang ada',
+    username_label:'Username (unik, publik)', email_label:'Alamat email', pass_label:'Kata sandi', confirm_pass:'Konfirmasi kata sandi',
+    username_ph:'mis. luna_mawar', email_ph:'kamu@contoh.com', pass_ph:'Min 8 karakter', confirm_ph:'Ulangi',
+    username_err:'Username sudah dipakai atau tidak valid (huruf, angka, _ saja).', email_err:'Masukkan email yang valid.', pass_err:'Min 8 karakter.', confirm_err:'Kata sandi tidak cocok.',
+    about_you:'Tentang <em style="font-style:italic;color:var(--pk)">kamu</em>',
+    profile_label:'Profil kesehatan',
+    girl_label:'Perempuan / Wanita', boy_label:'Laki-laki / Pria', nb_label:'Non-biner', ns_label:'Tidak ingin menyebutkan',
+    dob_err:'Pilih tanggal lahir lengkap.', gender_err:'Pilih profil.',
+    your_comp:'<em style="font-style:italic;color:var(--pk)">Teman AI</em>-mu',
+    comp_name_label:'Nama teman AI',
+    free_draw:'🎨 Gambar bebas', premade:'✨ Siap pakai',
+    draw_hint:'Gambar teman AI-mu! Gunakan alat di bawah.',
+    enter_app:'🌸 Masuk NXhyp', checking:'Mengecek…', creating:'Membuat akun…',
+    welcome_back:'Selamat <em style="font-style:italic;color:var(--pk)">datang kembali</em>',
+    signin_sub:'Masuk untuk memulihkan data, teman & teman AI-mu.',
+    signin_btn:'Masuk', signin_err:'Email atau kata sandi salah.',
+    good_morning:'Selamat pagi', good_afternoon:'Selamat siang', good_evening:'Selamat malam',
+    cycle_today:'Siklus hari ini', next_period:'Haid berikutnya dalam 14 hari', ovulation:'Masa ovulasi',
+    log_today_cycle:'Catat hari ini +10 poin',
+    health_today:'Kesehatan hari ini', energy_label:'Energi: Tinggi · Pemulihan baik', log_today_health:'Catat hari ini +10 poin',
+    steps_today:'Langkah hari ini', step_goal:'/ 10.000',
+    trackers_btn:'Pelacak', chat_btn:'Chat', friends_btn:'Teman',
+    tab_home:'Beranda', tab_health:'Kesehatan', tab_trackers:'Pelacak', tab_companion:'Teman AI', tab_more:'Lainnya',
+    steps_label:'👟 Langkah hari ini', hourly:'Per jam', add_steps:'+ Tambah 500 langkah (+5 poin)',
+    sleep_label:'🛌 Tidur', quality:'Kualitas', log_sleep:'Catat tidur +8 poin',
+    mood_label:'Suasana hati', log_mood:'Catat +5 poin', water_label:'Air', add_water:'+ 1 gelas',
+    streak_label:'-hari beruntun',
+    edit_draw:'🎨 Edit gambar', personality_tab:'💜 Kepribadian',
+    save_drawing:'Simpan gambar teman AI', earn_pts:'Dapatkan Poin NXhyp',
+    cycle_tracker:'🌸 Pelacak siklus', log_flow:'Catat hari ini — aliran',
+    symptoms:'Gejala', pain:'Nyeri', save_earn:'Simpan & dapatkan +10 poin',
+    health_tracker:'💪 Pelacak kesehatan', recovery_label:'Pemulihan',
+    ask_ph:'Tanya apa saja…',
+    search_tab:'Cari', friends_tab:'Teman', requests_tab:'Permintaan',
+    find_friends:'Temukan teman dengan username',
+    search_ph:'Masukkan username tepat', search_btn:'Cari',
+    no_user:'Tidak ada pengguna dengan username itu.', thats_you:'Itu kamu! 😄',
+    add_friend:'Tambah teman', req_sent:'✓ Permintaan terkirim', already_friends:'✓ Sudah berteman',
+    no_friends:'Belum ada teman. Cari pengguna dengan username!',
+    no_requests:'Tidak ada permintaan masuk.',
+    wants_friend:'Ingin berteman',
+    accept:'Terima', chat_btn2:'Chat',
+    msg_ph:'Pesan…',
+    anon_label:'Anonim',
+    all_tab:'Semua', questions_tab:'Pertanyaan', tips_tab:'Tips',
+    no_posts:'Belum ada postingan.\nJadilah yang pertama! 🌸',
+    share_ph:'Bagikan secara anonim…',
+    reply_btn:'Balas', you_label:'(kamu)',
+    sign_in_like:'Masuk untuk menyukai postingan.', sign_in_reply:'Masuk untuk membalas.', sign_in_post:'Masuk untuk memposting.',
+    community_title:'Komunitas', community_sub:'Postingan anonim',
+    friends_title:'Teman', friends_sub:'Cari username & chat',
+    chat_title:'Chat dengan teman AI',
+    signout:'Keluar', signout_sub:'Data tersimpan di server',
+    settings_title:'Pengaturan',
+    account_section:'Akun', email_setting:'Email', change_btn:'Ubah',
+    pass_setting:'Kata sandi', last_changed:'Belum pernah diubah', reset_btn:'Reset',
+    profile_setting:'Profil kesehatan', edit_btn:'Edit',
+    notif_section:'Notifikasi',
+    daily_rem:'Pengingat harian', daily_rem_sub:'Catat kesehatan jam 8 pagi setiap hari',
+    step_alerts:'Peringatan target langkah', step_alerts_sub:'Notifikasi saat mencapai 10.000',
+    comm_replies:'Balasan komunitas', comm_replies_sub:'Saat seseorang membalas postinganmu',
+    privacy_section:'Privasi & Data',
+    save_local:'Simpan data lokal', save_local_sub:'Ingat saya antar sesi',
+    anon_comm:'Anonim di komunitas', anon_comm_sub:'Jangan tampilkan nama di postingan',
+    delete_data:'Hapus semua data saya', delete_confirm:'Hapus semua data NXhyp kamu?', delete_sub:'Tidak dapat dibatalkan',
+    delete_btn:'Hapus',
+    lang_section:'Bahasa',
+    app_info:'Info aplikasi', version_label:'Versi', mem_label:'Status memori', mem_ok:'Tersimpan ✓',
+    toast_req_sent:'Permintaan teman terkirim ke @{u}! 👋',
+    toast_already:'Sudah terkirim atau sudah berteman!',
+    toast_accepted:'Teman ditambahkan! 🎉',
+    toast_drawing:'Gambar teman AI tersimpan! 🎨',
+    toast_levelup:'Naik level! Level {l} 🌟',
+    toast_sleep:'Tidur dicatat! +8 poin 🛌',
+    toast_water_goal:'Target air tercapai! +10 poin 💧',
+    toast_water:' {n}/8',
+    toast_mood:'+5 poin! Suasana hati dicatat 😊',
+    toast_cycle:'Dicatat! +10 poin 🌸',
+    toast_health:'Dicatat! +10 poin 💪',
+    toast_reply:'+15 poin untuk kontribusi! 🤝',
+    toast_posted:'Diposting! 🌸',
+    toast_signout:'Keluar. Data tersimpan di server.',
+    toast_welcome:'Selamat datang di NXhyp, @{u}! 🌸',
+    toast_welcome_back:'Selamat datang kembali, @{u}! 🌸',
+    toast_premade:'{e} dipilih sebagai teman AI!',
+    toast_need_pts:'Butuh {n} poin!',
+    toast_mode:'Mode: {m}',
+    toast_pass_reset:'Link reset kata sandi terkirim!',
+    toast_email_change:'Permintaan ubah email terkirim!',
+    sign_in_link:'Masuk', create_link:'Buat akun →',
+    forgot_pass:'Lupa kata sandi?', reset_sent:'Link reset terkirim ke emailmu!',
+    none:'Tidak ada', light:'Ringan', medium:'Sedang', heavy:'Berat',
+    cramps:'Kram', bloating:'Kembung', fatigue:'Kelelahan', headache:'Sakit kepala', mood_swings:'Perubahan suasana hati',
+    poor:'Buruk', fair:'Cukup', good:'Baik', great:'Bagus', perfect:'Sempurna',
+    draw_tool:'✏️ Gambar', erase_tool:'⬜ Hapus', fill_tool:'🪣 Isi', clear_tool:'🗑️ Bersihkan',
+    tap_set:'Ketuk untuk set', active:'✓ Aktif',
+    ai_q1:'Tips meredakan kram', ai_q2:'Gejala PCOS', ai_q3:'Kelelahan sebelum haid', ai_q4:'Panduan kesuburan',
+    ai_q1b:'Tingkatkan testosteron?', ai_q2b:'Pemulihan otot', ai_q3b:'Kesehatan prostat', ai_q4b:'Tips tidur',
+    ai_online:'Online',
+    ai_cramp:"Kram disebabkan prostaglandin. Ibuprofen 24–48 jam sebelum haid, bantal pemanas 40°C, dan magnesium glisin 300mg sebelum tidur sangat membantu.",
+    ai_cycle:"Kamu berada di Hari ke-14 — masa ovulasi. Rata-rata siklus 28 hari, haid berikutnya sekitar 14 hari lagi.",
+    ai_pms:"PMS terjadi ketika estrogen dan progesteron turun, menurunkan serotonin. Magnesium, kurangi kafein, dan olahraga aerobik 3× seminggu membantu.",
+    ai_default_g:"Tanyakan apa saja tentang siklus, gejala, PCOS, kesuburan, atau perasaanmu.",
+    ai_testo:"Testosteron memuncak saat tidur nyenyak. Latihan beban 3–4× seminggu, kelola stres, dan lemak tubuh yang sehat semuanya membantu.",
+    ai_recovery:"0,3g protein/kg dalam 30 menit setelah latihan, tidur 7–9 jam, pemulihan aktif di hari istirahat.",
+    ai_default_b:"Tanya tentang testosteron, pemulihan, kesehatan prostat, nutrisi, atau ketahanan mental.",
+    ai_greeting:"Aku {name}! Tanyakan apa saja tentang kesehatan atau perasaanmu.",
+  },
+  es: {
+    name:'Español', flag:'🇪🇸',
+    nav_features:'Funciones', nav_companion:'Compañero', nav_safety:'Privacidad', nav_try:'Probar demo',
+    hero_tag:'🌱 Salud para todos',
+    hero_h1:'Salud que <em style="font-style:italic;color:var(--pk)">realmente encaja</em> contigo',
+    hero_sub:'NXhyp te da un viaje de salud personalizado — ciclo, sueño, pasos, salud mental — más un compañero IA que puedes dibujar y amigos globales con chat real.',
+    hero_cta:'🌸 Comenzar gratis',
+    feat_tag:'Qué incluye', feat_h:'Todo lo que necesitas, <em>personalizado</em>',
+    comp_tag:'Tu compañero', comp_h:'Dibújalo. <em>Gana puntos. Desbloquea más.</em>',
+    comp_sub:'Cada hábito saludable gana Puntos NXhyp. Usa el lienzo para crear tu compañero IA único, o elige de diseños prediseñados.',
+    safe_tag:'Privacidad primero', safe_h:'Construido seguro desde <em style="color:#FAC775">la base</em>',
+    create_account:'Crear cuenta', sign_in:'Iniciar sesión en cuenta existente',
+    username_label:'Nombre de usuario (único, público)', email_label:'Correo electrónico', pass_label:'Contraseña', confirm_pass:'Confirmar contraseña',
+    username_ph:'ej. luna_rosa', email_ph:'tu@ejemplo.com', pass_ph:'Mín 8 caracteres', confirm_ph:'Repetir',
+    username_err:'Nombre de usuario tomado o inválido.', email_err:'Ingresa un correo válido.', pass_err:'Mín 8 caracteres.', confirm_err:'Las contraseñas no coinciden.',
+    about_you:'Sobre <em style="font-style:italic;color:var(--pk)">ti</em>',
+    profile_label:'Perfil de salud',
+    girl_label:'Niña / Mujer', boy_label:'Niño / Hombre', nb_label:'No binario', ns_label:'Prefiero no decir',
+    dob_err:'Selecciona fecha completa.', gender_err:'Selecciona un perfil.',
+    your_comp:'Tu <em style="font-style:italic;color:var(--pk)">compañero</em>',
+    comp_name_label:'Nombre del compañero',
+    free_draw:'🎨 Dibujo libre', premade:'✨ Prediseñado',
+    draw_hint:'¡Dibuja tu compañero! Usa las herramientas abajo.',
+    enter_app:'🌸 Entrar a NXhyp', checking:'Verificando…', creating:'Creando cuenta…',
+    welcome_back:'Bienvenido <em style="font-style:italic;color:var(--pk)">de vuelta</em>',
+    signin_sub:'Inicia sesión para restaurar tus datos, amigos y compañero.',
+    signin_btn:'Iniciar sesión', signin_err:'Correo o contraseña incorrectos.',
+    good_morning:'Buenos días', good_afternoon:'Buenas tardes', good_evening:'Buenas noches',
+    cycle_today:'Ciclo hoy', next_period:'Próximo período en 14 días', ovulation:'Ventana de ovulación',
+    log_today_cycle:'Registrar hoy +10 pts',
+    health_today:'Salud hoy', energy_label:'Energía: Alta · Buena recuperación', log_today_health:'Registrar hoy +10 pts',
+    steps_today:'Pasos hoy', step_goal:'/ 10,000',
+    trackers_btn:'Rastreadores', chat_btn:'Chat', friends_btn:'Amigos',
+    tab_home:'Inicio', tab_health:'Salud', tab_trackers:'Rastreadores', tab_companion:'Compañero', tab_more:'Más',
+    steps_label:'👟 Pasos hoy', hourly:'Por hora', add_steps:'+ Agregar 500 pasos (+5 pts)',
+    sleep_label:'🛌 Sueño', quality:'Calidad', log_sleep:'Registrar sueño +8 pts',
+    mood_label:'Estado de ánimo', log_mood:'Registrar +5 pts', water_label:'Agua', add_water:'+ 1 vaso',
+    streak_label:'-días seguidos',
+    edit_draw:'🎨 Editar dibujo', personality_tab:'💜 Personalidad',
+    save_drawing:'Guardar dibujo del compañero', earn_pts:'Ganar Puntos NXhyp',
+    cycle_tracker:'🌸 Rastreador de ciclo', log_flow:'Registrar hoy — flujo',
+    symptoms:'Síntomas', pain:'Dolor', save_earn:'Guardar y ganar +10 pts',
+    health_tracker:'💪 Rastreador de salud', recovery_label:'Recuperación',
+    ask_ph:'Pregunta lo que quieras…',
+    search_tab:'Buscar', friends_tab:'Amigos', requests_tab:'Solicitudes',
+    find_friends:'Buscar amigos por nombre de usuario',
+    search_ph:'Ingresa nombre de usuario exacto', search_btn:'Buscar',
+    no_user:'No se encontró ningún usuario.', thats_you:'¡Eso eres tú! 😄',
+    add_friend:'Agregar amigo', req_sent:'✓ Solicitud enviada', already_friends:'✓ Ya son amigos',
+    no_friends:'Sin amigos aún. ¡Busca usuarios por nombre de usuario!',
+    no_requests:'Sin solicitudes pendientes.',
+    wants_friend:'Quiere ser amigo',
+    accept:'Aceptar', chat_btn2:'Chat',
+    msg_ph:'Mensaje…',
+    anon_label:'Anónimo',
+    all_tab:'Todo', questions_tab:'Preguntas', tips_tab:'Consejos',
+    no_posts:'Sin publicaciones aún.\n¡Sé el primero! 🌸',
+    share_ph:'Comparte anónimamente…',
+    reply_btn:'Responder', you_label:'(tú)',
+    sign_in_like:'Inicia sesión para dar me gusta.', sign_in_reply:'Inicia sesión para responder.', sign_in_post:'Inicia sesión para publicar.',
+    community_title:'Comunidad', community_sub:'Publicaciones anónimas',
+    friends_title:'Amigos', friends_sub:'Buscar por usuario y chatear',
+    chat_title:'Chatear con compañero',
+    signout:'Cerrar sesión', signout_sub:'Datos guardados en servidor',
+    settings_title:'Configuración',
+    account_section:'Cuenta', email_setting:'Correo', change_btn:'Cambiar',
+    pass_setting:'Contraseña', last_changed:'Nunca cambiada', reset_btn:'Restablecer',
+    profile_setting:'Perfil de salud', edit_btn:'Editar',
+    notif_section:'Notificaciones',
+    daily_rem:'Recordatorios diarios', daily_rem_sub:'Registra salud a las 8am cada día',
+    step_alerts:'Alertas de meta de pasos', step_alerts_sub:'Notificar al alcanzar 10,000',
+    comm_replies:'Respuestas de comunidad', comm_replies_sub:'Cuando alguien responde tu publicación',
+    privacy_section:'Privacidad y Datos',
+    save_local:'Guardar datos localmente', save_local_sub:'Recordarme entre sesiones',
+    anon_comm:'Anónimo en comunidad', anon_comm_sub:'No mostrar nombre en publicaciones',
+    delete_data:'Eliminar todos mis datos', delete_confirm:'¿Eliminar todos tus datos de NXhyp?', delete_sub:'No se puede deshacer',
+    delete_btn:'Eliminar',
+    lang_section:'Idioma',
+    app_info:'Info de la app', version_label:'Versión', mem_label:'Estado de memoria', mem_ok:'Guardado ✓',
+    toast_req_sent:'¡Solicitud de amistad enviada a @{u}! 👋',
+    toast_already:'¡Ya enviada o ya son amigos!',
+    toast_accepted:'¡Amigo agregado! 🎉',
+    toast_drawing:'¡Dibujo del compañero guardado! 🎨',
+    toast_levelup:'¡Subiste de nivel! Nivel {l} 🌟',
+    toast_sleep:'¡Sueño registrado! +8 pts 🛌',
+    toast_water_goal:'¡Meta de agua alcanzada! +10 pts 💧',
+    toast_water:' {n}/8',
+    toast_mood:'¡+5 pts! Estado de ánimo registrado 😊',
+    toast_cycle:'¡Registrado! +10 pts 🌸',
+    toast_health:'¡Registrado! +10 pts 💪',
+    toast_reply:'¡+15 pts por contribuir! 🤝',
+    toast_posted:'¡Publicado! 🌸',
+    toast_signout:'Sesión cerrada. Datos guardados.',
+    toast_welcome:'¡Bienvenido a NXhyp, @{u}! 🌸',
+    toast_welcome_back:'¡Bienvenido de vuelta, @{u}! 🌸',
+    toast_premade:'¡{e} seleccionado como compañero!',
+    toast_need_pts:'¡Necesitas {n} pts!',
+    toast_mode:'Modo: {m}',
+    toast_pass_reset:'¡Enlace de restablecimiento enviado!',
+    toast_email_change:'¡Solicitud de cambio de correo enviada!',
+    sign_in_link:'Iniciar sesión', create_link:'Crear cuenta →',
+    forgot_pass:'¿Olvidaste la contraseña?', reset_sent:'¡Enlace enviado a tu correo!',
+    none:'Ninguno', light:'Ligero', medium:'Medio', heavy:'Abundante',
+    cramps:'Cólicos', bloating:'Hinchazón', fatigue:'Fatiga', headache:'Dolor de cabeza', mood_swings:'Cambios de humor',
+    poor:'Malo', fair:'Regular', good:'Bueno', great:'Muy bueno', perfect:'Perfecto',
+    draw_tool:'✏️ Dibujar', erase_tool:'⬜ Borrar', fill_tool:'🪣 Rellenar', clear_tool:'🗑️ Limpiar',
+    tap_set:'Toca para activar', active:'✓ Activo',
+    ai_q1:'Tips para cólicos', ai_q2:'Síntomas de SOP', ai_q3:'Cansancio antes del período', ai_q4:'Guía de fertilidad',
+    ai_q1b:'¿Aumentar testosterona?', ai_q2b:'Recuperación muscular', ai_q3b:'Salud de próstata', ai_q4b:'Tips de sueño',
+    ai_online:'En línea',
+    ai_cramp:"Los cólicos son causados por prostaglandinas. Ibuprofeno 24–48h antes del período, almohadilla térmica a 40°C y glicinato de magnesio 300mg antes de dormir.",
+    ai_cycle:"Estás en el Día 14 — tu ventana de ovulación. Ciclo promedio de 28 días, próximo período en ~14 días.",
+    ai_pms:"El SPM ocurre cuando el estrógeno y la progesterona bajan. Magnesio, menos cafeína y ejercicio aeróbico 3× por semana ayudan.",
+    ai_default_g:"Pregúntame sobre tu ciclo, síntomas, SOP, fertilidad o cómo te sientes.",
+    ai_testo:"La testosterona alcanza su pico durante el sueño profundo. Entrenamiento de fuerza 3–4× por semana, manejo del estrés y % de grasa corporal saludable.",
+    ai_recovery:"0,3g de proteína/kg en 30 min post-entrenamiento, 7–9 horas de sueño, recuperación activa en días de descanso.",
+    ai_default_b:"Pregunta sobre testosterona, recuperación, salud de próstata, nutrición o resiliencia mental.",
+    ai_greeting:"¡Soy {name}! Pregúntame lo que quieras sobre tu salud o bienestar.",
+  },
+  fr: {
+    name:'Français', flag:'🇫🇷',
+    nav_features:'Fonctionnalités', nav_companion:'Compagnon', nav_safety:'Sécurité', nav_try:'Essayer',
+    hero_tag:'🌱 Santé pour tous',
+    hero_h1:'La santé qui <em style="font-style:italic;color:var(--pk)">vous correspond vraiment</em>',
+    hero_sub:'NXhyp vous offre un parcours santé personnalisé — cycle, sommeil, pas, santé mentale — plus un compagnon IA que vous pouvez dessiner et des amis globaux.',
+    hero_cta:'🌸 Commencer gratuitement',
+    feat_tag:'Ce qui est inclus', feat_h:'Tout ce dont vous avez besoin, <em>personnalisé</em>',
+    comp_tag:'Votre compagnon', comp_h:'Dessinez-le. <em>Gagnez des points. Débloquez plus.</em>',
+    comp_sub:'Chaque habitude saine vous rapporte des Points NXhyp. Utilisez le canvas pour créer votre compagnon IA unique.',
+    safe_tag:'La confidentialité d\'abord', safe_h:'Construit en toute sécurité <em style="color:#FAC775">depuis le début</em>',
+    create_account:'Créer un compte', sign_in:'Se connecter',
+    username_label:'Nom d\'utilisateur (unique, public)', email_label:'Adresse e-mail', pass_label:'Mot de passe', confirm_pass:'Confirmer le mot de passe',
+    username_ph:'ex. luna_rose', email_ph:'vous@exemple.com', pass_ph:'Min 8 caractères', confirm_ph:'Répéter',
+    username_err:'Nom d\'utilisateur pris ou invalide.', email_err:'Entrez un e-mail valide.', pass_err:'Min 8 caractères.', confirm_err:'Les mots de passe ne correspondent pas.',
+    about_you:'À <em style="font-style:italic;color:var(--pk)">votre sujet</em>',
+    profile_label:'Profil santé',
+    girl_label:'Fille / Femme', boy_label:'Garçon / Homme', nb_label:'Non-binaire', ns_label:'Préfère ne pas dire',
+    dob_err:'Sélectionnez la date complète.', gender_err:'Sélectionnez un profil.',
+    your_comp:'Votre <em style="font-style:italic;color:var(--pk)">compagnon</em>',
+    comp_name_label:'Nom du compagnon',
+    free_draw:'🎨 Dessin libre', premade:'✨ Prédéfini',
+    draw_hint:'Dessinez votre compagnon ! Utilisez les outils ci-dessous.',
+    enter_app:'🌸 Entrer dans NXhyp', checking:'Vérification…', creating:'Création du compte…',
+    welcome_back:'Bon <em style="font-style:italic;color:var(--pk)">retour</em>',
+    signin_sub:'Connectez-vous pour restaurer vos données, amis et compagnon.',
+    signin_btn:'Se connecter', signin_err:'E-mail ou mot de passe incorrect.',
+    good_morning:'Bonjour', good_afternoon:'Bon après-midi', good_evening:'Bonsoir',
+    cycle_today:'Cycle aujourd\'hui', next_period:'Prochaines règles dans 14 jours', ovulation:'Fenêtre d\'ovulation',
+    log_today_cycle:'Enregistrer aujourd\'hui +10 pts',
+    health_today:'Santé aujourd\'hui', energy_label:'Énergie : Haute · Bonne récupération', log_today_health:'Enregistrer aujourd\'hui +10 pts',
+    steps_today:'Pas aujourd\'hui', step_goal:'/ 10 000',
+    trackers_btn:'Suivi', chat_btn:'Chat', friends_btn:'Amis',
+    tab_home:'Accueil', tab_health:'Santé', tab_trackers:'Suivi', tab_companion:'Compagnon', tab_more:'Plus',
+    steps_label:'👟 Pas aujourd\'hui', hourly:'Par heure', add_steps:'+ Ajouter 500 pas (+5 pts)',
+    sleep_label:'🛌 Sommeil', quality:'Qualité', log_sleep:'Enregistrer le sommeil +8 pts',
+    mood_label:'Humeur', log_mood:'Enregistrer +5 pts', water_label:'Eau', add_water:'+ 1 verre',
+    streak_label:'-jours consécutifs',
+    edit_draw:'🎨 Modifier le dessin', personality_tab:'💜 Personnalité',
+    save_drawing:'Sauvegarder le dessin', earn_pts:'Gagner des Points NXhyp',
+    cycle_tracker:'🌸 Suivi du cycle', log_flow:'Enregistrer aujourd\'hui — flux',
+    symptoms:'Symptômes', pain:'Douleur', save_earn:'Sauvegarder et gagner +10 pts',
+    health_tracker:'💪 Suivi santé', recovery_label:'Récupération',
+    ask_ph:'Posez votre question…',
+    search_tab:'Rechercher', friends_tab:'Amis', requests_tab:'Demandes',
+    find_friends:'Trouver des amis par nom d\'utilisateur',
+    search_ph:'Entrer le nom exact', search_btn:'Rechercher',
+    no_user:'Aucun utilisateur trouvé.', thats_you:'C\'est vous ! 😄',
+    add_friend:'Ajouter un ami', req_sent:'✓ Demande envoyée', already_friends:'✓ Déjà amis',
+    no_friends:'Pas encore d\'amis. Recherchez des utilisateurs !',
+    no_requests:'Pas de demandes en attente.',
+    wants_friend:'Veut être ami',
+    accept:'Accepter', chat_btn2:'Chat',
+    msg_ph:'Message…',
+    anon_label:'Anonyme',
+    all_tab:'Tout', questions_tab:'Questions', tips_tab:'Conseils',
+    no_posts:'Aucune publication.\nSoyez le premier ! 🌸',
+    share_ph:'Partager anonymement…',
+    reply_btn:'Répondre', you_label:'(vous)',
+    sign_in_like:'Connectez-vous pour aimer.', sign_in_reply:'Connectez-vous pour répondre.', sign_in_post:'Connectez-vous pour publier.',
+    community_title:'Communauté', community_sub:'Publications anonymes',
+    friends_title:'Amis', friends_sub:'Chercher par pseudo & chatter',
+    chat_title:'Chatter avec le compagnon',
+    signout:'Se déconnecter', signout_sub:'Données sauvegardées',
+    settings_title:'Paramètres',
+    account_section:'Compte', email_setting:'E-mail', change_btn:'Modifier',
+    pass_setting:'Mot de passe', last_changed:'Jamais modifié', reset_btn:'Réinitialiser',
+    profile_setting:'Profil santé', edit_btn:'Modifier',
+    notif_section:'Notifications',
+    daily_rem:'Rappels quotidiens', daily_rem_sub:'Enregistrer la santé à 8h chaque jour',
+    step_alerts:'Alertes d\'objectif de pas', step_alerts_sub:'Notifier à 10 000 pas',
+    comm_replies:'Réponses communautaires', comm_replies_sub:'Quand quelqu\'un répond à votre publication',
+    privacy_section:'Confidentialité et Données',
+    save_local:'Sauvegarder localement', save_local_sub:'Se souvenir de moi entre les sessions',
+    anon_comm:'Anonyme dans la communauté', anon_comm_sub:'Ne jamais afficher mon nom',
+    delete_data:'Supprimer toutes mes données', delete_confirm:'Supprimer toutes vos données NXhyp ?', delete_sub:'Cette action est irréversible',
+    delete_btn:'Supprimer',
+    lang_section:'Langue',
+    app_info:'Infos app', version_label:'Version', mem_label:'État mémoire', mem_ok:'Sauvegardé ✓',
+    toast_req_sent:'Demande d\'ami envoyée à @{u} ! 👋',
+    toast_already:'Déjà envoyée ou déjà amis !',
+    toast_accepted:'Ami ajouté ! 🎉',
+    toast_drawing:'Dessin du compagnon sauvegardé ! 🎨',
+    toast_levelup:'Niveau supérieur ! Niveau {l} 🌟',
+    toast_sleep:'Sommeil enregistré ! +8 pts 🛌',
+    toast_water_goal:'Objectif eau atteint ! +10 pts 💧',
+    toast_water:' {n}/8',
+    toast_mood:'+5 pts ! Humeur enregistrée 😊',
+    toast_cycle:'Enregistré ! +10 pts 🌸',
+    toast_health:'Enregistré ! +10 pts 💪',
+    toast_reply:'+15 pts pour votre contribution ! 🤝',
+    toast_posted:'Publié ! 🌸',
+    toast_signout:'Déconnecté. Données sauvegardées.',
+    toast_welcome:'Bienvenue sur NXhyp, @{u} ! 🌸',
+    toast_welcome_back:'Bon retour, @{u} ! 🌸',
+    toast_premade:'{e} sélectionné comme compagnon !',
+    toast_need_pts:'Besoin de {n} pts !',
+    toast_mode:'Mode : {m}',
+    toast_pass_reset:'Lien de réinitialisation envoyé !',
+    toast_email_change:'Demande de changement d\'e-mail envoyée !',
+    sign_in_link:'Se connecter', create_link:'Créer un compte →',
+    forgot_pass:'Mot de passe oublié ?', reset_sent:'Lien envoyé à votre e-mail !',
+    none:'Aucun', light:'Léger', medium:'Moyen', heavy:'Abondant',
+    cramps:'Crampes', bloating:'Ballonnements', fatigue:'Fatigue', headache:'Maux de tête', mood_swings:'Sautes d\'humeur',
+    poor:'Mauvais', fair:'Passable', good:'Bon', great:'Très bon', perfect:'Parfait',
+    draw_tool:'✏️ Dessiner', erase_tool:'⬜ Effacer', fill_tool:'🪣 Remplir', clear_tool:'🗑️ Effacer tout',
+    tap_set:'Appuyer pour activer', active:'✓ Actif',
+    ai_q1:'Conseils pour les crampes', ai_q2:'Symptômes SOPK', ai_q3:'Fatigue avant les règles', ai_q4:'Guide fertilité',
+    ai_q1b:'Augmenter la testostérone ?', ai_q2b:'Récupération musculaire', ai_q3b:'Santé prostate', ai_q4b:'Conseils sommeil',
+    ai_online:'En ligne',
+    ai_cramp:"Les crampes sont causées par les prostaglandines. Ibuprofène 24–48h avant les règles, coussin chauffant à 40°C et glycinate de magnésium 300mg avant de dormir.",
+    ai_cycle:"Vous êtes au Jour 14 — votre fenêtre d'ovulation. Cycle moyen de 28 jours, prochaines règles dans ~14 jours.",
+    ai_pms:"Le SPM survient quand l'œstrogène et la progestérone baissent. Magnésium, moins de caféine et exercice aérobique 3× par semaine aident.",
+    ai_default_g:"Posez-moi des questions sur votre cycle, symptômes, SOPK, fertilité ou ressenti.",
+    ai_testo:"La testostérone est maximale pendant le sommeil profond. Musculation 3–4× par semaine, gestion du stress et % de graisse corporelle saine.",
+    ai_recovery:"0,3g de protéines/kg dans les 30 min post-entraînement, 7–9h de sommeil, récupération active les jours de repos.",
+    ai_default_b:"Posez des questions sur la testostérone, la récupération, la santé prostatique, la nutrition ou la résilience mentale.",
+    ai_greeting:"Je suis {name} ! Posez-moi toutes vos questions sur votre santé.",
+  },
+  ar: {
+    name:'العربية', flag:'🇸🇦',
+    nav_features:'الميزات', nav_companion:'الرفيق', nav_safety:'الخصوصية', nav_try:'جرّب',
+    hero_tag:'🌱 الصحة للجميع',
+    hero_h1:'رعاية صحية <em style="font-style:italic;color:var(--pk)">تناسبك حقًا</em>',
+    hero_sub:'NXhyp يمنحك رحلة صحية شخصية — دورة شهرية، نوم، خطوات، صحة نفسية — مع رفيق ذكاء اصطناعي يمكنك رسمه وأصدقاء عالميين.',
+    hero_cta:'🌸 ابدأ مجانًا',
+    feat_tag:'ماذا يحتوي', feat_h:'كل ما تحتاجه، <em>مخصص لك</em>',
+    comp_tag:'رفيقك', comp_h:'ارسمه. <em>اكسب نقاطًا. افتح المزيد.</em>',
+    comp_sub:'كل عادة صحية تكسبك نقاط NXhyp. ارسم رفيقك الفريد أو اختر من التصاميم الجاهزة.',
+    safe_tag:'الخصوصية أولًا', safe_h:'مبني آمنًا <em style="color:#FAC775">من الأساس</em>',
+    create_account:'إنشاء حساب', sign_in:'تسجيل الدخول',
+    username_label:'اسم المستخدم (فريد، عام)', email_label:'البريد الإلكتروني', pass_label:'كلمة المرور', confirm_pass:'تأكيد كلمة المرور',
+    username_ph:'مثال: luna_rose', email_ph:'you@example.com', pass_ph:'8 أحرف على الأقل', confirm_ph:'كرر',
+    username_err:'اسم المستخدم مأخوذ أو غير صالح.', email_err:'أدخل بريدًا إلكترونيًا صحيحًا.', pass_err:'8 أحرف على الأقل.', confirm_err:'كلمتا المرور غير متطابقتين.',
+    about_you:'عن <em style="font-style:italic;color:var(--pk)">نفسك</em>',
+    profile_label:'ملف الصحة',
+    girl_label:'فتاة / امرأة', boy_label:'ولد / رجل', nb_label:'ثنائي الجنس', ns_label:'أفضل عدم التحديد',
+    dob_err:'اختر تاريخ الميلاد كاملًا.', gender_err:'اختر ملفًا.',
+    your_comp:'<em style="font-style:italic;color:var(--pk)">رفيقك</em>',
+    comp_name_label:'اسم الرفيق',
+    free_draw:'🎨 رسم حر', premade:'✨ جاهز',
+    draw_hint:'ارسم رفيقك! استخدم الأدوات أدناه.',
+    enter_app:'🌸 ادخل NXhyp', checking:'جارٍ التحقق…', creating:'جارٍ إنشاء الحساب…',
+    welcome_back:'مرحبًا <em style="font-style:italic;color:var(--pk)">بعودتك</em>',
+    signin_sub:'سجّل الدخول لاستعادة بياناتك وأصدقائك ورفيقك.',
+    signin_btn:'تسجيل الدخول', signin_err:'البريد الإلكتروني أو كلمة المرور غير صحيحة.',
+    good_morning:'صباح الخير', good_afternoon:'مساء الخير', good_evening:'مساء النور',
+    cycle_today:'الدورة اليوم', next_period:'الدورة القادمة بعد 14 يومًا', ovulation:'نافذة الإباضة',
+    log_today_cycle:'سجّل اليوم +10 نقاط',
+    health_today:'الصحة اليوم', energy_label:'الطاقة: عالية · تعافٍ جيد', log_today_health:'سجّل اليوم +10 نقاط',
+    steps_today:'الخطوات اليوم', step_goal:'/ 10,000',
+    trackers_btn:'المتتبعات', chat_btn:'دردشة', friends_btn:'الأصدقاء',
+    tab_home:'الرئيسية', tab_health:'الصحة', tab_trackers:'المتتبعات', tab_companion:'الرفيق', tab_more:'المزيد',
+    steps_label:'👟 الخطوات اليوم', hourly:'بالساعة', add_steps:'+ أضف 500 خطوة (+5 نقاط)',
+    sleep_label:'🛌 النوم', quality:'الجودة', log_sleep:'سجّل النوم +8 نقاط',
+    mood_label:'المزاج', log_mood:'سجّل +5 نقاط', water_label:'الماء', add_water:'+ كوب 1',
+    streak_label:'-أيام متتالية',
+    edit_draw:'🎨 تعديل الرسم', personality_tab:'💜 الشخصية',
+    save_drawing:'حفظ رسم الرفيق', earn_pts:'اكسب نقاط NXhyp',
+    cycle_tracker:'🌸 متتبع الدورة', log_flow:'سجّل اليوم — التدفق',
+    symptoms:'الأعراض', pain:'الألم', save_earn:'احفظ واكسب +10 نقاط',
+    health_tracker:'💪 متتبع الصحة', recovery_label:'التعافي',
+    ask_ph:'اسأل أي شيء…',
+    search_tab:'بحث', friends_tab:'الأصدقاء', requests_tab:'الطلبات',
+    find_friends:'ابحث عن أصدقاء باسم المستخدم',
+    search_ph:'أدخل اسم المستخدم بالضبط', search_btn:'بحث',
+    no_user:'لم يُعثر على مستخدم.', thats_you:'هذا أنت! 😄',
+    add_friend:'إضافة صديق', req_sent:'✓ تم إرسال الطلب', already_friends:'✓ أصدقاء بالفعل',
+    no_friends:'لا أصدقاء بعد. ابحث عن مستخدمين!',
+    no_requests:'لا طلبات معلقة.',
+    wants_friend:'يريد أن يكون صديقًا',
+    accept:'قبول', chat_btn2:'دردشة',
+    msg_ph:'رسالة…',
+    anon_label:'مجهول',
+    all_tab:'الكل', questions_tab:'الأسئلة', tips_tab:'النصائح',
+    no_posts:'لا توجد منشورات بعد.\nكن الأول! 🌸',
+    share_ph:'شارك بشكل مجهول…',
+    reply_btn:'رد', you_label:'(أنت)',
+    sign_in_like:'سجّل الدخول للإعجاب.', sign_in_reply:'سجّل الدخول للرد.', sign_in_post:'سجّل الدخول للنشر.',
+    community_title:'المجتمع', community_sub:'منشورات مجهولة',
+    friends_title:'الأصدقاء', friends_sub:'ابحث باسم المستخدم ودردش',
+    chat_title:'دردش مع الرفيق',
+    signout:'تسجيل الخروج', signout_sub:'البيانات محفوظة على الخادم',
+    settings_title:'الإعدادات',
+    account_section:'الحساب', email_setting:'البريد الإلكتروني', change_btn:'تغيير',
+    pass_setting:'كلمة المرور', last_changed:'لم تتغير أبدًا', reset_btn:'إعادة تعيين',
+    profile_setting:'ملف الصحة', edit_btn:'تعديل',
+    notif_section:'الإشعارات',
+    daily_rem:'تذكيرات يومية', daily_rem_sub:'سجّل الصحة الساعة 8 صباحًا',
+    step_alerts:'تنبيهات هدف الخطوات', step_alerts_sub:'إشعار عند بلوغ 10,000',
+    comm_replies:'ردود المجتمع', comm_replies_sub:'عندما يرد شخص على منشورك',
+    privacy_section:'الخصوصية والبيانات',
+    save_local:'حفظ البيانات محليًا', save_local_sub:'تذكّرني بين الجلسات',
+    anon_comm:'مجهول في المجتمع', anon_comm_sub:'لا تُظهر اسمي في المنشورات',
+    delete_data:'حذف جميع بياناتي', delete_confirm:'حذف جميع بيانات NXhyp الخاصة بك؟', delete_sub:'لا يمكن التراجع عن هذا',
+    delete_btn:'حذف',
+    lang_section:'اللغة',
+    app_info:'معلومات التطبيق', version_label:'الإصدار', mem_label:'حالة الذاكرة', mem_ok:'محفوظ ✓',
+    toast_req_sent:'تم إرسال طلب الصداقة إلى @{u}! 👋',
+    toast_already:'تم الإرسال مسبقًا أو أنتم أصدقاء!',
+    toast_accepted:'تمت إضافة الصديق! 🎉',
+    toast_drawing:'تم حفظ رسم الرفيق! 🎨',
+    toast_levelup:'ارتقيت مستوى! المستوى {l} 🌟',
+    toast_sleep:'تم تسجيل النوم! +8 نقاط 🛌',
+    toast_water_goal:'تم تحقيق هدف الماء! +10 نقاط 💧',
+    toast_water:' {n}/8',
+    toast_mood:'+5 نقاط! تم تسجيل المزاج 😊',
+    toast_cycle:'تم التسجيل! +10 نقاط 🌸',
+    toast_health:'تم التسجيل! +10 نقاط 💪',
+    toast_reply:'+15 نقاط للمساهمة! 🤝',
+    toast_posted:'تم النشر! 🌸',
+    toast_signout:'تم تسجيل الخروج. البيانات محفوظة.',
+    toast_welcome:'مرحبًا بك في NXhyp، @{u}! 🌸',
+    toast_welcome_back:'مرحبًا بعودتك، @{u}! 🌸',
+    toast_premade:'تم اختيار {e} رفيقًا!',
+    toast_need_pts:'تحتاج {n} نقاط!',
+    toast_mode:'الوضع: {m}',
+    toast_pass_reset:'تم إرسال رابط إعادة التعيين!',
+    toast_email_change:'تم إرسال طلب تغيير البريد!',
+    sign_in_link:'تسجيل الدخول', create_link:'إنشاء حساب ←',
+    forgot_pass:'نسيت كلمة المرور؟', reset_sent:'تم إرسال الرابط إلى بريدك!',
+    none:'لا شيء', light:'خفيف', medium:'متوسط', heavy:'غزير',
+    cramps:'تشنجات', bloating:'انتفاخ', fatigue:'إرهاق', headache:'صداع', mood_swings:'تقلبات مزاجية',
+    poor:'سيئ', fair:'مقبول', good:'جيد', great:'ممتاز', perfect:'مثالي',
+    draw_tool:'✏️ رسم', erase_tool:'⬜ محو', fill_tool:'🪣 تعبئة', clear_tool:'🗑️ مسح',
+    tap_set:'اضغط للتفعيل', active:'✓ نشط',
+    ai_q1:'نصائح لتخفيف التشنجات', ai_q2:'أعراض تكيس المبايض', ai_q3:'الإرهاق قبل الدورة', ai_q4:'إرشادات الخصوبة',
+    ai_q1b:'زيادة التستوستيرون?', ai_q2b:'تعافي العضلات', ai_q3b:'صحة البروستاتا', ai_q4b:'نصائح النوم',
+    ai_online:'متصل',
+    ai_cramp:"التشنجات ناتجة عن البروستاغلاندين. إيبوبروفين 24–48 ساعة قبل الدورة، وسادة دافئة 40°C، وغليسينات المغنيسيوم 300 مغ قبل النوم.",
+    ai_cycle:"أنتِ في اليوم 14 — نافذة الإباضة. متوسط الدورة 28 يومًا، الدورة القادمة بعد ~14 يومًا.",
+    ai_pms:"متلازمة ما قبل الدورة تحدث عند انخفاض الإستروجين والبروجستيرون. المغنيسيوم، تقليل الكافيين، والتمارين الهوائية 3× أسبوعيًا تساعد.",
+    ai_default_g:"اسأليني عن دورتك، أعراضك، تكيس المبايض، الخصوبة، أو كيف تشعرين.",
+    ai_testo:"التستوستيرون يبلغ ذروته خلال النوم العميق. تدريب القوة 3–4× أسبوعيًا وإدارة الإجهاد يساعدان.",
+    ai_recovery:"0.3 غ بروتين/كغ خلال 30 دقيقة بعد التمرين، 7–9 ساعات نوم، تعافٍ نشط في أيام الراحة.",
+    ai_default_b:"اسأل عن التستوستيرون، التعافي، صحة البروستاتا، التغذية، أو المرونة النفسية.",
+    ai_greeting:"أنا {name}! اسألني أي شيء عن صحتك.",
+  }
+};
+
+let currentLang = localStorage.getItem('nxhyp_lang') || 'en';
+function T(key, vars={}) {
+  const lang = LANGS[currentLang] || LANGS.en;
+  let str = lang[key] || LANGS.en[key] || key;
+  Object.entries(vars).forEach(([k,v]) => { str = str.replace('{'+k+'}', v); });
+  return str;
+}
+function applyLang() {
+  const isRTL = currentLang === 'ar';
+  document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+  document.documentElement.lang = currentLang;
+  // Nav
+  const nf=document.querySelector('.nav-links a:nth-child(1)');if(nf)nf.textContent=T('nav_features');
+  const nc=document.querySelector('.nav-links a:nth-child(2)');if(nc)nc.textContent=T('nav_companion');
+  const ns=document.querySelector('.nav-links a:nth-child(3)');if(ns)ns.textContent=T('nav_safety');
+  const nt=document.querySelector('.nav-cta');if(nt)nt.textContent=T('nav_try');
+  // Hero
+  const ht=document.getElementById('hero-tag');if(ht)ht.textContent=T('hero_tag');
+  const hh=document.getElementById('hero-h1');if(hh)hh.innerHTML=T('hero_h1');
+  const hs=document.getElementById('hero-sub');if(hs)hs.textContent=T('hero_sub');
+  const hc=document.getElementById('hero-cta');if(hc)hc.textContent=T('hero_cta');
+  // Auth
+  const els = {
+    'ob-create-btn': 'create_account', 'ob-signin-btn': 'sign_in',
+    'ob-un-lbl':'username_label','ob-email-lbl':'email_label','ob-pass-lbl':'pass_label','ob-p2-lbl':'confirm_pass',
+    'e-un':'username_err','e-email':'email_err','e-pass':'pass_err','e-p2':'confirm_err',
+    'ob-about-title':'about_you','ob-profile-lbl':'profile_label',
+    'go-girl':'girl_label','go-boy':'boy_label','go-nb':'nb_label','go-ns':'ns_label',
+    'e-dob':'dob_err','e-gen':'gender_err',
+    'ob-comp-title':'your_comp','ob-cname-lbl':'comp_name_label',
+    'ob-draw-tab':'free_draw','ob-premade-tab':'premade','ob-draw-hint':'draw_hint',
+    's3-btn':'enter_app',
+    'si-title':'welcome_back','si-sub':'signin_sub','si-btn':'signin_btn','e-si':'signin_err',
+    // Home
+    'h-gr':'good_morning',
+    'cycle-today-lbl':'cycle_today','next-period-lbl':'next_period','ovulation-lbl':'ovulation',
+    'log-cycle-btn':'log_today_cycle',
+    'health-today-lbl':'health_today','energy-lbl':'energy_label','log-health-btn':'log_today_health',
+    'steps-today-lbl':'steps_today',
+    'quick-trackers':'trackers_btn','quick-chat':'chat_btn','quick-friends':'friends_btn',
+    // Tabs (home)
+    'tab-home-h':'tab_home','tab-health-h':'tab_health','tab-trackers-h':'tab_trackers','tab-companion-h':'tab_companion','tab-more-h':'tab_more',
+  };
+  Object.entries(els).forEach(([id,key])=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    if(el.tagName==='INPUT'||el.tagName==='TEXTAREA') el.placeholder=T(key);
+    else if(key==='about_you'||key==='your_comp'||key==='welcome_back'||key==='hero_h1') el.innerHTML=T(key);
+    else el.textContent=T(key);
+  });
+  // Placeholders
+  const phs = {
+    'ob-un':'username_ph','ob-email':'email_ph','ob-pass':'pass_ph','ob-p2':'confirm_ph',
+    'si-e':'email_ph','si-p':'pass_ph','a-in':'ask_ph','dm-in':'msg_ph','comm-in':'share_ph','fr-search-inp':'search_ph',
+  };
+  Object.entries(phs).forEach(([id,key])=>{const el=document.getElementById(id);if(el)el.placeholder=T(key);});
+  // Settings language selector highlight
+  buildLangSelector();
+}
+
+function setLang(code) {
+  currentLang = code;
+  localStorage.setItem('nxhyp_lang', code);
+  applyLang();
+  aToast(LANGS[code]?.flag + ' ' + LANGS[code]?.name);
+}
+
+function buildLangSelector() {
+  const el = document.getElementById('lang-selector');
+  if (!el) return;
+  el.innerHTML = Object.entries(LANGS).map(([code, l]) =>
+    `<div onclick="setLang('${code}')" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;border:1.5px solid ${currentLang===code?'var(--pu6)':'#E0D8EC'};background:${currentLang===code?'var(--pu0)':'#fff'};margin-bottom:6px;transition:.15s">
+      <span style="font-size:20px">${l.flag}</span>
+      <span style="font-size:13px;font-weight:${currentLang===code?'600':'400'};color:${currentLang===code?'var(--pu6)':'#2C1A22'}">${l.name}</span>
+      ${currentLang===code?'<i class="ti ti-check" style="margin-left:auto;color:var(--pu6);font-size:16px"></i>':''}
+    </div>`
+  ).join('');
+}
+
 // ══════════════════════════════════════════
 // SUPABASE CONFIG
 // ══════════════════════════════════════════
@@ -765,7 +1519,7 @@ function openApp() {
   buildEarnList();
   updateClock();
   initCanvas();
-  // Try auto-login from localStorage
+  applyLang();
   const saved = localStorage.getItem('nxhyp_uid');
   if (saved) autoLogin(saved);
 }
@@ -964,8 +1718,39 @@ function goTo(id) {
   if (id==='community') loadCommunity();
   if (id==='friends') { curFTab='search'; buildFriends('search'); }
   if (id==='companion') { setTimeout(()=>{ initCanvas2(); syncDrawingToCanvas2(); buildPremadeGrid2(); buildTraitGrid(); buildEarnList(); }, 100); }
-  if (id==='more') { document.getElementById('more-pts').textContent = pts.toLocaleString() + ' pts'; document.getElementById('more-lv').textContent = level; renderCompAvatarEl('more-ava'); }
+  if (id==='more') { document.getElementById('more-pts').textContent = pts.toLocaleString() + ' pts'; document.getElementById('more-lv').textContent = level; renderCompAvatarEl('more-ava'); applyLangMore(); }
+  if (id==='settings') { buildLangSelector(); applyLangSettings(); if(ME){ const sd=document.getElementById('s-email-d');if(sd)sd.textContent=ME.email; const sp=document.getElementById('s-prof-d');if(sp)sp.textContent=T(profile==='girl'?'girl_label':profile==='boy'?'boy_label':'nb_label'); } }
   if (id==='trackers') renderStepBars();
+}
+
+function applyLangMore() {
+  const map = {
+    'more-comm':'community_title','more-comm-sub':'community_sub',
+    'more-friends':'friends_title','more-friends-sub':'friends_sub',
+    'more-chat':'chat_title','more-signout':'signout','more-signout-sub':'signout_sub',
+    'more-settings':'settings_title',
+  };
+  Object.entries(map).forEach(([id,key])=>{const el=document.getElementById(id);if(el)el.textContent=T(key);});
+}
+
+function applyLangSettings() {
+  const map = {
+    'settings-title':'settings_title',
+    'lang-section-lbl':'lang_section',
+    'account-section-lbl':'account_section',
+    'email-setting-lbl':'email_setting','change-btn':'change_btn',
+    'pass-setting-lbl':'pass_setting','last-changed-lbl':'last_changed','reset-btn':'reset_btn',
+    'profile-setting-lbl':'profile_setting','edit-btn':'edit_btn',
+    'notif-section-lbl':'notif_section',
+    'daily-rem-lbl':'daily_rem','daily-rem-sub-lbl':'daily_rem_sub',
+    'step-alerts-lbl':'step_alerts','step-alerts-sub-lbl':'step_alerts_sub',
+    'comm-replies-lbl':'comm_replies','comm-replies-sub-lbl':'comm_replies_sub',
+    'privacy-section-lbl':'privacy_section',
+    'anon-comm-lbl':'anon_comm','anon-comm-sub-lbl':'anon_comm_sub',
+    'delete-data-lbl':'delete_data','delete-sub-lbl':'delete_sub','delete-btn':'delete_btn',
+    'app-info-lbl':'app_info','version-lbl':'version_label','mem-lbl':'mem_label','mem-status':'mem_ok',
+  };
+  Object.entries(map).forEach(([id,key])=>{const el=document.getElementById(id);if(el)el.textContent=T(key);});
 }
 function goHealth() { goTo(profile==='girl'?'health-g':'health-b'); }
 function updateClock() {
@@ -1423,56 +2208,139 @@ async function loadCommunity() {
     if(commCat==='q') url+='&cat=eq.Questions';
     if(commCat==='t') url+='&cat=eq.Tips';
     const posts=await sb(url);
-    // Load likes and replies counts
+    if(!posts||posts.length===0){el.innerHTML='<div style="text-align:center;padding:40px;font-size:12px;color:#aaa">No posts yet.<br>Be the first to share something! 🌸</div>';return;}
+
     const postIds=posts.map(p=>p.id);
-    let myLikes=[];
-    if(ME&&postIds.length>0){
-      myLikes=await sb(`post_likes?user_id=eq.${ME.id}&post_id=in.(${postIds.join(',')})&select=post_id`);
+
+    // Load my likes
+    let myLikeIds=new Set();
+    if(ME){
+      const ml=await sb(`post_likes?user_id=eq.${ME.id}&post_id=in.(${postIds.join(',')})&select=post_id`);
+      myLikeIds=new Set((ml||[]).map(l=>l.post_id));
     }
-    const myLikeIds=new Set((myLikes||[]).map(l=>l.post_id));
+
+    // Load ALL replies for these posts in one query
+    const allReplies=await sb(`post_replies?post_id=in.(${postIds.join(',')})&order=created_at.asc&select=id,post_id,content,created_at,user_id`);
+
+    // Load usernames for reply authors
+    const replyUserIds=[...new Set((allReplies||[]).map(r=>r.user_id))];
+    let replyUsers={};
+    if(replyUserIds.length>0){
+      const ru=await sb(`users?id=in.(${replyUserIds.join(',')})&select=id,username`);
+      (ru||[]).forEach(u=>replyUsers[u.id]=u.username);
+    }
+
+    // Group replies by post
+    const repliesByPost={};
+    (allReplies||[]).forEach(r=>{
+      if(!repliesByPost[r.post_id]) repliesByPost[r.post_id]=[];
+      repliesByPost[r.post_id].push(r);
+    });
+
     const catColors={Questions:['var(--bl0)','var(--bl8)'],Tips:['var(--tl0)','var(--tl6)'],Support:['var(--pk0)','var(--pk8)']};
-    el.innerHTML=(posts||[]).map(p=>{
+    const acol=profile==='girl'?'var(--pk)':'var(--bl)';
+
+    el.innerHTML=posts.map(p=>{
       const liked=myLikeIds.has(p.id);
       const cc=catColors[p.cat]||['#eee','#666'];
-      const t=new Date(p.created_at);const ts=t.toLocaleDateString();
-      return `<div class="cpost"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:10px;color:#aaa">${ts}</span><span style="background:${cc[0]};color:${cc[1]};font-size:9px;padding:2px 8px;border-radius:999px;font-weight:500">${p.cat}</span></div><div style="font-size:12px;line-height:1.6;margin-bottom:8px">${p.content}</div><div style="display:flex;gap:12px;margin-bottom:6px"><button class="like-btn ${liked?'liked':''}" onclick="likePost('${p.id}',${liked},${p.likes},this)"><i class="ti ${liked?'ti-heart-filled':'ti-heart'}" style="font-size:13px"></i> <span class="lc-${p.id}">${p.likes}</span></button></div><div style="border-top:.5px solid rgba(0,0,0,.07);padding-top:6px;display:flex;gap:6px"><input type="text" id="ri-${p.id}" placeholder="Reply anonymously…" style="flex:1;height:28px;padding:0 9px;border-radius:8px;border:.5px solid #ddd;font-size:11px;font-family:var(--font-b);background:#FAFAFA;outline:none"><button onclick="addReply('${p.id}')" style="background:${profile==='girl'?'var(--pk)':'var(--bl)'};border:none;border-radius:7px;padding:0 11px;color:#fff;font-size:11px;cursor:pointer;font-family:var(--font-b);height:28px">Reply</button></div></div>`;
+      const ts=new Date(p.created_at).toLocaleDateString();
+      const replies=repliesByPost[p.id]||[];
+
+      const repliesHtml=replies.map(r=>{
+        const uname=replyUsers[r.user_id]?'@'+replyUsers[r.user_id]:'Anonymous';
+        const rt=new Date(r.created_at);
+        const rts=rt.getHours()+':'+(rt.getMinutes()<10?'0':'')+rt.getMinutes()+' · '+rt.toLocaleDateString();
+        const isMe=ME&&r.user_id===ME.id;
+        return `<div style="padding:7px 10px;border-radius:10px;background:${isMe?'var(--pk0)':'#F8F5FC'};border:.5px solid ${isMe?'var(--pk1)':'rgba(0,0,0,.06)'};margin-bottom:5px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+            <span style="font-size:10px;font-weight:600;color:${isMe?'var(--pk6)':acol}">${uname}${isMe?' (you)':''}</span>
+            <span style="font-size:9px;color:#bbb">${rts}</span>
+          </div>
+          <div style="font-size:12px;color:#2C1A22;line-height:1.5">${r.content}</div>
+        </div>`;
+      }).join('');
+
+      return `<div class="cpost" id="post-${p.id}">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <span style="font-size:10px;color:#aaa">${ts}</span>
+          <span style="background:${cc[0]};color:${cc[1]};font-size:9px;padding:2px 8px;border-radius:999px;font-weight:500">${p.cat}</span>
+        </div>
+        <div style="font-size:12px;line-height:1.6;margin-bottom:8px;color:#2C1A22">${p.content}</div>
+        <div style="display:flex;gap:12px;margin-bottom:8px;align-items:center">
+          <button class="like-btn ${liked?'liked':''}" onclick="likePost('${p.id}',${liked},${p.likes},this)">
+            <i class="ti ${liked?'ti-heart-filled':'ti-heart'}" style="font-size:13px"></i>
+            <span id="lc-${p.id}">${p.likes}</span>
+          </button>
+          <span style="font-size:11px;color:#aaa;display:flex;align-items:center;gap:4px">
+            <i class="ti ti-message-circle" style="font-size:13px"></i>
+            <span id="rc-${p.id}">${replies.length}</span>
+          </span>
+        </div>
+        <div id="replies-${p.id}" style="margin-bottom:6px">${repliesHtml}</div>
+        <div style="display:flex;gap:6px">
+          <input type="text" id="ri-${p.id}" placeholder="Reply as @${ME?ME.username:'you'}…" style="flex:1;height:32px;padding:0 10px;border-radius:9px;border:1.5px solid ${profile==='girl'?'var(--pk1)':'var(--bl1)'};font-size:11px;font-family:var(--font-b);background:#fff;outline:none" onkeydown="if(event.key==='Enter')addReply('${p.id}')">
+          <button onclick="addReply('${p.id}')" style="background:${acol};border:none;border-radius:9px;padding:0 12px;color:#fff;font-size:11px;cursor:pointer;font-family:var(--font-b);height:32px;white-space:nowrap">Reply</button>
+        </div>
+      </div>`;
     }).join('');
-    if(!posts||posts.length===0) el.innerHTML='<div style="text-align:center;padding:30px;font-size:12px;color:#aaa">No posts yet. Be the first!</div>';
-  }catch(e){ el.innerHTML='<div style="text-align:center;padding:20px;font-size:12px;color:#aaa">Error loading posts.</div>'; }
+  } catch(e) {
+    el.innerHTML='<div style="text-align:center;padding:20px;font-size:12px;color:#aaa">Error loading posts. Try again.</div>';
+    console.error(e);
+  }
 }
+
 async function likePost(pid, wasLiked, currentLikes, btn) {
-  if(!ME)return;
+  if(!ME){aToast('Sign in to like posts.');return;}
   try {
     if(wasLiked){
       await sb(`post_likes?user_id=eq.${ME.id}&post_id=eq.${pid}`,{method:'DELETE'});
-      await sb(`community_posts?id=eq.${pid}`,{method:'PATCH',body:JSON.stringify({likes:currentLikes-1})});
+      await sb(`community_posts?id=eq.${pid}`,{method:'PATCH',body:JSON.stringify({likes:Math.max(0,currentLikes-1)})});
       btn.classList.remove('liked');btn.querySelector('i').className='ti ti-heart';
-      btn.querySelector('.lc-'+pid).textContent=currentLikes-1;
-      btn.onclick=()=>likePost(pid,false,currentLikes-1,btn);
-    }else{
+      const lc=document.getElementById('lc-'+pid);if(lc)lc.textContent=Math.max(0,currentLikes-1);
+      btn.onclick=()=>likePost(pid,false,Math.max(0,currentLikes-1),btn);
+    } else {
       await sb('post_likes',{method:'POST',body:JSON.stringify({user_id:ME.id,post_id:pid})});
       await sb(`community_posts?id=eq.${pid}`,{method:'PATCH',body:JSON.stringify({likes:currentLikes+1})});
       btn.classList.add('liked');btn.querySelector('i').className='ti ti-heart-filled';
-      btn.querySelector('.lc-'+pid).textContent=currentLikes+1;
+      const lc=document.getElementById('lc-'+pid);if(lc)lc.textContent=currentLikes+1;
       btn.onclick=()=>likePost(pid,true,currentLikes+1,btn);
     }
-  }catch(e){}
+  } catch(e){}
 }
+
 async function addReply(pid) {
-  const inp=document.getElementById('ri-'+pid);if(!inp||!inp.value.trim())return;
-  if(!ME)return;
+  const inp=document.getElementById('ri-'+pid);
+  if(!inp||!inp.value.trim()){return;}
+  if(!ME){aToast('Sign in to reply.');return;}
+  const content=inp.value.trim();
+  inp.value='';
   try {
-    await sb('post_replies',{method:'POST',body:JSON.stringify({post_id:pid,user_id:ME.id,content:inp.value.trim()})});
-    inp.value=''; logA('community'); aToast('+15 pts for contributing! 🤝');
-  }catch(e){aToast('Error posting reply.');}
+    await sb('post_replies',{method:'POST',body:JSON.stringify({post_id:pid,user_id:ME.id,content})});
+    // Append reply immediately without full reload
+    const repliesEl=document.getElementById('replies-'+pid);
+    const rcEl=document.getElementById('rc-'+pid);
+    if(repliesEl){
+      const now=new Date();
+      const rts=now.getHours()+':'+(now.getMinutes()<10?'0':'')+now.getMinutes()+' · '+now.toLocaleDateString();
+      const div=document.createElement('div');
+      div.style.cssText='padding:7px 10px;border-radius:10px;background:var(--pk0);border:.5px solid var(--pk1);margin-bottom:5px';
+      div.innerHTML=`<div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:10px;font-weight:600;color:var(--pk6)">@${ME.username} (you)</span><span style="font-size:9px;color:#bbb">${rts}</span></div><div style="font-size:12px;color:#2C1A22;line-height:1.5">${content}</div>`;
+      repliesEl.appendChild(div);
+    }
+    if(rcEl) rcEl.textContent=parseInt(rcEl.textContent||0)+1;
+    logA('community'); aToast('+15 pts for contributing! 🤝');
+  } catch(e){ aToast('Error posting reply.'); inp.value=content; }
 }
+
 async function commPost() {
-  const inp=document.getElementById('comm-in');if(!inp||!inp.value.trim())return;
+  const inp=document.getElementById('comm-in');
+  if(!inp||!inp.value.trim())return;
   if(!ME){aToast('Sign in to post.');return;}
+  const content=inp.value.trim(); inp.value='';
   try {
-    await sb('community_posts',{method:'POST',body:JSON.stringify({user_id:ME.id,cat:'Questions',content:inp.value.trim(),likes:0})});
-    inp.value=''; loadCommunity(); aToast('Posted anonymously! 🌸');
-  }catch(e){aToast('Error posting.');}
+    await sb('community_posts',{method:'POST',body:JSON.stringify({user_id:ME.id,cat:'Questions',content,likes:0})});
+    aToast('Posted! 🌸'); loadCommunity();
+  } catch(e){ aToast('Error posting.'); inp.value=content; }
 }
 
 // ══════════════════════════════════════════
