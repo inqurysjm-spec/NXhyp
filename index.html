@@ -353,6 +353,8 @@ footer{background:#1A1A2E;padding:40px 5vw 24px;color:rgba(255,255,255,.45);font
       <div style="font-size:11px;color:#C9897A;letter-spacing:.04em;margin-top:2px">your body, your rhythm, your hype</div>
       <div style="font-size:13px;color:#888;line-height:1.6;text-align:center;max-width:260px">Your wellness companion. Global friends. Real chat. Draw your AI companion.</div>
       <div style="width:100%;display:flex;flex-direction:column;gap:8px;margin-top:8px">
+        <button class="abtn" onclick="demoLogin()" style="background:linear-gradient(135deg,var(--pu6),var(--pk));color:#fff;border:none;font-size:14px;font-weight:600">✨ Try instant demo</button>
+        <div style="font-size:10px;color:#aaa;text-align:center;margin:-2px 0 2px">No sign-up needed · all features pre-loaded</div>
         <button class="abtn abtn-g" onclick="goStep(1)">🌸 Create account</button>
         <button class="abtn abtn-o" onclick="goStep(10)">Sign in to existing account</button>
       </div>
@@ -451,6 +453,7 @@ footer{background:#1A1A2E;padding:40px 5vw 24px;color:rgba(255,255,255,.45);font
       <div class="inp-w"><label>Password</label><div class="inp-r"><input class="inp-f" id="si-p" type="password" placeholder="Your password" onkeydown="if(event.key==='Enter')doSI()"><button class="inp-pt" onclick="togP('si-p',this)" type="button"><i class="ti ti-eye-off"></i></button></div><div class="err-m" id="e-si">Incorrect email or password.</div></div>
       <button class="abtn abtn-g" id="si-btn" onclick="doSI()">Sign in</button>
       <div style="text-align:center;font-size:12px;color:#888">New? <span style="color:var(--pk);cursor:pointer;font-weight:500" onclick="goStep(1)">Create account →</span></div>
+      <div onclick="demoLogin()" style="background:var(--pu0);border:.5px solid var(--pu1);border-radius:10px;padding:9px 12px;font-size:11px;color:var(--pu6);text-align:center;cursor:pointer">✨ Demo account: <strong>demo@nxhyp.com</strong> · any password<br><span style="font-size:10px;color:#999">or tap here to skip sign-in entirely</span></div>
     </div>
   </div>
 
@@ -1424,24 +1427,138 @@ function buildLangSelector() {
 }
 
 // ══════════════════════════════════════════
-// SUPABASE CONFIG
+// PROTOTYPE — MOCK DATA + OFFLINE sb()
 // ══════════════════════════════════════════
-const SB_URL = 'https://bkqyryolitaunuociuvx.supabase.co';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJrcXlyeW9saXRhdW51b2NpdXZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5NDEwMTUsImV4cCI6MjA5NTUxNzAxNX0.AP_OmGKWnHVEbFYMkK5xKitQQWLVKQGrOU7wDA7UdN8';
+let PROTO_USERS = JSON.parse(localStorage.getItem('nxhyp_proto_users') || '[]');
+let PROTO_POSTS = [], PROTO_REPLIES = [], PROTO_MESSAGES = [];
+let MOCK_FRIEND_REQS = [{id:'fr_demo',from_user_id:'u5',to_user_id:'u1',status:'pending'}];
+let myLikedPosts = new Set();
 
-async function sb(path, opts={}) {
-  const r = await fetch(SB_URL + '/rest/v1/' + path, {
-    headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=representation', ...opts.headers },
-    ...opts
-  });
-  if (!r.ok && r.status !== 200) { const t = await r.text(); console.error(t); throw new Error(t); }
-  try { return await r.json(); } catch { return []; }
+const MOCK_USERS = [
+  { id:'u1', username:'luna_demo', email:'demo@nxhyp.com', password_hash:'demo_pass', profile:'girl',
+    pts:450, level:3, level_pts:120, level_max:392, streak:7, steps:6820, water_count:5,
+    companion:{name:'Luna',base:'🦄',drawing:null,trait:'cheerful',traitLabel:'Bright & cheerful'},
+    trait_owned:['gentle','cheerful'] },
+  { id:'u2', username:'rose_97', email:'rose@ex.com', password_hash:'x', profile:'girl', pts:210,
+    companion:{name:'Mochi',base:'🐱',drawing:null,trait:'gentle',traitLabel:'Gentle & wise'} },
+  { id:'u3', username:'alex_fit', email:'alex@ex.com', password_hash:'x', profile:'boy', pts:380,
+    companion:{name:'Blaze',base:'🦁',drawing:null,trait:'direct',traitLabel:'Direct & clear'} },
+  { id:'u4', username:'zara_w', email:'zara@ex.com', password_hash:'x', profile:'girl', pts:150,
+    companion:{name:'Nova',base:'🌸',drawing:null,trait:'gentle',traitLabel:'Gentle & wise'} },
+  { id:'u5', username:'jay_health', email:'jay@ex.com', password_hash:'x', profile:'boy', pts:520,
+    companion:{name:'Rex',base:'🐶',drawing:null,trait:'wise',traitLabel:'Wise elder'} },
+];
+const MOCK_FRIENDSHIPS = [
+  {id:'f1',user_a:'u1',user_b:'u2'},{id:'f2',user_a:'u1',user_b:'u3'},{id:'f3',user_a:'u4',user_b:'u1'},
+];
+const MOCK_MESSAGES = [
+  {id:'dm1',from_user_id:'u2',to_user_id:'u1',content:'Hey! How are you feeling today? 🌸',created_at:new Date(Date.now()-3600000).toISOString()},
+  {id:'dm2',from_user_id:'u1',to_user_id:'u2',content:'Pretty good! Just logged my steps ✨',created_at:new Date(Date.now()-3500000).toISOString()},
+  {id:'dm3',from_user_id:'u2',to_user_id:'u1',content:'Luna looks adorable btw! Love the unicorn 🦄',created_at:new Date(Date.now()-1800000).toISOString()},
+  {id:'dm4',from_user_id:'u3',to_user_id:'u1',content:'Bro hit 10k steps today 💪 this step tracker is legit',created_at:new Date(Date.now()-900000).toISOString()},
+];
+const MOCK_POSTS = [
+  {id:'p1',cat:'Questions',content:"Has anyone tried magnesium glycinate for cramps? My doctor suggested it and I'm really curious if it works 🌸",likes:24,user_id:'u2',created_at:new Date(Date.now()-7200000).toISOString()},
+  {id:'p2',cat:'Tips',content:'Tracking sleep alongside your cycle phase shows wild patterns! During luteal phase my deep sleep drops noticeably. Anyone else notice this?',likes:31,user_id:'u3',created_at:new Date(Date.now()-14400000).toISOString()},
+  {id:'p3',cat:'Support',content:"Day 2 of my period and it's rough 😔 Any gentle movement recs? Even short walks feel like a lot right now",likes:18,user_id:'u4',created_at:new Date(Date.now()-21600000).toISOString()},
+  {id:'p4',cat:'Tips',content:"10,000 steps is my non-negotiable now. Started 3 weeks ago and my energy is genuinely better. NXhyp keeps me honest 💪",likes:45,user_id:'u5',created_at:new Date(Date.now()-86400000).toISOString()},
+  {id:'p5',cat:'Questions',content:'Anyone tracking testosterone naturally? What diet or sleep changes actually moved the needle for you?',likes:12,user_id:'u5',created_at:new Date(Date.now()-172800000).toISOString()},
+  {id:'p6',cat:'Support',content:"Just hit 60 day streak!! 🎉 Never thought I'd stick with any wellness app this long. My companion motivates me every single day",likes:67,user_id:'u2',created_at:new Date(Date.now()-259200000).toISOString()},
+];
+const MOCK_REPLIES = [
+  {id:'r1',post_id:'p1',user_id:'u3',content:'Yes! 300mg before bed changed things for me. Takes 2–3 cycles to kick in though.',created_at:new Date(Date.now()-7000000).toISOString()},
+  {id:'r2',post_id:'p1',user_id:'u4',content:'Same! Anti-inflammatory foods during luteal phase helped a lot too 🌿',created_at:new Date(Date.now()-6800000).toISOString()},
+  {id:'r3',post_id:'p2',user_id:'u2',content:'Completely! Luteal = lighter sleep for me. I avoid heavy workouts days 19–23 now.',created_at:new Date(Date.now()-14000000).toISOString()},
+  {id:'r4',post_id:'p3',user_id:'u2',content:'Gentle yin yoga and hot water bottle 💕 No standing poses, just floor stretches',created_at:new Date(Date.now()-21000000).toISOString()},
+  {id:'r5',post_id:'p3',user_id:'u5',content:'Pool walking is amazing for cramp relief. Warmth + gentle movement together really works.',created_at:new Date(Date.now()-20500000).toISOString()},
+  {id:'r6',post_id:'p6',user_id:'u3',content:"60 days!! You're an inspiration 🔥 I'm at day 22 and your post just motivated me!",created_at:new Date(Date.now()-258000000).toISOString()},
+  {id:'r7',post_id:'p6',user_id:'u4',content:'Same companion name as mine! Luna is absolutely the best 🌙',created_at:new Date(Date.now()-257000000).toISOString()},
+];
+
+function _eq(q,f){const m=q.match(new RegExp('(?:^|&)'+f+'=eq\\.([^&\\s]+)'));return m?decodeURIComponent(m[1]):null;}
+function _in(q,f){const m=q.match(new RegExp(f+'=in\\.\\(([^)]+)\\)'));return m?m[1].split(','):null;}
+async function sb(path,opts={}){
+  await new Promise(r=>setTimeout(r,30+Math.random()*60));
+  const method=opts.method||'GET';
+  const body=opts.body?JSON.parse(opts.body):null;
+  const qi=path.indexOf('?');
+  const tbl=qi>=0?path.slice(0,qi):path;
+  const q=qi>=0?path.slice(qi+1):'';
+  const allU=()=>[...MOCK_USERS,...PROTO_USERS];
+
+  if(tbl==='users'){
+    if(method==='GET'){
+      let r=allU();
+      const id=_eq(q,'id');if(id)r=r.filter(u=>u.id===id);
+      const un=_eq(q,'username');if(un)r=r.filter(u=>u.username===un);
+      const em=_eq(q,'email');if(em)r=r.filter(u=>u.email.toLowerCase()===em.toLowerCase());
+      const pw=_eq(q,'password_hash');if(pw)r=r.filter(u=>u.password_hash===pw);
+      const ids=_in(q,'id');if(ids)r=r.filter(u=>ids.includes(u.id));
+      return r;
+    }
+    if(method==='POST'){const u={id:'u_'+Date.now(),...body};PROTO_USERS.push(u);localStorage.setItem('nxhyp_proto_users',JSON.stringify(PROTO_USERS));return[u];}
+    if(method==='PATCH'){
+      const id=_eq(q,'id');
+      const pu=PROTO_USERS.find(u=>u.id===id);
+      if(pu){Object.assign(pu,body);localStorage.setItem('nxhyp_proto_users',JSON.stringify(PROTO_USERS));}
+      else{const mu=MOCK_USERS.find(u=>u.id===id);if(mu)Object.assign(mu,body);}
+      return[];
+    }
+  }
+  if(tbl==='community_posts'){
+    if(method==='GET'){
+      let p=[...PROTO_POSTS,...MOCK_POSTS].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+      if(q.includes('cat=eq.Questions'))p=p.filter(x=>x.cat==='Questions');
+      if(q.includes('cat=eq.Tips'))p=p.filter(x=>x.cat==='Tips');
+      return p.slice(0,30);
+    }
+    if(method==='POST'){const p={id:'p_'+Date.now(),...body,created_at:new Date().toISOString()};PROTO_POSTS.unshift(p);return[p];}
+    if(method==='PATCH'){const id=_eq(q,'id');const p=[...MOCK_POSTS,...PROTO_POSTS].find(x=>x.id===id);if(p)Object.assign(p,body);return[];}
+  }
+  if(tbl==='post_likes'){
+    if(method==='GET'){const ids=_in(q,'post_id');return[...myLikedPosts].filter(id=>!ids||ids.includes(id)).map(id=>({post_id:id}));}
+    if(method==='POST'){myLikedPosts.add(body.post_id);return[];}
+    if(method==='DELETE'){const pid=_eq(q,'post_id');if(pid)myLikedPosts.delete(pid);return[];}
+  }
+  if(tbl==='post_replies'){
+    if(method==='GET'){const ids=_in(q,'post_id');let r=[...MOCK_REPLIES,...PROTO_REPLIES];if(ids)r=r.filter(x=>ids.includes(x.post_id));return r.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));}
+    if(method==='POST'){const r={id:'r_'+Date.now(),...body,created_at:new Date().toISOString()};PROTO_REPLIES.push(r);return[r];}
+  }
+  if(tbl==='friendships'){
+    if(method==='GET'){
+      const uid=ME?.id;
+      const ors=q.match(/[ab]\.eq\.([^,)&]+)/g)||[];
+      const uids=[...new Set(ors.map(m=>m.split('.eq.')[1]))];
+      if(uids.length>=2)return MOCK_FRIENDSHIPS.filter(f=>uids.includes(f.user_a)&&uids.includes(f.user_b));
+      return MOCK_FRIENDSHIPS.filter(f=>f.user_a===uid||f.user_b===uid);
+    }
+    if(method==='POST'){MOCK_FRIENDSHIPS.push({id:'f_'+Date.now(),...body});return[];}
+  }
+  if(tbl==='friend_requests'){
+    if(method==='GET'){
+      let r=MOCK_FRIEND_REQS;
+      const toId=_eq(q,'to_user_id');if(toId)r=r.filter(x=>x.to_user_id===toId);
+      const fromId=_eq(q,'from_user_id');
+      if(fromId){r=r.filter(x=>x.from_user_id===fromId);const t2=_eq(q,'to_user_id');if(t2)r=r.filter(x=>x.to_user_id===t2);}
+      if(q.includes('status=eq.pending'))r=r.filter(x=>x.status==='pending');
+      return r;
+    }
+    if(method==='POST'){const r={id:'fr_'+Date.now(),...body};MOCK_FRIEND_REQS.push(r);return[r];}
+    if(method==='PATCH'){const id=_eq(q,'id');const r=MOCK_FRIEND_REQS.find(x=>x.id===id);if(r)Object.assign(r,body);return[];}
+  }
+  if(tbl==='messages'){
+    if(method==='GET'){
+      const uid=ME?.id;if(!uid||!curDmUserId)return[];
+      return[...MOCK_MESSAGES,...PROTO_MESSAGES].filter(m=>(m.from_user_id===uid&&m.to_user_id===curDmUserId)||(m.from_user_id===curDmUserId&&m.to_user_id===uid)).sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
+    }
+    if(method==='POST'){const m={id:'m_'+Date.now(),...body,created_at:new Date().toISOString()};PROTO_MESSAGES.push(m);return[m];}
+  }
+  return[];
 }
 
-// Simple hash
 async function hashPw(pw) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw + 'nxhyp_salt'));
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  let h=0;for(let i=0;i<pw.length;i++)h=((h<<5)-h+pw.charCodeAt(i))|0;
+  return 'ph_'+Math.abs(h).toString(36);
 }
 
 // ══════════════════════════════════════════
@@ -1640,6 +1757,7 @@ async function doSI() {
   btn.textContent = 'Signing in…'; btn.disabled = true;
   const em = document.getElementById('si-e').value.trim();
   const pw = document.getElementById('si-p').value;
+  if (em.toLowerCase() === 'demo@nxhyp.com') { btn.textContent='Sign in'; btn.disabled=false; demoLogin(); return; }
   const hash = await hashPw(pw);
   try {
     const rows = await sb('users?email=eq.' + encodeURIComponent(em) + '&password_hash=eq.' + hash + '&select=*');
@@ -1648,7 +1766,7 @@ async function doSI() {
     localStorage.setItem('nxhyp_uid', ME.id);
     applyUser();
     enterApp();
-    aToast('Welcome back, @' + ME.username + '! 🌸');
+    aToast(T('toast_welcome_back', {u: ME.username}));
   } catch(e) {
     aToast('Error signing in');
     btn.textContent='Sign in'; btn.disabled=false;
@@ -1692,6 +1810,20 @@ async function doSignOut() {
   document.getElementById('as-auth').classList.add('on');
   goStep(0);
   aToast('Signed out. Data saved to server.');
+}
+
+function demoLogin() {
+  ME = Object.assign({}, MOCK_USERS[0]);
+  companion = Object.assign({}, ME.companion);
+  localStorage.setItem('nxhyp_uid', ME.id);
+  hourlySteps = [0,0,0,0,0,0,0,420,560,780,680,940,1040,860,740,600,200,0,0,0,0,0,0,0];
+  sleepH = 7;
+  const ph=document.getElementById('t-sleep-phase');
+  if(ph)ph.innerHTML='<div class="sp-block" style="flex:2;background:#CECBF6">L</div><div class="sp-block" style="flex:3;background:#7F77DD">D</div><div class="sp-block" style="flex:2;background:#9FE1CB">R</div><div class="sp-block" style="flex:1;background:#E0D8EC">A</div><div class="sp-block" style="flex:2;background:#7F77DD">D</div>';
+  const ts=document.getElementById('t-sleep');if(ts)ts.textContent='7h';
+  applyUser();
+  enterApp();
+  aToast('Welcome to NXhyp! 🌸 Explore all features freely');
 }
 
 // ══════════════════════════════════════════
