@@ -214,14 +214,30 @@
     W.setPrompt(onProximity);
     updateHud();
     setTimeout(() => W.waveOnce(), 600);
+    if (!enterMainWorld._netStarted) { enterMainWorld._netStarted = true; initNet(); }
   }
   function onProximity(loc) {
     const p = $('enter-prompt');
     if (loc) { p.classList.remove('hidden'); $('enter-prompt-name').textContent = loc.name; p.dataset.loc = loc.id; }
     else p.classList.add('hidden');
   }
+  let inInterior = false;
+  const LOC_META = {
+    airport: { emoji: '✈️', name: 'Airport' }, station: { emoji: '🚉', name: 'Train Station' },
+    study: { emoji: '📚', name: 'Study Room' }, library: { emoji: '🏛️', name: 'Library' },
+    cafe: { emoji: '☕', name: 'Cafe' }, shop: { emoji: '🛍️', name: 'Shop' },
+    quests: { emoji: '📋', name: 'Quest Board' }, passport: { emoji: '🛂', name: 'Passport Office' },
+    friends: { emoji: '🤝', name: 'Friends Plaza' },
+  };
   function enterLocation(id) {
     onProximity(null);
+    // step into the themed 3D interior of this place
+    W.enterInterior(id, S.character, S.name);
+    inInterior = true;
+    showInteriorBar(id);
+    openLocationPanel(id);
+  }
+  function openLocationPanel(id) {
     switch (id) {
       case 'airport': openTravelPanel('plane'); break;
       case 'station': openTravelPanel('train'); break;
@@ -233,6 +249,22 @@
       case 'passport': openPassport(); break;
       case 'friends': openFriends(); break;
     }
+  }
+  function showInteriorBar(id) {
+    const m = LOC_META[id] || { emoji: '📍', name: id };
+    let bar = $('interior-bar');
+    if (!bar) {
+      bar = document.createElement('div'); bar.id = 'interior-bar';
+      bar.innerHTML = `<span id="interior-bar-label"></span><button class="btn btn-tiny" id="interior-leave">← Leave</button>`;
+      document.body.appendChild(bar);
+      bar.querySelector('#interior-leave').onclick = leaveInterior;
+    }
+    $('interior-bar-label').innerHTML = `<span class="ib-emoji">${m.emoji}</span> You're at the <b>${m.name}</b>`;
+    bar.classList.add('show');
+  }
+  function hideInteriorBar() { const b = $('interior-bar'); if (b) b.classList.remove('show'); }
+  function leaveInterior() {
+    inInterior = false; hideInteriorBar(); closePanel(); W.leaveInterior();
   }
 
   // ---------------- travel / session setup ----------------
@@ -375,6 +407,7 @@
       lastActivity: Date.now(), idle: false,
       pomPhase: 'work', pomLeft: 25 * 60, focusMode: false, started: Date.now(),
     };
+    inInterior = false; hideInteriorBar();
     W.enterStudy(bg, parts);
     $('hud').classList.add('hidden');
     $('mobile-controls').classList.add('hidden');
@@ -552,6 +585,7 @@
     S.lastSession = { dest: s.dest.name, minutes, coins: coins + bonus, date: todayStr() };
     checkBackgroundUnlocks();
     save();
+    syncProfile();
     // results screen
     showResults({ minutes, coins, bonus, newCity, dest: s.dest, completed, parts: s.parts });
     session = null;
@@ -734,7 +768,33 @@
     const others = D.BOTS.filter(b => !S.friends.includes(b.id) && !S.blocked.includes(b.id));
     const me = { name: S.name, flag: '🏠', minutes: S.totalMinutes, miles: S.miles, coins: S.coins };
     const board = D.BOTS.filter(b => !S.blocked.includes(b.id)).concat([me]).sort((a, b) => b.miles - a.miles || b.minutes - a.minutes);
-    const html = `
+    // real community section (live users + incoming requests)
+    let community = '';
+    if (NET_ON) {
+      const reqs = netRequests.map(r => `<div class="friend-row">
+        <span class="friend-dot on"></span>
+        <span class="friend-av" style="background:#8b7cf6">${esc(r.from_name[0] || '?')}</span>
+        <span class="friend-info"><b>${esc(r.from_name)}</b><span class="friend-meta">wants to be friends</span></span>
+        <button class="btn btn-tiny btn-primary" data-accept="${r.id}">Accept</button></div>`).join('');
+      const live = netOnline.filter(u => !S.blocked.includes(u.id)).map(u => `<div class="friend-row">
+        <span class="friend-dot on"></span>
+        <span class="friend-av" style="background:${(u.char && u.char.outfit) || '#22d3ee'}">${esc((u.name || '?')[0])}</span>
+        <span class="friend-info"><b>${esc(u.name || 'Studier')}</b> 🌍<span class="friend-meta">online${u.city ? ' · ' + esc(u.city) : ''}</span></span>
+        <span class="friend-actions">
+          <button class="btn btn-tiny" data-rdm="${u.id}">💬</button>
+          <button class="btn btn-tiny btn-primary" data-radd="${esc(u.name || '')}">+ Add</button>
+        </span></div>`).join('');
+      community = `
+        <div class="community-box">
+          <div class="community-h">🌍 Live Community <span class="online-pill">${netOnline.length + 1} online</span></div>
+          ${reqs ? '<div class="community-sub">Friend requests</div>' + reqs : ''}
+          <div class="community-sub">Online now</div>
+          ${live || '<p class="muted" style="padding:.4rem">You\'re the first one here — invite a friend to open the app!</p>'}
+        </div>`;
+    } else {
+      community = `<div class="community-note muted">🌐 Offline mode — showing simulated study buddies. Open the live site to chat with real people worldwide.</div>`;
+    }
+    const html = community + `
       <div class="tabs"><button class="tab active" data-t="friends">Friends</button>
         <button class="tab" data-t="find">Find People</button>
         <button class="tab" data-t="board">Leaderboard</button></div>
@@ -788,6 +848,17 @@
     });
     $('panel-body').querySelectorAll('[data-prof]').forEach(b => b.onclick = () => openProfile(b.dataset.prof));
     $('panel-body').querySelectorAll('[data-invite]').forEach(b => b.onclick = () => inviteToStudy(b.dataset.invite));
+    // real community actions
+    $('panel-body').querySelectorAll('[data-rdm]').forEach(b => b.onclick = () => openDM(b.dataset.rdm));
+    $('panel-body').querySelectorAll('[data-radd]').forEach(b => b.onclick = () => {
+      const name = b.dataset.radd; if (!name) return;
+      NET.sendFriendRequest(name).then(ok => { toast(ok ? 'Friend request sent to ' + name : 'Could not send request', ok ? '🤝' : '⚠️'); });
+      b.disabled = true; b.textContent = 'Sent';
+    });
+    $('panel-body').querySelectorAll('[data-accept]').forEach(b => b.onclick = () => {
+      const id = +b.dataset.accept; const req = netRequests.find(r => r.id === id); if (!req) return;
+      NET.acceptFriendRequest(req).then(() => { netRequests = netRequests.filter(r => r.id !== id); refreshNetFriends(); toast('You are now friends with ' + req.from_name + '! 🎉', '🤝'); openFriends(); });
+    });
   }
   function openProfile(id) {
     const b = D.BOTS.find(x => x.id === id); if (!b) return;
@@ -839,9 +910,72 @@
   }
   let pendingParticipants = null;
 
-  // ---------------- chat (simulated) ----------------
+  // ---------------- networking (real global community) ----------------
+  const NET = window.SV_NET;
+  let NET_ON = false;
+  let netOnline = [];          // real online users from presence
+  let netRequests = [];        // incoming friend requests
+  let netFriends = [];         // accepted real friends [{id,name}]
+  const chatSeen = new Set();  // de-dupe message ids
+  const chatPeers = {};        // id -> {id,name,char,city} for DM display
+
+  function initNet() {
+    if (!NET) return;
+    NET.on('message', onNetMessage);
+    NET.on('presence', (list) => {
+      netOnline = list; list.forEach(u => chatPeers[u.id] = u); updateOnlineHud();
+      // show real online people walking in the world
+      const worldList = list.slice(0, 5).map(u => ({ char: u.char || {}, name: u.name || 'Studier', online: true }));
+      if (worldList.length) W.setWorldFriends(worldList);
+    });
+    NET.on('friendRequest', onNetFriendRequest);
+    NET.on('friendship', () => { refreshNetFriends(); toast('You have a new friend! 🤝', '🎉'); });
+    NET.init({ name: S.name, character: S.character, homeCity: homeCity().name,
+               coins: S.coins, totalMinutes: S.totalMinutes, miles: S.miles })
+      .then(ok => {
+        NET_ON = ok;
+        if (ok) {
+          toast('Connected to the global community 🌍', '🌍');
+          refreshNetFriends();
+          NET.pendingRequests().then(r => { netRequests = r || []; updateOnlineHud(); });
+        }
+        updateOnlineHud();
+      });
+  }
+  function refreshNetFriends() { if (NET_ON) NET.loadFriends().then(f => { netFriends = f || []; }); }
+  function syncProfile() { if (NET_ON) NET.updateProfile({ name: S.name, character: S.character, homeCity: homeCity().name, coins: S.coins, totalMinutes: S.totalMinutes, miles: S.miles }); }
+  function updateOnlineHud() {
+    const el = $('hud-online'); if (!el) return;
+    const n = (netOnline ? netOnline.length : 0) + 1;
+    el.classList.toggle('hidden', !NET_ON);
+    el.innerHTML = '🟢 <span>' + n + '</span> online';
+  }
+  function onNetMessage(row) {
+    if (chatSeen.has(row.id)) return; chatSeen.add(row.id);
+    if (row.user_id === NET.myId()) return; // own message already shown optimistically
+    if (row.user_id && row.user_id !== NET.myId()) chatPeers[row.user_id] = { id: row.user_id, name: row.username, char: row.char || {} };
+    const isDM = row.room && row.room.indexOf('dm_') === 0;
+    if (isDM && row.room.indexOf(NET.myId()) < 0) return; // not my DM
+    const msg = {
+      me: row.user_id === NET.myId(),
+      from: { id: row.user_id, name: row.username, char: row.char || {}, flag: '🌍' },
+      text: row.text, t: Date.parse(row.created_at) || Date.now(),
+    };
+    if (row.room === 'global' || row.room === 'lobby') (chatState.messages[row.room] = chatState.messages[row.room] || []).push(msg);
+    else (chatState.dms[row.room] = chatState.dms[row.room] || []).push(msg);
+    if ($('chat-panel').classList.contains('open') && chatState.room === row.room) renderChat();
+    else if (!msg.me) { const bump = $('nav-chat-dot'); if (bump) bump.classList.remove('hidden'); }
+  }
+  function onNetFriendRequest(req) {
+    netRequests.unshift(req);
+    toast(req.from_name + ' sent you a friend request', '🤝');
+    updateOnlineHud();
+  }
+
+  // ---------------- chat ----------------
   let chatState = { room: 'global', messages: { global: [], lobby: [] }, dms: {}, timer: null, typingTimer: null };
   function seedChat() {
+    if (NET_ON) return; // real history loads instead of bot seed
     if (chatState.messages.global.length) return;
     D.CHAT_LINES.slice(0, 6).forEach((line, i) => {
       const bot = D.BOTS[i % D.BOTS.length];
@@ -849,15 +983,35 @@
     });
     chatState.messages.lobby.push({ from: D.BOTS[2], text: 'Anyone want to do a 50-min session at the cafe? ☕', t: Date.now() - 120000 });
   }
+  async function loadRoomHistory(room) {
+    if (!NET_ON) return;
+    const rows = await NET.loadHistory(room, 40);
+    const prev = (room === 'global' || room === 'lobby') ? (chatState.messages[room] || []) : (chatState.dms[room] || []);
+    const optimistic = prev.filter(m => m.me && !m._fromHistory); // keep messages we sent locally
+    const hist = rows.map(row => { chatSeen.add(row.id); return {
+      _fromHistory: true, id: row.id, me: row.user_id === NET.myId(),
+      from: { id: row.user_id, name: row.username, char: row.char || {}, flag: '🌍' },
+      text: row.text, t: Date.parse(row.created_at) || Date.now() }; });
+    // drop optimistic copies that now appear in history (same text)
+    const histTexts = new Set(hist.filter(m => m.me).map(m => m.text));
+    const merged = hist.concat(optimistic.filter(m => !histTexts.has(m.text)));
+    if (room === 'global' || room === 'lobby') chatState.messages[room] = merged; else chatState.dms[room] = merged;
+    if (chatState.room === room) renderChat();
+  }
   function toggleChat(open) {
     const panel = $('chat-panel');
     const willOpen = open != null ? open : !panel.classList.contains('open');
     if (willOpen && session && session.focusMode) { toast('Chat is muted in Focus Mode', '🔇'); return; }
     panel.classList.toggle('open', willOpen);
-    if (willOpen) { seedChat(); renderChat(); startChatBots(); }
-    else stopChatBots();
+    const dot = $('nav-chat-dot'); if (dot) dot.classList.add('hidden');
+    if (willOpen) {
+      if (NET_ON) { loadRoomHistory(chatState.room); renderChat(); }
+      else { seedChat(); renderChat(); startChatBots(); }
+      switchChatTabUI();
+    } else stopChatBots();
   }
   function startChatBots() {
+    if (NET_ON) return;
     if (chatState.timer) return;
     chatState.timer = setInterval(() => {
       if (Math.random() < 0.6) {
@@ -900,6 +1054,14 @@
   function sendChat(text) {
     if (!text.trim()) return;
     const room = chatState.room;
+    if (NET_ON) {
+      NET.send(room, text);
+      const mine = { me: true, text, t: Date.now() }; // optimistic render
+      if (room === 'global' || room === 'lobby') (chatState.messages[room] = chatState.messages[room] || []).push(mine);
+      else (chatState.dms[room] = chatState.dms[room] || []).push(mine);
+      renderChat();
+      return;
+    }
     const msg = { me: true, text, t: Date.now(), reactions: null };
     if (room === 'global' || room === 'lobby') chatState.messages[room].push(msg);
     else { chatState.dms[room] = chatState.dms[room] || []; chatState.dms[room].push(msg); }
@@ -911,15 +1073,32 @@
     }
   }
   function openDM(id) {
+    // real user (presence/friend) vs simulated bot
+    if (NET_ON && chatPeers[id]) {
+      const room = NET.dmRoom(id);
+      chatState.room = room;
+      closePanel(); toggleChat(true); loadRoomHistory(room); switchChatTabUI();
+      return;
+    }
     const b = D.BOTS.find(x => x.id === id); if (!b) return;
     closePanel(); chatState.room = 'dm_' + id;
     if (!chatState.dms['dm_' + id]) chatState.dms['dm_' + id] = [];
     toggleChat(true); switchChatTabUI();
   }
+  function dmPeerName(room) {
+    const mine = NET.myId();
+    const other = room.replace('dm_', '').split('__').find(x => x !== mine);
+    const peer = chatPeers[other] || Object.values(chatPeers).find(p => room.indexOf(p.id) >= 0);
+    return peer ? peer.name : 'Direct Message';
+  }
   function switchChatTabUI() {
     $('chat-tabs').querySelectorAll('.ctab').forEach(t => t.classList.toggle('active', t.dataset.room === chatState.room));
-    const isDm = chatState.room.startsWith('dm_');
-    $('chat-room-name').textContent = isDm ? (D.BOTS.find(b => 'dm_' + b.id === chatState.room) || {}).name + ' (DM)' : (chatState.room === 'global' ? 'Global Chat' : 'Study Lobby');
+    const isDm = chatState.room.indexOf('dm_') === 0;
+    let title;
+    if (!isDm) title = chatState.room === 'global' ? 'Global Chat' : 'Study Lobby';
+    else if (NET_ON) title = dmPeerName(chatState.room) + ' (DM)';
+    else title = ((D.BOTS.find(b => 'dm_' + b.id === chatState.room) || {}).name || 'DM') + ' (DM)';
+    $('chat-room-name').textContent = title;
   }
 
   // ---------------- dashboard ----------------
@@ -983,9 +1162,9 @@
         mountPreview($('self-prof-char'), S.character, S.name);
         const draft = JSON.parse(JSON.stringify(S.character));
         renderCustomizer($('self-customizer'), draft, () => {
-          S.character = draft; save(); mountPreview($('self-prof-char'), S.character, S.name); W.refreshPlayer(S.character, S.name);
+          S.character = draft; save(); mountPreview($('self-prof-char'), S.character, S.name); W.refreshPlayer(S.character, S.name); syncProfile();
         });
-        $('home-select').onchange = e => { S.homeCityId = e.target.value; save(); toast('Home city updated', '🏠'); };
+        $('home-select').onchange = e => { S.homeCityId = e.target.value; save(); syncProfile(); toast('Home city updated', '🏠'); };
       }
     });
     bindFriendButtons();
@@ -1076,7 +1255,7 @@
       const n = b.dataset.nav;
       ({ dashboard: openDashboard, shop: openShop, quests: openQuests, passport: openPassport, friends: openFriends, profile: openSelfProfile, chat: () => toggleChat(true), travel: () => openTravelPanel('plane') }[n] || (() => {}))();
     });
-    $('panel-close').onclick = closePanel;
+    $('panel-close').onclick = () => { if (inInterior) leaveInterior(); else closePanel(); };
     $('enter-prompt').onclick = () => enterLocation($('enter-prompt').dataset.loc);
     window.addEventListener('keydown', e => { if ((e.key === 'e' || e.key === 'E') && !$('enter-prompt').classList.contains('hidden')) enterLocation($('enter-prompt').dataset.loc); });
     // chat panel controls
@@ -1118,7 +1297,7 @@
   // expose
   window.SV = {
     boot, closePanel, openTravel: () => openTravelPanel('plane'), backTravel,
-    inviteToStudy, openDM, blockUser,
+    inviteToStudy, openDM, blockUser, enterPlace: enterLocation, leaveInterior,
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();

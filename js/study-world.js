@@ -469,11 +469,211 @@ window.SV_WORLD = (function () {
     }
   }
 
+  // -------- interior scenes (entering a location) ------------------
+  let interiorScene, interiorCam, interiorChars = [], interiorPlayer, interiorFx = [];
+  function buildInterior(locId, charCfg, name) {
+    interiorScene = new THREE.Scene();
+    interiorChars = []; interiorFx = [];
+    const S = (c, e, r) => new THREE.MeshStandardMaterial({ color: c, emissive: e || '#000', emissiveIntensity: e ? (r || 0.5) : 0, roughness: 0.9 });
+    const box = (w, h, d, c, e, r) => new THREE.Mesh(new THREE.BoxGeometry(w, h, d), S(c, e, r));
+    const add = (m, x, y, z) => { m.position.set(x, y, z); interiorScene.add(m); return m; };
+
+    const THEME = {
+      airport:  { indoor: true,  floor: '#cdd3de', wall: '#eef1f6', sky: ['#aee0ff', '#dff3ff'] },
+      station:  { indoor: false, floor: '#9aa0a6', sky: ['#8fc7ee', '#dceefb'] },
+      shop:     { indoor: true,  floor: '#3a2c3f', wall: '#5b3a5e', sky: null },
+      quests:   { indoor: true,  floor: '#3b3526', wall: '#5a4f33', sky: null },
+      passport: { indoor: true,  floor: '#26324f', wall: '#33446b', sky: null },
+      library:  { indoor: true,  floor: '#4a3526', wall: '#6b4a30', sky: null },
+      cafe:     { indoor: true,  floor: '#5a3f2a', wall: '#7a5638', sky: null },
+      friends:  { indoor: false, floor: '#7fbf6a', sky: ['#8fd0f4', '#e6f7ff'] },
+      study:    { indoor: true,  floor: '#2e2e44', wall: '#3a3a5c', sky: null },
+    };
+    const t = THEME[locId] || THEME.airport;
+
+    // sky / background
+    if (t.sky) {
+      const cv = document.createElement('canvas'); cv.width = 8; cv.height = 256;
+      const c = cv.getContext('2d'); const g = c.createLinearGradient(0, 0, 0, 256);
+      g.addColorStop(0, t.sky[0]); g.addColorStop(1, t.sky[1]); c.fillStyle = g; c.fillRect(0, 0, 8, 256);
+      interiorScene.background = new THREE.CanvasTexture(cv);
+    } else { interiorScene.background = new THREE.Color(t.wall).multiplyScalar(0.5); }
+
+    // floor
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(40, 30), S(t.floor, null, 0));
+    floor.rotation.x = -Math.PI / 2; interiorScene.add(floor);
+    // walls for indoor
+    if (t.indoor) {
+      add(box(40, 12, 0.4, t.wall), 0, 6, -10);
+      const sw = box(0.4, 12, 30, t.wall);
+      add(sw, -16, 6, 0); add(sw.clone(), 16, 6, 0);
+    }
+
+    // lighting
+    interiorScene.add(new THREE.HemisphereLight('#ffffff', '#44485e', t.indoor ? 0.9 : 1.1));
+    const dl = new THREE.DirectionalLight('#fff7e6', t.indoor ? 0.5 : 0.9); dl.position.set(6, 12, 8); interiorScene.add(dl);
+
+    function npc(cfg, x, z, ry, state) {
+      const g = buildCharacter(cfg, cfg.nm || '');
+      g.position.set(x, locId === 'library' || locId === 'cafe' ? 0.42 : 0, z);
+      g.rotation.y = ry || 0; g.userData.state = state || 'idle';
+      interiorScene.add(g); interiorChars.push(g); return g;
+    }
+    const palette = ['#ef4444', '#3b82f6', '#10b981', '#eab308', '#8b5cf6', '#ec4899'];
+    const skins = ['#ffdbac', '#e0ac69', '#c68642', '#8d5524'];
+    const rc = () => ({ skin: skins[(Math.random() * skins.length) | 0], hair: '#1a1a1a', outfit: palette[(Math.random() * palette.length) | 0] });
+
+    // ---- per-location props ----
+    if (locId === 'airport') {
+      // parked plane OUTSIDE (placed behind the glass, drawn first)
+      const plane = new THREE.Group();
+      const fusGeo = THREE.CapsuleGeometry ? new THREE.CapsuleGeometry(1, 6, 6, 12) : new THREE.CylinderGeometry(1, 1, 8, 12);
+      const fus = new THREE.Mesh(fusGeo, S('#f5f7fa'));
+      fus.rotation.z = Math.PI / 2; plane.add(fus);
+      const wing = box(1.4, 0.2, 7, '#dde3ea'); plane.add(wing);
+      const tail = box(0.2, 2.2, 1.6, '#3b82f6'); tail.position.set(-4.2, 1.2, 0); plane.add(tail);
+      const tailwing = box(2.2, 0.2, 2.4, '#dde3ea'); tailwing.position.set(-4, 0.3, 0); plane.add(tailwing);
+      const stripe = box(9, 0.5, 0.05, '#3b82f6'); stripe.position.set(0, 0.2, 1.02); plane.add(stripe);
+      const nose = new THREE.Mesh(new THREE.ConeGeometry(1, 1.6, 12), S('#f5f7fa')); nose.rotation.z = -Math.PI / 2; nose.position.x = 4; plane.add(nose);
+      plane.position.set(1, 4.2, -15); plane.scale.set(1.6, 1.6, 1.6); plane.rotation.y = 0.25; interiorScene.add(plane);
+      // glass window wall (transparent so the plane shows through)
+      add(new THREE.Mesh(new THREE.PlaneGeometry(30, 8), new THREE.MeshStandardMaterial({ color: '#cdeeff', transparent: true, opacity: 0.28 })), 0, 5, -9.7);
+      // window mullions
+      for (let i = -3; i <= 3; i++) add(box(0.18, 8, 0.18, '#94a3b8'), i * 4.3, 5, -9.6);
+      add(box(30, 0.2, 0.3, '#94a3b8'), 0, 1, -9.6); add(box(30, 0.2, 0.3, '#94a3b8'), 0, 9, -9.6);
+      // seats
+      for (let i = 0; i < 4; i++) { add(box(0.8, 0.5, 0.8, '#2563eb'), -11 + i * 1.0, 0.5, 5); }
+      // departures board
+      add(box(6, 1.6, 0.2, '#111827', '#22d3ee', 0.25), 9, 7.5, -9.5);
+      const dep = makeLabel('🛫 DEPARTURES', { color: '#22d3ee', size: 30, scale: 5 }); add(dep, 9, 7.5, -9.3);
+      npc(rc(), -10, 4, Math.PI, 'idle'); npc(rc(), 6, 3, -0.5, 'idle');
+    } else if (locId === 'station') {
+      // platform edge + rails
+      add(box(40, 0.3, 0.4, '#5b6168'), 0, 0.15, -3);
+      [-3.6, -4.4].forEach(z => add(box(40, 0.1, 0.12, '#3a3f45'), 0, 0.05, z));
+      // train
+      const train = new THREE.Group();
+      const body = box(20, 3, 2.4, '#e11d48'); train.add(body);
+      for (let i = 0; i < 9; i++) { const w = box(1.2, 1, 0.1, '#bfe6ff', '#bfe6ff', 0.3); w.position.set(-8 + i * 2, 0.4, 1.25); train.add(w); }
+      const stripe = box(20, 0.5, 0.1, '#fde047'); stripe.position.set(0, -0.8, 1.21); train.add(stripe);
+      train.position.set(0, 1.8, -5.5); interiorScene.add(train);
+      // benches + clock + pillars
+      for (let i = 0; i < 3; i++) { add(box(1.8, 0.4, 0.6, '#6b4423'), -8 + i * 8, 0.5, 4); }
+      for (let i = 0; i < 5; i++) add(box(0.4, 8, 0.4, '#aeb4ba'), -14 + i * 7, 4, -2);
+      const clock = add(new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.7, 0.15, 16), S('#f8fafc')), 0, 6.5, -2);
+      clock.rotation.x = Math.PI / 2;
+      npc(rc(), -6, 3.5, Math.PI, 'idle'); npc(rc(), 7, 4, -0.3, 'idle');
+    } else if (locId === 'shop') {
+      // racks of clothes
+      for (let s = -1; s <= 1; s += 2) for (let r = 0; r < 4; r++) {
+        add(box(2.4, 1.2, 0.5, palette[r]), s * 9, 1.2 + 0, -8.5 + 0); // shelf back
+        add(box(2.4, 0.8, 0.6, palette[(r + 2) % palette.length]), s * 9, 1 + r * 1.5, -8);
+      }
+      // counter + sign
+      add(box(5, 1.1, 1.4, '#7c3aed'), 0, 0.55, -6);
+      const sign = makeLabel('🛍️ BOUTIQUE', { color: '#f9a8d4', bg: 'rgba(124,58,237,0.7)', size: 28, scale: 6 }); add(sign, 0, 8, -9.4);
+      npc({ skin: '#ffdbac', hair: '#e8c170', outfit: '#f472b6' }, -2.5, -5.5, 0.4, 'idle'); // shopkeeper-ish customer
+    } else if (locId === 'quests') {
+      // big cork board
+      add(box(12, 7, 0.3, '#b08947'), 0, 5, -9.6);
+      add(box(12.6, 7.6, 0.2, '#6b4f25'), 0, 5, -9.8); // frame
+      const notes = ['#fef08a', '#bbf7d0', '#bfdbfe', '#fbcfe8', '#fed7aa'];
+      for (let i = 0; i < 12; i++) {
+        const n = box(1.4, 1.4, 0.05, notes[i % notes.length]); n.rotation.z = (Math.random() - 0.5) * 0.3;
+        add(n, -4.5 + (i % 4) * 3, 3 + Math.floor(i / 4) * 2, -9.4);
+      }
+      const banner = makeLabel('📋 QUEST BOARD', { color: '#fff', bg: 'rgba(0,0,0,0.4)', size: 30, scale: 7 }); add(banner, 0, 9, -9.3);
+    } else if (locId === 'passport') {
+      // world map wall
+      const mcv = document.createElement('canvas'); mcv.width = 256; mcv.height = 128;
+      const mc = mcv.getContext('2d'); mc.fillStyle = '#1e3a5f'; mc.fillRect(0, 0, 256, 128);
+      mc.fillStyle = '#4ade80'; for (let i = 0; i < 60; i++) mc.fillRect(Math.random() * 256, Math.random() * 128, 6, 4);
+      const map = new THREE.Mesh(new THREE.PlaneGeometry(14, 7), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(mcv) }));
+      add(map, 0, 6, -9.6);
+      // counter + globe
+      add(box(6, 1.1, 1.5, '#1d4ed8'), 0, 0.55, -5);
+      const globe = add(new THREE.Mesh(new THREE.SphereGeometry(0.6, 16, 16), S('#3b82f6')), 3.5, 1.5, -5);
+      interiorFx.push({ m: globe, spin: 0.5 });
+      const sign = makeLabel('🛂 PASSPORT OFFICE', { color: '#fff', size: 26, scale: 6 }); add(sign, 0, 9, -9.4);
+      npc({ skin: '#e0ac69', hair: '#1a1a1a', outfit: '#1d4ed8' }, 0, -3.5, 0, 'idle');
+    } else if (locId === 'library') {
+      // rows of bookshelves
+      for (let s = -1; s <= 1; s += 2) {
+        add(box(2, 8, 4, '#5a3a1b'), s * 12, 4, -4);
+        for (let r = 0; r < 6; r++) add(box(2.2, 0.8, 3.4, palette[r]), s * 12, 1 + r * 1.2, -4);
+      }
+      add(box(2, 8, 4, '#5a3a1b'), -12, 4, 3); add(box(2, 8, 4, '#5a3a1b'), 12, 4, 3);
+      // reading tables + lamps + students
+      for (let i = -1; i <= 1; i++) {
+        const tx = i * 5;
+        add(box(2.4, 0.15, 1.2, '#8b5a2b'), tx, 1, -1);
+        [[-0.9, 0.55], [0.9, 0.55]].forEach(([x]) => add(box(0.12, 1, 0.12, '#5a3a1b'), tx + x, 0.5, -1));
+        add(new THREE.Mesh(new THREE.ConeGeometry(0.2, 0.25, 10), S('#fbbf24', '#fbbf24', 0.7)), tx, 1.4, -1.4);
+        const plib = new THREE.PointLight('#ffd27f', 0.5, 6); plib.position.set(tx, 2, -1); interiorScene.add(plib);
+        npc(rc(), tx, -1.6, 0, 'studying');
+      }
+      const sign = makeLabel('🏛️ LIBRARY', { color: '#fde68a', size: 30, scale: 5 }); add(sign, 0, 9.5, -9.5);
+    } else if (locId === 'cafe') {
+      // counter + espresso machine + cups
+      add(box(8, 1.2, 1.6, '#5a3a1b'), -6, 0.6, -8);
+      add(box(1.2, 0.9, 0.8, '#cbd5e1', '#94a3b8', 0.2), -7, 1.65, -8); // machine
+      for (let i = 0; i < 5; i++) add(new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.1, 0.2, 8), S(palette[i])), -8.5 + i * 0.5, 1.3, -8);
+      // shelf of mugs
+      add(box(6, 0.2, 0.8, '#7a5638'), -6, 4, -9.4);
+      // tables with cups + warm pendant lights + patrons
+      for (let i = 0; i < 3; i++) {
+        const tx = 1 + i * 4.5;
+        const tbl = add(new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.8, 0.15, 16), S('#8b5a2b')), tx, 0.9, -2);
+        add(new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.1, 0.2, 8), S('#ef4444')), tx, 1.1, -2);
+        const pl = new THREE.PointLight('#ffb066', 0.6, 6); pl.position.set(tx, 3, -2); interiorScene.add(pl);
+        add(new THREE.Mesh(new THREE.SphereGeometry(0.18, 8, 8), S('#fbbf24', '#fbbf24', 0.8)), tx, 3, -2);
+        npc(rc(), tx, -2.9, 0, Math.random() < 0.5 ? 'idle' : 'studying');
+      }
+      const sign = makeLabel('☕ CAFE', { color: '#ffe6c7', size: 30, scale: 4 }); add(sign, 0, 9, -9.5);
+    } else if (locId === 'friends') {
+      // outdoor plaza: fountain, benches, lamps, trees, people
+      const base = add(new THREE.Mesh(new THREE.CylinderGeometry(2.4, 2.6, 0.6, 24), S('#9ca3af')), 0, 0.3, -4);
+      add(new THREE.Mesh(new THREE.CylinderGeometry(2.0, 2.0, 0.4, 24), S('#67c7e6', '#67c7e6', 0.2)), 0, 0.7, -4);
+      add(new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.4, 2, 12), S('#9ca3af')), 0, 1.6, -4);
+      for (let i = 0; i < 5; i++) { const tr = makeTree(); tr.position.set(-12 + i * 6, 0, -8.5); const s = 1.3 + Math.random(); tr.scale.set(s, s, s); interiorScene.add(tr); }
+      for (let i = 0; i < 4; i++) add(box(1.8, 0.4, 0.6, '#6b4423'), -9 + i * 6, 0.5, 5);
+      for (let i = 0; i < 4; i++) { add(box(0.2, 4, 0.2, '#475569'), -9 + i * 6, 2, 2); const l = add(new THREE.Mesh(new THREE.SphereGeometry(0.25, 8, 8), S('#fde68a', '#fde68a', 0.8)), -9 + i * 6, 4, 2); const pl = new THREE.PointLight('#ffe6a0', 0.4, 8); pl.position.copy(l.position); interiorScene.add(pl); }
+      for (let i = 0; i < 5; i++) { const g = npc(rc(), -8 + i * 4, 2 + Math.random() * 3, Math.random() * 6, 'walking'); g.userData.wander = { a: Math.random() * 6, speed: 0.4 + Math.random() * 0.4, r: 2 + Math.random() * 2, cx: g.position.x, cz: g.position.z }; }
+      const sign = makeLabel('🤝 FRIENDS PLAZA', { color: '#fff', bg: 'rgba(0,0,0,0.35)', size: 28, scale: 6 }); add(sign, 0, 9, -9);
+    }
+
+    // player avatar standing in the scene (over-the-shoulder, facing in)
+    interiorPlayer = buildCharacter(charCfg, name);
+    interiorPlayer.position.set(0, 0, 3);
+    interiorPlayer.rotation.y = Math.PI; // face into the scene
+    interiorPlayer.userData.state = 'idle';
+    interiorScene.add(interiorPlayer);
+
+    interiorCam = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 200);
+    interiorCam.position.set(0, 5.2, 13.5); interiorCam.lookAt(0, 2.4, -4);
+  }
+
   // -------- render loop --------------------------------------------
   let trainScroll = 0;
   function loop() {
     requestAnimationFrame(loop);
     const dt = Math.min(clock.getDelta(), 0.05);
+    if (mode === 'interior' && interiorScene) {
+      interiorChars.forEach(c => {
+        if (c.userData.wander) {
+          const w = c.userData.wander; w.a += w.speed * dt;
+          c.position.x = w.cx + Math.cos(w.a) * w.r; c.position.z = w.cz + Math.sin(w.a) * w.r;
+          c.rotation.y = -w.a;
+        }
+        animateChar(c, dt);
+      });
+      if (interiorPlayer) animateChar(interiorPlayer, dt);
+      interiorFx.forEach(f => { f.m.rotation.y += f.spin * dt; });
+      interiorCam.position.x = Math.sin(clock.elapsedTime * 0.18) * 1.4;
+      interiorCam.lookAt(0, 2.4, -4);
+      renderer.render(interiorScene, interiorCam);
+      return;
+    }
     if (mode === 'world' && worldScene) {
       updatePlayer(dt);
       worldFriends.forEach(f => {
@@ -543,6 +743,7 @@ window.SV_WORLD = (function () {
     renderer.setSize(window.innerWidth, window.innerHeight);
     if (worldCam) { worldCam.aspect = window.innerWidth / window.innerHeight; worldCam.updateProjectionMatrix(); }
     if (studyCam) { studyCam.aspect = window.innerWidth / window.innerHeight; studyCam.updateProjectionMatrix(); }
+    if (interiorCam) { interiorCam.aspect = window.innerWidth / window.innerHeight; interiorCam.updateProjectionMatrix(); }
   }
   function enterWorld(charCfg, name) {
     buildWorld(charCfg, name);
@@ -559,6 +760,8 @@ window.SV_WORLD = (function () {
   }
   function enterStudy(bg, participants) { buildStudyScene(bg, participants); mode = 'study'; }
   function leaveStudy() { mode = worldScene ? 'world' : 'idle'; }
+  function enterInterior(locId, charCfg, name) { buildInterior(locId, charCfg, name); mode = 'interior'; }
+  function leaveInterior() { interiorScene = null; mode = worldScene ? 'world' : 'idle'; }
   function setJoystick(x, y) { joy.x = x; joy.y = y; }
   function setPrompt(cb) { onPrompt = cb; }
   function waveOnce() {
@@ -579,6 +782,7 @@ window.SV_WORLD = (function () {
 
   return {
     init, buildCharacter, enterWorld, refreshPlayer, enterStudy, leaveStudy,
+    enterInterior, leaveInterior,
     setJoystick, setPrompt, waveOnce, setWorldFriends,
     setStudyMeState, setStudyCoins, setParticipantCoins, tickDayNight,
     setState, makeLabel

@@ -25,6 +25,7 @@
   <div class="hud-top">
     <div class="hud-chip hud-logo">🧳 <span class="grad">Studyverse</span></div>
     <div class="hud-stats">
+      <div class="hud-chip hidden" id="hud-online">🟢 <span>1</span> online</div>
       <div class="hud-chip">⭐ <span id="hud-coins">0</span></div>
       <div class="hud-chip">🔥 <span id="hud-streak">0</span></div>
       <div class="hud-chip">✈️ <span id="hud-miles">0</span> mi</div>
@@ -42,7 +43,7 @@
     <button class="nav-btn" data-nav="quests"><span class="ni">📋</span>Quests</button>
     <button class="nav-btn" data-nav="passport"><span class="ni">🛂</span>Passport</button>
     <button class="nav-btn" data-nav="friends"><span class="ni">🤝</span>Friends</button>
-    <button class="nav-btn" data-nav="chat"><span class="ni">💬</span>Chat</button>
+    <button class="nav-btn" data-nav="chat"><span class="ni">💬</span>Chat<span id="nav-chat-dot" class="nav-dot hidden"></span></button>
     <button class="nav-btn" data-nav="profile"><span class="ni">👤</span>Profile</button>
   </div>
 </div>
@@ -91,7 +92,10 @@
 
 <!-- ───────────── SCRIPTS ───────────── -->
 <script src="js/three.min.js"></script>
+<script src="js/supabase.umd.js"></script>
+<script src="js/study-config.js"></script>
 <script src="js/study-data.js"></script>
+<script src="js/study-net.js"></script>
 <script src="js/study-world.js"></script>
 <script src="js/study-app.js"></script>
 </body>
