@@ -3,326 +3,100 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="description" content="NXhyp — Your health journey, gamified. Track steps, sleep & water. Grow your companion. Connect with friends.">
-  <meta name="theme-color" content="#0f0f1a">
-  <title>NXhyp — Level Up Your Health</title>
-  <link rel="stylesheet" href="css/styles.css">
-  <style>
-    /* Structural glue not covered by styles.css */
-    #main-app { display: flex; flex-direction: column; flex: 1; min-height: 0; }
-    #main-app.hidden { display: none !important; }
-    .auth-logo { font-size: 1.75rem; font-weight: 900; text-align: center; margin-bottom: 1.25rem;
-      background: linear-gradient(135deg, #7c3aed, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -1px; }
-    .auth-switch { text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted); }
-    .btn-full { width: 100%; }
-    .form-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.35rem; }
-    /* Landing extras */
-    .land-logo-accent { background: linear-gradient(135deg, #7c3aed, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .land-cta-band { background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 5rem 5vw; text-align: center; }
-    .land-cta-band h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 800; letter-spacing: -1px; margin-bottom: 0.75rem; }
-    .land-cta-band p { color: var(--text-muted); margin-bottom: 1.75rem; }
-    /* Onboarding extras */
-    .onboarding-wrap { background: var(--bg); }
-    .onboard-emoji { font-size: 4rem; margin-bottom: 1.25rem; }
-    .onboard-features { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem; }
-    .onboard-feat { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 0.875rem 1rem; font-size: 0.9rem; }
-    .onboard-tip { background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.3); border-radius: 12px; padding: 1rem; font-size: 0.875rem; color: var(--text-muted); margin-bottom: 2rem; }
-    .onboard-comp-preview { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; margin-bottom: 2rem;
-      background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; }
-    .onboard-comp-name { font-size: 1rem; font-weight: 700; color: var(--text-muted); }
-    .onboard-stats-preview { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem; }
-    .onboard-stat-item { display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem;
-      background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 0.875rem 1rem; }
-    /* Sidebar footer / clock */
-    .sidebar-clock-wrap { margin-top: auto; padding: 1rem 0.75rem 0.5rem; }
-    /* Hero visual */
-    .hero-visual { display: flex; justify-content: center; margin-top: 3rem; }
-    .hero-phone { background: var(--card); border: 2px solid var(--border); border-radius: 28px; padding: 1.5rem; max-width: 240px; width: 100%; box-shadow: 0 24px 60px rgba(0,0,0,0.4); }
-    .hero-phone-stat { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; font-weight: 600; padding: 0.5rem 0;
-      border-bottom: 1px solid var(--border); }
-    .hero-phone-stat:last-of-type { border-bottom: none; }
-    .hero-phone-comp { text-align: center; padding: 1rem 0 0.5rem; font-size: 3.5rem; }
-    .hero-phone-label { text-align: center; font-size: 0.8rem; font-weight: 600; color: #10b981; }
-    .hero-phone-xp { height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; margin: 0.75rem 0 0.35rem; }
-    .hero-phone-xp-fill { height: 100%; width: 65%; background: linear-gradient(90deg, #7c3aed, #a855f7); border-radius: 999px; }
-    .hero-phone-level { font-size: 0.75rem; color: var(--text-muted); text-align: center; }
-  </style>
+  <meta name="description" content="Studyverse — a gamified 3D study-timer world. Earn coins, fly to new cities, customize your character, and study with friends worldwide.">
+  <meta name="theme-color" content="#0f1020">
+  <title>Studyverse — Study. Travel. Connect.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/study.css">
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════
-     TOASTS
-════════════════════════════════════════════ -->
-<div id="toast-container"></div>
+<!-- 3D world canvas -->
+<canvas id="canvas"></canvas>
 
-<!-- ══════════════════════════════════════════
-     AUTH MODAL
-════════════════════════════════════════════ -->
-<div id="auth-overlay" class="modal-overlay hidden">
-  <div class="modal">
-    <button class="modal-close" onclick="closeAuthModal()">✕</button>
-    <div class="auth-logo">NXhyp</div>
+<!-- ───────────── ONBOARDING ───────────── -->
+<div id="onboarding" class="hidden">
+  <div id="onboarding-card"></div>
+</div>
 
-    <div class="auth-tabs">
-      <button class="auth-tab active" data-tab="signin" onclick="switchAuthTab('signin')">Sign In</button>
-      <button class="auth-tab" data-tab="signup" onclick="switchAuthTab('signup')">Sign Up</button>
+<!-- ───────────── HUD ───────────── -->
+<div id="hud" class="hidden">
+  <div class="hud-top">
+    <div class="hud-chip hud-logo">🧳 <span class="grad">Studyverse</span></div>
+    <div class="hud-stats">
+      <div class="hud-chip hidden" id="hud-online">🟢 <span>1</span> online</div>
+      <div class="hud-chip">⭐ <span id="hud-coins">0</span></div>
+      <div class="hud-chip">🔥 <span id="hud-streak">0</span></div>
+      <div class="hud-chip">✈️ <span id="hud-miles">0</span> mi</div>
     </div>
+  </div>
 
-    <!-- Sign In -->
-    <form id="signin-form" onsubmit="event.preventDefault(); handleSignin()">
-      <div class="form-group">
-        <label for="signin-email">Email</label>
-        <input type="email" id="signin-email" placeholder="you@example.com" autocomplete="email" required>
-      </div>
-      <div class="form-group">
-        <label for="signin-password">Password</label>
-        <input type="password" id="signin-password" placeholder="••••••••" autocomplete="current-password" required>
-      </div>
-      <button class="btn btn-primary btn-full" id="signin-btn" type="submit">Sign In</button>
-      <p class="auth-switch">Don't have an account?
-        <a href="#" onclick="switchAuthTab('signup'); return false;">Sign Up</a>
-      </p>
-    </form>
+  <div id="enter-prompt" class="hidden">
+    <span class="kbd">E</span> Enter <b id="enter-prompt-name"></b>
+  </div>
 
-    <!-- Sign Up -->
-    <form id="signup-form" class="hidden" onsubmit="event.preventDefault(); handleSignup()">
-      <div class="form-group">
-        <label for="signup-username">Username</label>
-        <input type="text" id="signup-username" placeholder="cooluser123" autocomplete="username" required>
-      </div>
-      <div class="form-group">
-        <label for="signup-email">Email</label>
-        <input type="email" id="signup-email" placeholder="you@example.com" autocomplete="email" required>
-      </div>
-      <div class="form-group">
-        <label for="signup-password">Password</label>
-        <input type="password" id="signup-password" placeholder="Min. 6 characters" autocomplete="new-password" required>
-      </div>
-      <div class="form-group">
-        <label for="signup-confirm-pw">Confirm Password</label>
-        <input type="password" id="signup-confirm-pw" placeholder="Repeat password" autocomplete="new-password" required>
-      </div>
-      <button class="btn btn-primary btn-full" id="signup-btn" type="submit">Create Account</button>
-      <p class="auth-switch">Already have an account?
-        <a href="#" onclick="switchAuthTab('signin'); return false;">Sign In</a>
-      </p>
-    </form>
+  <div class="hud-nav">
+    <button class="nav-btn" data-nav="dashboard"><span class="ni">🏠</span>Home</button>
+    <button class="nav-btn" data-nav="travel"><span class="ni">✈️</span>Fly</button>
+    <button class="nav-btn" data-nav="shop"><span class="ni">🛍️</span>Shop</button>
+    <button class="nav-btn" data-nav="quests"><span class="ni">📋</span>Quests</button>
+    <button class="nav-btn" data-nav="passport"><span class="ni">🛂</span>Passport</button>
+    <button class="nav-btn" data-nav="friends"><span class="ni">🤝</span>Friends</button>
+    <button class="nav-btn" data-nav="chat"><span class="ni">💬</span>Chat<span id="nav-chat-dot" class="nav-dot hidden"></span></button>
+    <button class="nav-btn" data-nav="profile"><span class="ni">👤</span>Profile</button>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════
-     LANDING PAGE
-════════════════════════════════════════════ -->
-<div id="landing">
-
-  <!-- Nav -->
-  <nav class="landing-nav">
-    <div class="logo">NX<span class="land-logo-accent">hyp</span></div>
-    <div class="nav-links">
-      <button class="btn btn-ghost" onclick="openAuthModal('signin')">Sign In</button>
-      <button class="btn btn-primary" onclick="openAuthModal('signup')">Get Started Free</button>
-    </div>
-  </nav>
-
-  <!-- Hero -->
-  <section class="hero">
-    <div>
-      <div style="font-size:0.85rem;font-weight:600;color:var(--primary);margin-bottom:1rem;letter-spacing:0.05em;text-transform:uppercase">
-        🌟 Health · Gamified
-      </div>
-      <h1>Level Up<br>Your Health</h1>
-      <p>Track steps, sleep &amp; water. Grow your companion.<br>Turn healthy habits into a rewarding game.</p>
-      <div class="hero-btns">
-        <button class="btn btn-primary btn-lg" onclick="openAuthModal('signup')">Get Started Free</button>
-        <button class="btn btn-outline btn-lg" onclick="openAuthModal('signin')">Sign In</button>
-      </div>
-      <!-- Mini phone mockup -->
-      <div class="hero-visual">
-        <div class="hero-phone">
-          <div class="hero-phone-stat">👟 <strong>8,432</strong> steps today</div>
-          <div class="hero-phone-stat">😴 <strong>7h 45m</strong> sleep</div>
-          <div class="hero-phone-stat">💧 <strong>6 / 8</strong> cups</div>
-          <div class="hero-phone-comp">🐱</div>
-          <div class="hero-phone-label">Buddy is Happy! 😄</div>
-          <div class="hero-phone-xp"><div class="hero-phone-xp-fill"></div></div>
-          <div class="hero-phone-level">Lv 12 · 🔥 5 day streak</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Features -->
-  <section class="features-section">
-    <h2>Everything you need to build<br>lasting healthy habits</h2>
-    <p class="section-sub">Free forever. Works on any device.</p>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feat-icon">📊</div>
-        <h3>Health Tracking</h3>
-        <p>Track steps, sleep, water, and mood with beautiful charts and visualizations.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feat-icon">🐾</div>
-        <h3>Companion Pet</h3>
-        <p>Draw and customize your own companion that grows happier as your habits improve.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feat-icon">💬</div>
-        <h3>AI Health Coach</h3>
-        <p>Get personalized health advice and motivation from your AI assistant.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feat-icon">👥</div>
-        <h3>Social &amp; Community</h3>
-        <p>Connect with friends, share achievements, and stay motivated together.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feat-icon">🏆</div>
-        <h3>Level Up System</h3>
-        <p>Earn XP and level up as you hit your goals. Unlock traits and rewards.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feat-icon">🌐</div>
-        <h3>Multi-Language</h3>
-        <p>Available in English, Bahasa Indonesia, Español, Français, and العربية.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA Band -->
-  <div class="land-cta-band">
-    <h2>Start your journey today</h2>
-    <p>Free forever. No credit card required.</p>
-    <button class="btn btn-primary btn-lg" onclick="openAuthModal('signup')">Create Free Account</button>
-  </div>
-
-  <!-- Footer -->
-  <footer>
-    <strong style="background:linear-gradient(135deg,#7c3aed,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">NXhyp</strong>
-    &nbsp;· Your health journey, gamified. © 2025
-  </footer>
-
+<!-- ───────────── MOBILE CONTROLS ───────────── -->
+<div id="mobile-controls" class="hidden">
+  <div id="joystick"><div id="joystick-stick"></div></div>
 </div>
 
-<!-- ══════════════════════════════════════════
-     APP SHELL  (#app)
-════════════════════════════════════════════ -->
-<div id="app" class="hidden">
+<!-- ───────────── STUDY SESSION UI ───────────── -->
+<div id="study-ui" class="hidden"></div>
 
-  <!-- ── ONBOARDING ── -->
-  <div id="onboarding" class="hidden onboarding-wrap">
-
-    <div id="onboard-step-1" class="onboard-step">
-      <div class="onboard-emoji">🎉</div>
-      <h2>Welcome to NXhyp!</h2>
-      <p>Let's set up your health journey.</p>
-      <div class="onboard-features">
-        <div class="onboard-feat">👟 Track your steps daily</div>
-        <div class="onboard-feat">😴 Log your sleep patterns</div>
-        <div class="onboard-feat">💧 Stay hydrated — 8 cups a day</div>
-        <div class="onboard-feat">🐾 Grow your companion pet</div>
-      </div>
-      <button class="btn btn-primary btn-lg" onclick="nextOnboardStep()">Get Started →</button>
+<!-- ───────────── GENERIC PANEL (modal) ───────────── -->
+<div id="panel">
+  <div class="panel-inner">
+    <div class="panel-head">
+      <h2 id="panel-title">Panel</h2>
+      <button class="panel-x" id="panel-close">✕</button>
     </div>
+    <div id="panel-body"></div>
+  </div>
+</div>
 
-    <div id="onboard-step-2" class="onboard-step hidden">
-      <div class="onboard-emoji">👤</div>
-      <h2>You're set up!</h2>
-      <p>Your username is ready. Others will find you in the community.</p>
-      <div class="onboard-tip">
-        <strong>Tip:</strong> Earn XP by logging steps, sleep, and water every day. Build your streak for bonus points!
-      </div>
-      <button class="btn btn-primary btn-lg" onclick="nextOnboardStep()">Next →</button>
-    </div>
+<!-- ───────────── CHAT PANEL ───────────── -->
+<div id="chat-panel">
+  <div class="chat-head">
+    <h3 id="chat-room-name">Global Chat</h3>
+    <button class="panel-x" id="chat-close">✕</button>
+  </div>
+  <div id="chat-tabs">
+    <button class="ctab active" data-room="global">🌍 Global</button>
+    <button class="ctab" data-room="lobby">🛋️ Study Lobby</button>
+  </div>
+  <div id="chat-messages"></div>
+  <div id="chat-typing" class="hidden"></div>
+  <div class="chat-input-bar">
+    <button class="icon-btn" id="chat-emoji-btn">😊</button>
+    <input id="chat-input" placeholder="Type a message..." maxlength="240" />
+    <button class="btn btn-primary" id="chat-send">➤</button>
+    <div id="emoji-tray" class="hidden"></div>
+  </div>
+</div>
 
-    <div id="onboard-step-3" class="onboard-step hidden">
-      <div class="onboard-emoji">🐾</div>
-      <h2>Meet your Companion!</h2>
-      <p>Your companion's mood reflects your healthy habits.</p>
-      <div class="onboard-comp-preview">
-        <span style="font-size:4.5rem">🐱</span>
-        <div class="onboard-comp-name">Buddy · Neutral 😐</div>
-      </div>
-      <div class="onboard-tip">
-        Hit your daily step, sleep, and water goals to make Buddy <strong>Excited!</strong> 🎉
-      </div>
-      <button class="btn btn-primary btn-lg" onclick="nextOnboardStep()">Next →</button>
-    </div>
+<!-- ───────────── TOASTS ───────────── -->
+<div id="toast-wrap"></div>
 
-    <div id="onboard-step-4" class="onboard-step hidden">
-      <div class="onboard-emoji">🚀</div>
-      <h2>You're all set!</h2>
-      <p>Your health journey starts now.</p>
-      <div class="onboard-stats-preview">
-        <div class="onboard-stat-item">🔥 <span>Streak starts today</span></div>
-        <div class="onboard-stat-item">⭐ <span>Level 1 · 0 XP</span></div>
-        <div class="onboard-stat-item">🏆 <span>First goal: 10,000 steps</span></div>
-        <div class="onboard-stat-item">🤝 <span>Join the community</span></div>
-      </div>
-      <button class="btn btn-primary btn-lg" onclick="nextOnboardStep()">Let's Go! 🎮</button>
-    </div>
-
-  </div><!-- /#onboarding -->
-
-  <!-- ── MAIN APP ── -->
-  <div id="main-app" class="hidden">
-
-    <!-- Sidebar (desktop only) -->
-    <div class="app-content">
-      <aside id="sidebar">
-        <div class="logo">NXhyp</div>
-        <nav id="sidebar-nav"></nav>
-        <div class="sidebar-clock-wrap">
-          <div id="clock"></div>
-        </div>
-      </aside>
-
-      <!-- Main content column -->
-      <div id="content">
-
-        <!-- Sticky header (visible on all sizes) -->
-        <div id="app-header">
-          <div class="logo" style="font-size:1.1rem">NXhyp</div>
-          <div style="display:flex;align-items:center;gap:1rem">
-            <span id="clock-mobile" style="font-size:0.85rem;color:var(--text-muted)"></span>
-          </div>
-        </div>
-
-        <!-- Views — rendered by JS -->
-        <div id="view-dashboard"  class="view hidden"></div>
-        <div id="view-steps"      class="view hidden"></div>
-        <div id="view-sleep"      class="view hidden"></div>
-        <div id="view-water"      class="view hidden"></div>
-        <div id="view-companion"  class="view hidden"></div>
-        <div id="view-ai"         class="view hidden"></div>
-        <div id="view-friends"    class="view hidden"></div>
-        <div id="view-community"  class="view hidden"></div>
-        <div id="view-profile"    class="view hidden"></div>
-
-      </div><!-- /#content -->
-    </div><!-- /.app-content -->
-
-    <!-- Bottom nav (mobile only) -->
-    <nav id="bottom-nav"></nav>
-
-  </div><!-- /#main-app -->
-
-</div><!-- /#app -->
-
-<!-- ══════════════════════════════════════════
-     SCRIPTS  (order matters)
-════════════════════════════════════════════ -->
-<script src="js/translations.js"></script>
-<script src="js/state.js"></script>
-<script src="js/lang.js"></script>
-<script src="js/supabase.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/canvas.js"></script>
-<script src="js/companion.js"></script>
-<script src="js/trackers.js"></script>
-<script src="js/community.js"></script>
-<script src="js/friends.js"></script>
-<script src="js/ai.js"></script>
-<script src="js/app.js"></script>
+<!-- ───────────── SCRIPTS ───────────── -->
+<script src="js/three.min.js"></script>
+<script src="js/supabase.umd.js"></script>
+<script src="js/study-config.js"></script>
+<script src="js/study-data.js"></script>
+<script src="js/study-net.js"></script>
+<script src="js/study-world.js"></script>
+<script src="js/study-app.js"></script>
 </body>
 </html>
