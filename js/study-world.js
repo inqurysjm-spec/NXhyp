@@ -17,7 +17,7 @@ window.SV_WORLD = (function () {
   let keys = {};
   let joy = { x: 0, y: 0 };
   let studyChars = [];          // {group, state} in study scene
-  let hemi, sun, skyMesh;       // world lighting
+  let hemi, sun, skyMesh, skyTex, sunGlow; // world lighting
 
   // -------- text sprite helper -------------------------------------
   function makeLabel(text, opts) {
@@ -210,20 +210,38 @@ window.SV_WORLD = (function () {
     worldScene = new THREE.Scene();
     worldScene.fog = new THREE.Fog('#bcd4e6', 28, 80);
 
-    // sky dome
-    const skyGeo = new THREE.SphereGeometry(120, 16, 16);
-    const skyMat = new THREE.MeshBasicMaterial({ color: '#9ec9e8', side: THREE.BackSide });
-    skyMesh = new THREE.Mesh(skyGeo, skyMat); worldScene.add(skyMesh);
+    // gradient sky dome (canvas texture, repainted by day/night)
+    const skyCv = document.createElement('canvas'); skyCv.width = 8; skyCv.height = 256;
+    skyTex = new THREE.CanvasTexture(skyCv);
+    skyMesh = new THREE.Mesh(new THREE.SphereGeometry(140, 24, 16),
+      new THREE.MeshBasicMaterial({ map: skyTex, side: THREE.BackSide, fog: false }));
+    skyMesh.userData.cv = skyCv; worldScene.add(skyMesh);
+    paintSky('#a9d8f5', '#dfeffb');
 
-    hemi = new THREE.HemisphereLight('#ffffff', '#4a6b4a', 0.9); worldScene.add(hemi);
-    sun = new THREE.DirectionalLight('#ffffff', 0.8); sun.position.set(10, 20, 8); worldScene.add(sun);
+    // soft sun glow
+    const sunCv = document.createElement('canvas'); sunCv.width = sunCv.height = 128;
+    const sctx = sunCv.getContext('2d');
+    const sg = sctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+    sg.addColorStop(0, 'rgba(255,250,230,0.95)'); sg.addColorStop(0.4, 'rgba(255,240,200,0.5)'); sg.addColorStop(1, 'rgba(255,240,200,0)');
+    sctx.fillStyle = sg; sctx.fillRect(0, 0, 128, 128);
+    sunGlow = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(sunCv), transparent: true, depthWrite: false, fog: false }));
+    sunGlow.scale.set(34, 34, 1); sunGlow.position.set(34, 34, -70); worldScene.add(sunGlow);
 
-    // ground
-    const ground = new THREE.Mesh(new THREE.CircleGeometry(60, 48),
-      new THREE.MeshStandardMaterial({ color: '#6cb46c', roughness: 1 }));
+    hemi = new THREE.HemisphereLight('#ffffff', '#5a7a55', 1.05); worldScene.add(hemi);
+    sun = new THREE.DirectionalLight('#fff6e0', 0.95); sun.position.set(14, 24, 10); worldScene.add(sun);
+    const fill = new THREE.DirectionalLight('#cfe0ff', 0.3); fill.position.set(-12, 10, -8); worldScene.add(fill);
+
+    // ground (soft radial gradient texture)
+    const gCv = document.createElement('canvas'); gCv.width = gCv.height = 256;
+    const gctx = gCv.getContext('2d');
+    const gg = gctx.createRadialGradient(128, 128, 20, 128, 128, 140);
+    gg.addColorStop(0, '#86c98a'); gg.addColorStop(0.6, '#72bd78'); gg.addColorStop(1, '#5fa869');
+    gctx.fillStyle = gg; gctx.fillRect(0, 0, 256, 256);
+    const ground = new THREE.Mesh(new THREE.CircleGeometry(60, 64),
+      new THREE.MeshStandardMaterial({ map: new THREE.CanvasTexture(gCv), roughness: 0.95 }));
     ground.rotation.x = -Math.PI / 2; worldScene.add(ground);
     // paths (cross)
-    const pathMat = new THREE.MeshStandardMaterial({ color: '#c8b88a', roughness: 1 });
+    const pathMat = new THREE.MeshStandardMaterial({ color: '#d8c79a', roughness: 0.9 });
     const pathH = new THREE.Mesh(new THREE.PlaneGeometry(80, 4), pathMat);
     pathH.rotation.x = -Math.PI / 2; pathH.position.y = 0.01; worldScene.add(pathH);
     const pathV = new THREE.Mesh(new THREE.PlaneGeometry(4, 80), pathMat);
@@ -300,18 +318,35 @@ window.SV_WORLD = (function () {
     });
   }
 
+  function paintSky(top, bottom) {
+    if (!skyMesh) return;
+    const cv = skyMesh.userData.cv, ctx = cv.getContext('2d');
+    const g = ctx.createLinearGradient(0, 0, 0, cv.height);
+    g.addColorStop(0, top); g.addColorStop(0.55, mix(top, bottom, 0.5)); g.addColorStop(1, bottom);
+    ctx.fillStyle = g; ctx.fillRect(0, 0, cv.width, cv.height);
+    skyTex.needsUpdate = true;
+  }
+  function mix(a, b, t) {
+    const pa = parseInt(a.slice(1), 16), pb = parseInt(b.slice(1), 16);
+    const r = Math.round(((pa >> 16) & 255) * (1 - t) + ((pb >> 16) & 255) * t);
+    const gg = Math.round(((pa >> 8) & 255) * (1 - t) + ((pb >> 8) & 255) * t);
+    const bl = Math.round((pa & 255) * (1 - t) + (pb & 255) * t);
+    return '#' + ((1 << 24) + (r << 16) + (gg << 8) + bl).toString(16).slice(1);
+  }
+
   function updateDayNight() {
     if (!skyMesh) return;
     const h = new Date().getHours() + new Date().getMinutes() / 60;
-    let top, intensity, sunColor, fogColor;
-    if (h >= 6 && h < 9) { top = '#fcd9a8'; intensity = 0.7; sunColor = '#ffe0b0'; fogColor = '#ffe8cc'; }     // dawn
-    else if (h >= 9 && h < 17) { top = '#9ec9e8'; intensity = 1.0; sunColor = '#ffffff'; fogColor = '#bcd4e6'; } // day
-    else if (h >= 17 && h < 20) { top = '#f7a072'; intensity = 0.7; sunColor = '#ff9a5a'; fogColor = '#f3b58a'; } // dusk
-    else { top = '#1a2350'; intensity = 0.35; sunColor = '#7a8bd0'; fogColor = '#1a2340'; }                       // night
-    skyMesh.material.color.set(top);
+    let top, bottom, intensity, sunColor, fogColor, glow;
+    if (h >= 5.5 && h < 9) { top = '#f9c79a'; bottom = '#ffe6cf'; intensity = 0.85; sunColor = '#ffe0b0'; fogColor = '#ffe3c8'; glow = '#ffd9a0'; }   // dawn
+    else if (h >= 9 && h < 17) { top = '#7fbef0'; bottom = '#d8eefb'; intensity = 1.15; sunColor = '#fff6e0'; fogColor = '#cfe6f5'; glow = '#fff3cf'; } // day
+    else if (h >= 17 && h < 20) { top = '#ef7d7a'; bottom = '#ffce8f'; intensity = 0.85; sunColor = '#ff9a5a'; fogColor = '#f6b487'; glow = '#ffb066'; } // dusk
+    else { top = '#10173f'; bottom = '#3a2a66'; intensity = 0.5; sunColor = '#9aa8e0'; fogColor = '#171f44'; glow = '#3a3a7a'; }                          // night
+    paintSky(top, bottom);
     if (worldScene.fog) worldScene.fog.color.set(fogColor);
     if (hemi) hemi.intensity = intensity;
     if (sun) { sun.intensity = intensity * 0.9; sun.color.set(sunColor); }
+    if (sunGlow) sunGlow.material.color.set(glow);
   }
 
   // -------- study scene --------------------------------------------
